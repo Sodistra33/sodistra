@@ -31,10 +31,13 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
           <Button
             size="lg"
-            onClick={() => scrollToSection("#services")}
+            onClick={() => {
+              // TODO: Connect to Supabase for PDF download
+              console.log("Téléchargement de la brochure");
+            }}
             className="bg-accent hover:bg-accent-light text-accent-foreground text-lg px-8 py-6"
           >
-            Découvrir nos services
+            Télécharger notre brochure
             <ArrowRight className="ml-2" size={20} />
           </Button>
           <Button

@@ -20,6 +20,7 @@ const Navbar = () => {
     { label: "Services", href: "#services" },
     { label: "Réalisations", href: "#realisations" },
     { label: "Atouts", href: "#atouts" },
+    { label: "Actualités", href: "#actualites" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -64,10 +65,13 @@ const Navbar = () => {
 
           <div className="hidden lg:block">
             <Button
-              onClick={() => scrollToSection("#contact")}
+              onClick={() => {
+                // TODO: Connect to Supabase for PDF download
+                console.log("Téléchargement de la brochure");
+              }}
               className="bg-accent hover:bg-accent-light text-accent-foreground"
             >
-              Demander un devis
+              Télécharger notre brochure
             </Button>
           </div>
 
@@ -95,10 +99,13 @@ const Navbar = () => {
               </button>
             ))}
             <Button
-              onClick={() => scrollToSection("#contact")}
+              onClick={() => {
+                // TODO: Connect to Supabase for PDF download
+                console.log("Téléchargement de la brochure");
+              }}
               className="w-full mt-4 bg-accent hover:bg-accent-light text-accent-foreground"
             >
-              Demander un devis
+              Télécharger notre brochure
             </Button>
           </div>
         </div>
