@@ -1,8 +1,10 @@
 import { Calendar, Share2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const Blog = () => {
+  const navigate = useNavigate();
   const articles = [
     {
       id: 1,
@@ -90,13 +92,20 @@ const Blog = () => {
                   {article.excerpt}
                 </p>
                 <div className="flex items-center justify-between">
-                  <Button variant="link" className="p-0 h-auto text-accent">
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto text-accent"
+                    onClick={() => navigate(`/actualite/${article.id}`)}
+                  >
                     Lire la suite →
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleShare(article)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleShare(article);
+                    }}
                     className="text-muted-foreground hover:text-accent"
                   >
                     <Share2 size={18} />

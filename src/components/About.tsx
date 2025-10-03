@@ -1,10 +1,19 @@
 import { CheckCircle2 } from "lucide-react";
 import teamImage from "@/assets/team-photo.jpg";
+import building1 from "@/assets/project-building-1.jpg";
+import building2 from "@/assets/project-building-2.jpg";
+import infrastructure1 from "@/assets/project-infrastructure-1.jpg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const About = () => {
   const values = [
     "Excellence et qualité garanties",
-    "Plus de 15 ans d'expérience",
+    "Plus de 17 ans d'expérience",
     "Équipe de professionnels qualifiés",
     "Respect des délais et budgets",
   ];
@@ -42,16 +51,31 @@ const About = () => {
           </div>
 
           <div className="relative animate-slide-up animate-delay-200">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={teamImage}
-                alt="Équipe SODISTRA"
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
-            </div>
-            <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-2xl p-8 shadow-lg">
-              <div className="text-5xl font-bold mb-2">15+</div>
+            <Carousel
+              plugins={[
+                Autoplay({
+                  delay: 3000,
+                }),
+              ]}
+              className="w-full"
+            >
+              <CarouselContent>
+                {[teamImage, building1, building2, infrastructure1].map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                      <img
+                        src={image}
+                        alt={`SODISTRA ${index + 1}`}
+                        className="w-full h-[500px] object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+            <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-2xl p-8 shadow-lg z-10">
+              <div className="text-5xl font-bold mb-2">17+</div>
               <div className="font-semibold">Années d'expérience</div>
             </div>
           </div>

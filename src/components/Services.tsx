@@ -51,21 +51,57 @@ const Services = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card
-              key={index}
-              className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 animate-slide-up border-border bg-card"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-light rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <service.icon className="text-primary-foreground" size={32} />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{service.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+          {services.map((service, index) => {
+            const isYellow = index % 2 === 0;
+            return (
+              <Card
+                key={index}
+                className={`group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-slide-up border-border ${
+                  isYellow
+                    ? "hover:bg-accent hover:border-accent"
+                    : "hover:bg-primary hover:border-primary"
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CardContent className="p-8">
+                  <div
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 ${
+                      isYellow
+                        ? "bg-gradient-to-br from-primary to-primary-light group-hover:bg-primary-foreground"
+                        : "bg-gradient-to-br from-accent to-accent-light group-hover:bg-accent-foreground"
+                    }`}
+                  >
+                    <service.icon
+                      className={`transition-colors duration-300 ${
+                        isYellow
+                          ? "text-primary-foreground group-hover:text-accent"
+                          : "text-accent-foreground group-hover:text-primary"
+                      }`}
+                      size={32}
+                    />
+                  </div>
+                  <h3
+                    className={`text-xl font-bold mb-3 transition-colors duration-300 ${
+                      isYellow
+                        ? "text-primary group-hover:text-accent-foreground"
+                        : "text-primary group-hover:text-primary-foreground"
+                    }`}
+                  >
+                    {service.title}
+                  </h3>
+                  <p
+                    className={`leading-relaxed transition-colors duration-300 ${
+                      isYellow
+                        ? "text-muted-foreground group-hover:text-accent-foreground"
+                        : "text-muted-foreground group-hover:text-primary-foreground"
+                    }`}
+                  >
+                    {service.description}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </section>

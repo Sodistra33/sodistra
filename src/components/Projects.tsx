@@ -23,6 +23,7 @@ export interface Project {
 const Projects = () => {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState("tous");
+  const [showAll, setShowAll] = useState(false);
 
   const projects: Project[] = [
     {
@@ -94,6 +95,8 @@ const Projects = () => {
       ? projects
       : projects.filter((project) => project.category === activeFilter);
 
+  const displayedProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
+
   return (
     <section id="realisations" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
@@ -127,7 +130,7 @@ const Projects = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <div
               key={project.id}
               onClick={() => navigate(`/projet/${project.id}`)}
@@ -141,7 +144,7 @@ const Projects = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <Badge 
-                  className={`absolute top-4 right-4 ${
+                  className={`absolute top-4 right-4 z-10 ${
                     project.status === "En cours" 
                       ? "bg-accent text-accent-foreground" 
                       : "bg-green-600 text-white"
@@ -150,7 +153,7 @@ const Projects = () => {
                   {project.status}
                 </Badge>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent flex items-end">
                 <div className="p-6 w-full">
                   <h3 className="text-white font-bold text-xl mb-2">{project.title}</h3>
                   <p className="text-white/80 text-sm mb-2 line-clamp-2">{project.description}</p>
@@ -162,6 +165,19 @@ const Projects = () => {
             </div>
           ))}
         </div>
+
+        {filteredProjects.length > 6 && (
+          <div className="flex justify-center mt-12">
+            <Button
+              onClick={() => setShowAll(!showAll)}
+              variant="default"
+              size="lg"
+              className="bg-accent hover:bg-accent-light text-accent-foreground px-8"
+            >
+              {showAll ? "Voir moins" : "Voir plus de projets"}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
