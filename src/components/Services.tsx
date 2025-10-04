@@ -1,39 +1,118 @@
-import { Building2, HardHat, Wrench, FileText, Briefcase, Package } from "lucide-react";
+import { Building2, HardHat, Wrench, FileText, Briefcase, Package, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon_name: string;
+  display_order: number;
+  is_active: boolean;
+}
 
 const Services = () => {
-  const services = [
-    {
-      icon: Building2,
-      title: "Construction de bâtiments",
-      description: "Conception et réalisation de bâtiments résidentiels, commerciaux et industriels de haute qualité.",
-    },
-    {
-      icon: HardHat,
-      title: "Génie civil",
-      description: "Infrastructures routières, ponts, ouvrages d'art et travaux de terrassement de grande envergure.",
-    },
-    {
-      icon: Wrench,
-      title: "Rénovation et maintenance",
-      description: "Services complets de réhabilitation et d'entretien pour prolonger la vie de vos structures.",
-    },
-    {
-      icon: FileText,
-      title: "Études techniques",
-      description: "Bureau d'études intégré pour l'analyse, la conception et le conseil sur vos projets.",
-    },
-    {
-      icon: Briefcase,
-      title: "Projets clé en main",
-      description: "Gestion complète de A à Z de vos projets de construction avec une garantie de résultat.",
-    },
-    {
-      icon: Package,
-      title: "Fourniture de matériaux",
-      description: "Approvisionnement en matériaux de construction de qualité supérieure pour tous vos besoins.",
-    },
-  ];
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        setServices(data);
+      } else {
+        // Fallback static data
+        setServices([
+          {
+            id: '1',
+            title: "Construction de bâtiments",
+            description: "Conception et réalisation de bâtiments résidentiels, commerciaux et industriels de haute qualité.",
+            icon_name: "Building2",
+            display_order: 0,
+            is_active: true
+          },
+          {
+            id: '2',
+            title: "Génie civil",
+            description: "Infrastructures routières, ponts, ouvrages d'art et travaux de terrassement de grande envergure.",
+            icon_name: "HardHat",
+            display_order: 1,
+            is_active: true
+          },
+          {
+            id: '3',
+            title: "Rénovation et maintenance",
+            description: "Services complets de réhabilitation et d'entretien pour prolonger la vie de vos structures.",
+            icon_name: "Wrench",
+            display_order: 2,
+            is_active: true
+          },
+          {
+            id: '4',
+            title: "Études techniques",
+            description: "Bureau d'études intégré pour l'analyse, la conception et le conseil sur vos projets.",
+            icon_name: "FileText",
+            display_order: 3,
+            is_active: true
+          },
+          {
+            id: '5',
+            title: "Projets clé en main",
+            description: "Gestion complète de A à Z de vos projets de construction avec une garantie de résultat.",
+            icon_name: "Briefcase",
+            display_order: 4,
+            is_active: true
+          },
+          {
+            id: '6',
+            title: "Fourniture de matériaux",
+            description: "Approvisionnement en matériaux de construction de qualité supérieure pour tous vos besoins.",
+            icon_name: "Package",
+            display_order: 5,
+            is_active: true
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getIcon = (iconName: string) => {
+    const icons: { [key: string]: any } = {
+      Building2,
+      HardHat,
+      Wrench,
+      FileText,
+      Briefcase,
+      Package
+    };
+    return icons[iconName] || Building2;
+  };
+
+  if (loading) {
+    return (
+      <section id="services" className="py-20 bg-background">
+        <div className="container mx-auto px-4 flex justify-center">
+          <Loader2 className="animate-spin h-12 w-12 text-accent" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="services" className="py-20 bg-background">
@@ -53,9 +132,10 @@ const Services = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const isYellow = index % 2 === 0;
+            const IconComponent = getIcon(service.icon_name);
             return (
               <Card
-                key={index}
+                key={service.id}
                 className={`group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-slide-up border-border ${
                   isYellow
                     ? "hover:bg-accent hover:border-accent"
@@ -71,7 +151,7 @@ const Services = () => {
                         : "bg-gradient-to-br from-accent to-accent-light group-hover:bg-accent-foreground"
                     }`}
                   >
-                    <service.icon
+                    <IconComponent
                       className={`transition-colors duration-300 ${
                         isYellow
                           ? "text-primary-foreground group-hover:text-accent"

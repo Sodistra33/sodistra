@@ -1,83 +1,63 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Calendar, User, Building2 } from "lucide-react";
+import { ArrowLeft, Calendar, User, Building2, Loader2, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import building1 from "@/assets/project-building-1.jpg";
-import building2 from "@/assets/project-building-2.jpg";
-import infrastructure1 from "@/assets/project-infrastructure-1.jpg";
-import infrastructure2 from "@/assets/project-infrastructure-2.jpg";
-import renovation1 from "@/assets/project-renovation-1.jpg";
-import { Project } from "@/components/Projects";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  featured_image_url: string;
+  gallery_images: string[];
+  client: string | null;
+  location: string | null;
+  completion_date: string | null;
+  status: string;
+  is_published: boolean;
+}
 
 const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Same projects data as in Projects component
-  const projects: Project[] = [
-    {
-      id: 1,
-      title: "Immeuble de bureaux moderne",
-      category: "batiments",
-      image: building1,
-      status: "Terminé",
-      description: "Construction d'un immeuble de bureaux de 12 étages avec des espaces modernes et équipements de pointe, situé au cœur du Plateau.",
-      client: "Groupe ABC Investissements",
-      date: "Janvier 2024",
-      gallery: [building1, building2],
-    },
-    {
-      id: 2,
-      title: "Complexe résidentiel",
-      category: "batiments",
-      image: building2,
-      status: "En cours",
-      description: "Développement d'un complexe résidentiel de 150 logements avec infrastructures communes : piscine, salle de sport, espaces verts.",
-      client: "SOGEPROM Côte d'Ivoire",
-      date: "Mars 2025",
-      gallery: [building2, building1],
-    },
-    {
-      id: 3,
-      title: "Pont autoroutier",
-      category: "infrastructures",
-      image: infrastructure1,
-      status: "Terminé",
-      description: "Construction d'un pont autoroutier de 800 mètres reliant deux axes stratégiques de la ville d'Abidjan.",
-      client: "Ministère des Infrastructures",
-      date: "Décembre 2023",
-      gallery: [infrastructure1, infrastructure2],
-    },
-    {
-      id: 4,
-      title: "Route nationale",
-      category: "infrastructures",
-      image: infrastructure2,
-      status: "En cours",
-      description: "Réhabilitation de 45 km de route nationale avec élargissement à 4 voies et construction d'ouvrages d'art.",
-      client: "AGEROUTE",
-      date: "Juin 2025",
-      gallery: [infrastructure2, infrastructure1],
-    },
-    {
-      id: 5,
-      title: "Rénovation façade commerciale",
-      category: "renovations",
-      image: renovation1,
-      status: "Terminé",
-      description: "Rénovation complète de la façade d'un centre commercial incluant isolation thermique, peinture et mise aux normes.",
-      client: "Centre Commercial Cap Sud",
-      date: "Septembre 2024",
-      gallery: [renovation1, building1],
-    },
-  ];
+  useEffect(() => {
+    fetchProject();
+  }, [id]);
 
-  const project = projects.find((p) => p.id === Number(id));
+  const fetchProject = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', id)
+        .eq('is_published', true)
+        .single();
+
+      if (error) throw error;
+      setProject(data);
+    } catch (error) {
+      console.error('Error fetching project:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-accent" />
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -110,30 +90,32 @@ const ProjectDetail = () => {
             <div className="space-y-4">
               <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                 <img
-                  src={project.gallery[selectedImage]}
+                  src={project.gallery_images?.[selectedImage] || project.featured_image_url}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="grid grid-cols-4 gap-4">
-                {project.gallery.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
-                      selectedImage === index
-                        ? "border-accent"
-                        : "border-transparent hover:border-accent/50"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`${project.title} - ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
+              {project.gallery_images && project.gallery_images.length > 0 && (
+                <div className="grid grid-cols-4 gap-4">
+                  {project.gallery_images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
+                        selectedImage === index
+                          ? "border-accent"
+                          : "border-transparent hover:border-accent/50"
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`${project.title} - ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Project Info */}
@@ -141,12 +123,12 @@ const ProjectDetail = () => {
               <div className="flex items-center gap-3 mb-4">
                 <Badge 
                   className={`text-sm ${
-                    project.status === "En cours" 
+                    project.status === "en_cours" 
                       ? "bg-accent text-accent-foreground" 
                       : "bg-green-600 text-white"
                   }`}
                 >
-                  {project.status}
+                  {project.status === "en_cours" ? "En cours" : "Terminé"}
                 </Badge>
               </div>
 
@@ -165,30 +147,52 @@ const ProjectDetail = () => {
                   </h3>
                   
                   <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <User className="text-accent mt-1" size={20} />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Client</p>
-                        <p className="font-semibold text-primary">{project.client}</p>
+                    {project.client && (
+                      <div className="flex items-start gap-3">
+                        <User className="text-accent mt-1" size={20} />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Client</p>
+                          <p className="font-semibold text-primary">{project.client}</p>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="flex items-start gap-3">
-                      <Calendar className="text-accent mt-1" size={20} />
-                      <div>
-                        <p className="text-sm text-muted-foreground">
-                          {project.status === "En cours" ? "Date de fin prévue" : "Date de réalisation"}
-                        </p>
-                        <p className="font-semibold text-primary">{project.date}</p>
+                    {project.completion_date && (
+                      <div className="flex items-start gap-3">
+                        <Calendar className="text-accent mt-1" size={20} />
+                        <div>
+                          <p className="text-sm text-muted-foreground">
+                            {project.status === "en_cours" ? "Date de fin prévue" : "Date de réalisation"}
+                          </p>
+                          <p className="font-semibold text-primary">
+                            {new Date(project.completion_date).toLocaleDateString('fr-FR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {project.location && (
+                      <div className="flex items-start gap-3">
+                        <MapPin className="text-accent mt-1" size={20} />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Localisation</p>
+                          <p className="font-semibold text-primary">{project.location}</p>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex items-start gap-3">
                       <Building2 className="text-accent mt-1" size={20} />
                       <div>
                         <p className="text-sm text-muted-foreground">Catégorie</p>
                         <p className="font-semibold text-primary capitalize">
-                          {project.category}
+                          {project.category === 'batiments' ? 'Bâtiments' : 
+                           project.category === 'infrastructures' ? 'Infrastructures' : 
+                           'Rénovations'}
                         </p>
                       </div>
                     </div>

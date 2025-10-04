@@ -1,88 +1,57 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Calendar, Share2, ArrowLeft } from "lucide-react";
+import { Calendar, Share2, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  featured_image_url: string | null;
+  category: string;
+  published_at: string;
+  is_published: boolean;
+}
 
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [article, setArticle] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const articles = [
-    {
-      id: 1,
-      title: "Participation au Salon International de la Construction 2025",
-      date: "15 Mars 2025",
-      excerpt: "SODISTRA sera présente au Salon International de la Construction d'Abidjan. Venez découvrir nos dernières innovations et rencontrer notre équipe.",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
-      category: "Événement",
-      content: `
-        <p>Nous sommes ravis d'annoncer notre participation au Salon International de la Construction d'Abidjan 2025, qui se tiendra du 20 au 25 mars au Parc des Expositions d'Abidjan.</p>
-        
-        <h3>Au programme de notre stand :</h3>
-        <ul>
-          <li>Présentation de nos projets phares réalisés en 2024</li>
-          <li>Démonstrations de nos nouvelles technologies de construction</li>
-          <li>Rencontres avec nos ingénieurs et chefs de projet</li>
-          <li>Sessions de questions-réponses sur vos projets</li>
-        </ul>
+  useEffect(() => {
+    fetchArticle();
+  }, [id]);
 
-        <p>Notre équipe sera présente tous les jours de 9h à 18h sur le stand B12, Hall 2. Nous vous attendons nombreux pour échanger sur vos projets et découvrir comment SODISTRA peut vous accompagner dans leur réalisation.</p>
+  const fetchArticle = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', id)
+        .eq('is_published', true)
+        .single();
 
-        <p>Inscription gratuite sur présentation de cette annonce. Venez découvrir l'excellence de la construction ivoirienne !</p>
-      `,
-    },
-    {
-      id: 2,
-      title: "Nouveau projet : Centre commercial moderne à Cocody",
-      date: "10 Mars 2025",
-      excerpt: "Nous sommes fiers d'annoncer le lancement d'un nouveau projet ambitieux : la construction d'un centre commercial de 15 000 m² à Cocody.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
-      category: "Nouveauté",
-      content: `
-        <p>SODISTRA est fier d'annoncer le démarrage d'un projet majeur : la construction d'un centre commercial moderne de 15 000 m² situé au cœur de Cocody.</p>
+      if (error) throw error;
+      setArticle(data);
+    } catch (error) {
+      console.error('Error fetching article:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        <h3>Caractéristiques du projet :</h3>
-        <ul>
-          <li>Surface totale : 15 000 m²</li>
-          <li>4 niveaux de commerces et services</li>
-          <li>Parking souterrain de 300 places</li>
-          <li>Espaces verts et zones de détente</li>
-          <li>Technologies éco-responsables</li>
-        </ul>
-
-        <p>Ce projet ambitieux représente un investissement de plus de 12 milliards de FCFA et créera plus de 500 emplois directs et indirects. Les travaux ont débuté en mars 2025 et la livraison est prévue pour décembre 2026.</p>
-
-        <p>Ce centre commercial sera un lieu de vie moderne, alliant commerce, loisirs et services dans un cadre architectural contemporain respectueux de l'environnement.</p>
-      `,
-    },
-    {
-      id: 3,
-      title: "Journée Portes Ouvertes : Découvrez nos chantiers",
-      date: "5 Mars 2025",
-      excerpt: "SODISTRA organise une journée portes ouvertes sur nos chantiers en cours. Une occasion unique de voir nos équipes en action.",
-      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&h=600&fit=crop",
-      category: "Événement",
-      content: `
-        <p>Pour la première fois, SODISTRA ouvre ses portes au grand public et organise une journée découverte de ses chantiers en cours.</p>
-
-        <h3>Programme de la journée :</h3>
-        <ul>
-          <li>Visite guidée de 3 chantiers majeurs en cours</li>
-          <li>Présentation des métiers de la construction</li>
-          <li>Démonstrations de techniques de construction modernes</li>
-          <li>Ateliers de sensibilisation à la sécurité sur chantier</li>
-          <li>Rencontres avec nos ingénieurs et conducteurs de travaux</li>
-        </ul>
-
-        <p>Cette journée se déroulera le samedi 15 mars 2025 de 9h à 17h. Les visites sont gratuites mais l'inscription est obligatoire pour des raisons de sécurité (places limitées à 100 personnes).</p>
-
-        <p>Inscriptions ouvertes dès maintenant via notre formulaire de contact ou par téléphone au +225 XX XX XX XX.</p>
-      `,
-    },
-  ];
-
-  const article = articles.find((a) => a.id === parseInt(id || "0"));
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-accent" />
+      </div>
+    );
+  }
 
   if (!article) {
     return (
@@ -125,13 +94,15 @@ const BlogDetail = () => {
           </Button>
 
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
-            <div className="aspect-[21/9] overflow-hidden">
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            {article.featured_image_url && (
+              <div className="aspect-[21/9] overflow-hidden">
+                <img
+                  src={article.featured_image_url}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
 
             <div className="p-8 md:p-12">
               <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
@@ -141,7 +112,11 @@ const BlogDetail = () => {
                   </span>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar size={16} className="mr-2" />
-                    {article.date}
+                    {new Date(article.published_at).toLocaleDateString('fr-FR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
                   </div>
                 </div>
                 <Button
