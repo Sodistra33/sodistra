@@ -1,5 +1,6 @@
 import { Shield, Award, Clock, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import logoWatermark from "@/assets/logo-sodistra-watermark.png";
 
 const Advantages = () => {
   const advantages = [
@@ -30,6 +31,15 @@ const Advantages = () => {
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-light rounded-full blur-3xl" />
+      </div>
+      
+      {/* Logo en filigrane */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+        <img 
+          src={logoWatermark} 
+          alt="" 
+          className="w-[600px] h-auto"
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
