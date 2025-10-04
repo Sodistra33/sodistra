@@ -27,6 +27,7 @@ export const BlogManager = () => {
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   useEffect(() => {
     fetchPosts();
@@ -128,7 +129,14 @@ export const BlogManager = () => {
         .from('blog-images')
         .getPublicUrl(filePath);
 
-      (e.target.form?.elements.namedItem('featured_image_url') as HTMLInputElement).value = publicUrl;
+      const urlInput = e.target.form?.elements.namedItem('featured_image_url') as HTMLInputElement;
+      if (urlInput) urlInput.value = publicUrl;
+      
+      setPreviewImage(publicUrl);
+      if (editingPost) {
+        setEditingPost({ ...editingPost, featured_image_url: publicUrl });
+      }
+      
       toast({ title: "Succès", description: "Image uploadée" });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -148,7 +156,10 @@ export const BlogManager = () => {
         <h2 className="text-2xl font-bold">Gestion du Blog</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingPost(null)}>
+            <Button onClick={() => { 
+              setEditingPost(null); 
+              setPreviewImage('');
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Nouvel Article
             </Button>
           </DialogTrigger>
@@ -184,10 +195,10 @@ export const BlogManager = () => {
                   className="cursor-pointer"
                 />
                 {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
-                {editingPost?.featured_image_url && (
-                  <img src={editingPost.featured_image_url} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
+                {(previewImage || editingPost?.featured_image_url) && (
+                  <img src={previewImage || editingPost?.featured_image_url} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
                 )}
-                <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={editingPost?.featured_image_url} />
+                <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={previewImage || editingPost?.featured_image_url} />
               </div>
               <div>
                 <Label htmlFor="is_published">Statut</Label>
@@ -202,7 +213,10 @@ export const BlogManager = () => {
                 </Select>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                  setPreviewImage('');
+                }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
                   {editingPost ? 'Mettre à jour' : 'Créer'}
@@ -227,7 +241,11 @@ export const BlogManager = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="icon" onClick={() => { setEditingPost(post); setIsDialogOpen(true); }}>
+                <Button variant="outline" size="icon" onClick={() => { 
+                  setEditingPost(post); 
+                  setPreviewImage(post.featured_image_url);
+                  setIsDialogOpen(true); 
+                }}>
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button variant="destructive" size="icon" onClick={() => handleDelete(post.id)}>

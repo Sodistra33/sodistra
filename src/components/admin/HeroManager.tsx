@@ -26,6 +26,7 @@ export const HeroManager = () => {
   const [editingHero, setEditingHero] = useState<HeroImage | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   useEffect(() => {
     fetchHeroes();
@@ -127,7 +128,14 @@ export const HeroManager = () => {
         .from('hero-images')
         .getPublicUrl(filePath);
 
-      (e.target.form?.elements.namedItem('image_path') as HTMLInputElement).value = publicUrl;
+      const urlInput = e.target.form?.elements.namedItem('image_path') as HTMLInputElement;
+      if (urlInput) urlInput.value = publicUrl;
+      
+      setPreviewImage(publicUrl);
+      if (editingHero) {
+        setEditingHero({ ...editingHero, image_path: publicUrl });
+      }
+      
       toast({ title: "Succès", description: "Image uploadée" });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -168,7 +176,10 @@ export const HeroManager = () => {
         <h2 className="text-2xl font-bold">Gestion Images Hero</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingHero(null)}>
+            <Button onClick={() => { 
+              setEditingHero(null); 
+              setPreviewImage('');
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Nouvelle Image Hero
             </Button>
           </DialogTrigger>
@@ -196,10 +207,10 @@ export const HeroManager = () => {
                   className="cursor-pointer"
                 />
                 {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
-                {editingHero?.image_path && (
-                  <img src={editingHero.image_path} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
+                {(previewImage || editingHero?.image_path) && (
+                  <img src={previewImage || editingHero?.image_path} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
                 )}
-                <Input id="image_path" name="image_path" type="hidden" defaultValue={editingHero?.image_path} />
+                <Input id="image_path" name="image_path" type="hidden" defaultValue={previewImage || editingHero?.image_path} />
               </div>
               <div>
                 <Label htmlFor="button_text">Texte du bouton (optionnel)</Label>
@@ -221,7 +232,10 @@ export const HeroManager = () => {
                 </select>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                  setPreviewImage('');
+                }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
                   {editingHero ? 'Mettre à jour' : 'Créer'}
@@ -253,7 +267,11 @@ export const HeroManager = () => {
                 <Button variant="outline" size="icon" onClick={() => moveHero(hero.id, 'down')} disabled={index === heroes.length - 1}>
                   <ArrowDown className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" onClick={() => { setEditingHero(hero); setIsDialogOpen(true); }}>
+                <Button variant="outline" size="icon" onClick={() => { 
+                  setEditingHero(hero); 
+                  setPreviewImage(hero.image_path);
+                  setIsDialogOpen(true); 
+                }}>
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button variant="destructive" size="icon" onClick={() => handleDelete(hero.id)}>

@@ -23,6 +23,7 @@ export const PartnersManager = () => {
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewLogo, setPreviewLogo] = useState<string>('');
 
   useEffect(() => {
     fetchPartners();
@@ -125,6 +126,7 @@ export const PartnersManager = () => {
       const urlInput = e.target.form?.elements.namedItem('logo_path') as HTMLInputElement;
       if (urlInput) urlInput.value = publicUrl;
       
+      setPreviewLogo(publicUrl);
       if (editingPartner) {
         setEditingPartner({ ...editingPartner, logo_path: publicUrl });
       }
@@ -148,7 +150,10 @@ export const PartnersManager = () => {
         <h2 className="text-2xl font-bold">Gestion des Partenaires</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingPartner(null)}>
+            <Button onClick={() => { 
+              setEditingPartner(null); 
+              setPreviewLogo('');
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Nouveau Partenaire
             </Button>
           </DialogTrigger>
@@ -163,11 +168,12 @@ export const PartnersManager = () => {
               </div>
               <div>
                 <Label htmlFor="logo">Logo</Label>
-                <Input id="logo" type="file" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
-                {editingPartner?.logo_path && (
-                  <img src={editingPartner.logo_path} alt="Preview" className="mt-2 h-20 object-contain rounded" />
+                <Input id="logo" type="file" accept="image/*" onChange={handleLogoUpload} disabled={uploading} className="cursor-pointer" />
+                {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
+                {(previewLogo || editingPartner?.logo_path) && (
+                  <img src={previewLogo || editingPartner?.logo_path} alt="Preview" className="mt-2 h-20 object-contain rounded" />
                 )}
-                <Input id="logo_path" name="logo_path" type="hidden" defaultValue={editingPartner?.logo_path} />
+                <Input id="logo_path" name="logo_path" type="hidden" defaultValue={previewLogo || editingPartner?.logo_path} />
               </div>
               <div>
                 <Label htmlFor="website_url">Site web (optionnel)</Label>
@@ -185,7 +191,10 @@ export const PartnersManager = () => {
                 </select>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                  setPreviewLogo('');
+                }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
                   {editingPartner ? 'Mettre à jour' : 'Créer'}
@@ -204,7 +213,11 @@ export const PartnersManager = () => {
               <CardTitle className="text-lg">{partner.name}</CardTitle>
               <p className="text-sm text-muted-foreground">Ordre: {partner.display_order}</p>
               <div className="flex gap-2 mt-2">
-                <Button variant="outline" size="sm" onClick={() => { setEditingPartner(partner); setIsDialogOpen(true); }}>
+                <Button variant="outline" size="sm" onClick={() => { 
+                  setEditingPartner(partner); 
+                  setPreviewLogo(partner.logo_path);
+                  setIsDialogOpen(true); 
+                }}>
                   <Pencil className="h-3 w-3 mr-1" /> Modifier
                 </Button>
                 <Button variant="destructive" size="sm" onClick={() => handleDelete(partner.id)}>

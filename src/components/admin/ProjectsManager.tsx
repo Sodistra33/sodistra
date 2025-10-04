@@ -28,6 +28,7 @@ export const ProjectsManager = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useEffect(() => {
     fetchProjects();
@@ -61,6 +62,7 @@ export const ProjectsManager = () => {
       location: formData.get('location') as string,
       completion_date: formData.get('completion_date') as string,
       featured_image_url: formData.get('featured_image_url') as string,
+      gallery_images: galleryImages.length > 0 ? galleryImages : null,
       is_published: formData.get('is_published') === 'true',
     };
 
@@ -84,6 +86,7 @@ export const ProjectsManager = () => {
 
       setIsDialogOpen(false);
       setEditingProject(null);
+      setGalleryImages([]);
       fetchProjects();
     } catch (error) {
       console.error('Error saving project:', error);
@@ -136,13 +139,56 @@ export const ProjectsManager = () => {
         setEditingProject({ ...editingProject, featured_image_url: publicUrl });
       }
       
-      toast({ title: "Succès", description: "Image uploadée" });
+      toast({ title: "Succès", description: "Image principale uploadée" });
     } catch (error) {
       console.error('Error uploading image:', error);
       toast({ title: "Erreur", description: "Impossible d'uploader l'image", variant: "destructive" });
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadedUrls: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('project-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('project-images')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(publicUrl);
+      }
+
+      setGalleryImages([...galleryImages, ...uploadedUrls]);
+      toast({ title: "Succès", description: `${uploadedUrls.length} image(s) ajoutée(s) à la galerie` });
+    } catch (error) {
+      console.error('Error uploading gallery images:', error);
+      toast({ title: "Erreur", description: "Impossible d'uploader les images", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    const newGallery = [...galleryImages];
+    newGallery.splice(index, 1);
+    setGalleryImages(newGallery);
   };
 
   if (loading) {
@@ -155,7 +201,10 @@ export const ProjectsManager = () => {
         <h2 className="text-2xl font-bold">Gestion des Projets</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingProject(null)}>
+            <Button onClick={() => { 
+              setEditingProject(null); 
+              setGalleryImages([]);
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Nouveau Projet
             </Button>
           </DialogTrigger>
@@ -210,6 +259,37 @@ export const ProjectsManager = () => {
                 <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={editingProject?.featured_image_url} />
               </div>
               <div>
+                <Label htmlFor="gallery_images">Images de la galerie</Label>
+                <Input 
+                  id="gallery_images" 
+                  type="file" 
+                  accept="image/*" 
+                  multiple
+                  onChange={handleGalleryUpload} 
+                  disabled={uploading}
+                  className="cursor-pointer" 
+                />
+                {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
+                {galleryImages.length > 0 && (
+                  <div className="mt-2 grid grid-cols-4 gap-2">
+                    {galleryImages.map((url, index) => (
+                      <div key={index} className="relative group">
+                        <img src={url} alt={`Gallery ${index + 1}`} className="h-20 w-full object-cover rounded" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeGalleryImage(index)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
                 <Label htmlFor="is_published">Statut</Label>
                 <Select name="is_published" defaultValue={editingProject?.is_published ? 'true' : 'false'}>
                   <SelectTrigger>
@@ -222,7 +302,10 @@ export const ProjectsManager = () => {
                 </Select>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                  setGalleryImages([]);
+                }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
                   {editingProject ? 'Mettre à jour' : 'Créer'}
@@ -249,7 +332,11 @@ export const ProjectsManager = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="icon" onClick={() => { setEditingProject(project); setIsDialogOpen(true); }}>
+                <Button variant="outline" size="icon" onClick={() => { 
+                  setEditingProject(project); 
+                  setGalleryImages(project.gallery_images || []);
+                  setIsDialogOpen(true); 
+                }}>
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button variant="destructive" size="icon" onClick={() => handleDelete(project.id)}>
