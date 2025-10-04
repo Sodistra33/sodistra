@@ -34,16 +34,21 @@ const Blog = () => {
   };
 
   const handleShare = (article: any) => {
+    const shareUrl = `${window.location.origin}/actualite/${article.id}`;
+    
     if (navigator.share) {
       navigator.share({
         title: article.title,
         text: article.excerpt,
-        url: window.location.href,
+        url: shareUrl,
       }).catch(() => {
         console.log("Partage annulé");
       });
     } else {
-      console.log("Partage non supporté");
+      // Fallback: copier le lien dans le presse-papier
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        console.log("Lien copié dans le presse-papier");
+      });
     }
   };
 

@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoSodistra from "@/assets/logo-sodistra.png";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,10 +29,18 @@ const Navbar = () => {
   ];
 
   const scrollToSection = (href: string) => {
+    setIsMobileMenuOpen(false);
+    
+    // Si on n'est pas sur la page d'accueil, naviguer d'abord vers l'accueil
+    if (location.pathname !== '/') {
+      navigate('/' + href);
+      return;
+    }
+    
+    // Sinon, faire défiler vers la section
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
     }
   };
 

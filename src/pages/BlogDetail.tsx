@@ -65,16 +65,21 @@ const BlogDetail = () => {
   }
 
   const handleShare = () => {
+    const shareUrl = window.location.href;
+    
     if (navigator.share) {
       navigator.share({
         title: article.title,
         text: article.excerpt,
-        url: window.location.href,
+        url: shareUrl,
       }).catch(() => {
         console.log("Partage annulé");
       });
     } else {
-      console.log("Partage non supporté");
+      // Fallback: copier le lien dans le presse-papier
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        alert("Lien copié dans le presse-papier !");
+      });
     }
   };
 
@@ -85,7 +90,7 @@ const BlogDetail = () => {
       <div className="pt-24 pb-20 bg-secondary">
         <div className="container mx-auto px-4">
           <Button
-            onClick={() => navigate("/#actualites")}
+            onClick={() => navigate("/actualites")}
             variant="ghost"
             className="mb-8 text-primary hover:text-accent"
           >

@@ -44,16 +44,19 @@ const ProjectDetail = () => {
 
       if (error) throw error;
       
-      // Calculer le statut basé sur la date d'achèvement
+      // Calculer le statut basé sur la date d'achèvement et créer l'objet avec status
       if (data) {
         const isCompleted = data.completion_date 
           ? new Date(data.completion_date) <= new Date() 
           : false;
         
-        data.status = isCompleted ? 'completed' : 'en_cours';
+        const projectWithStatus: Project = {
+          ...data,
+          status: isCompleted ? 'completed' : 'en_cours'
+        };
+        
+        setProject(projectWithStatus);
       }
-      
-      setProject(data);
     } catch (error) {
       console.error('Error fetching project:', error);
     } finally {
@@ -213,22 +216,14 @@ const ProjectDetail = () => {
                   <Button
                     size="lg"
                     className="flex-1 bg-accent hover:bg-accent-light text-accent-foreground"
-                    onClick={() => {
-                      const element = document.querySelector("#contact");
-                      if (element) {
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                        setTimeout(() => {
-                          navigate("/#contact");
-                        }, 300);
-                      }
-                    }}
+                    onClick={() => navigate("/#contact")}
                   >
                     Contactez-nous
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/projets")}
                   >
                     Autres projets
                   </Button>
