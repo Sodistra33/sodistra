@@ -187,11 +187,22 @@ export const HeroManager = () => {
               </div>
               <div>
                 <Label htmlFor="image">Image</Label>
-                <Input id="image" type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                <Input id="image_path" name="image_path" placeholder="URL de l'image" defaultValue={editingHero?.image_path} className="mt-2" required />
+                <Input 
+                  id="image" 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  disabled={uploading}
+                  className="cursor-pointer"
+                />
+                {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
+                {editingHero?.image_path && (
+                  <img src={editingHero.image_path} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
+                )}
+                <Input id="image_path" name="image_path" type="hidden" defaultValue={editingHero?.image_path} />
               </div>
               <div>
-                <Label htmlFor="button_text">Texte du bouton</Label>
+                <Label htmlFor="button_text">Texte du bouton (optionnel)</Label>
                 <Input id="button_text" name="button_text" defaultValue={editingHero?.button_text || ''} placeholder="Ex: En savoir plus" />
               </div>
               <div>

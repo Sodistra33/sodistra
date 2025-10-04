@@ -38,6 +38,7 @@ const Projects = () => {
       const { data, error } = await supabase
         .from('projects')
         .select('*')
+        .eq('is_published', true)
         .order('completion_date', { ascending: false });
 
       if (error) throw error;
@@ -114,21 +115,23 @@ const Projects = () => {
     { id: "renovations", label: "Rénovations" },
   ];
 
-  // Combiner les projets de la base de données avec les projets statiques
-  const allProjects = [
-    ...projects,
-    ...dbProjects.map((p: any) => ({
-      id: parseInt(p.id) || Math.random(),
-      title: p.title,
-      category: p.category,
-      image: p.image_url || building1,
-      status: p.status === "completed" ? "Terminé" : "En cours",
-      description: p.description,
-      client: p.client,
-      date: new Date(p.completion_date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
-      gallery: p.gallery_images || [],
-    }))
-  ];
+  // Mapper les projets de la base de données
+  const mappedDbProjects = dbProjects.map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    category: p.category.toLowerCase(),
+    image: p.featured_image_url || building1,
+    status: p.is_published ? "Terminé" : "En cours",
+    description: p.description,
+    client: p.location || 'SODISTRA',
+    date: new Date(p.completion_date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
+    gallery: p.gallery_images || [],
+  }));
+
+  // Combiner avec les projets statiques si pas assez de projets en BDD
+  const allProjects = dbProjects.length > 0 
+    ? mappedDbProjects 
+    : projects;
 
   const filteredProjects =
     activeFilter === "tous"

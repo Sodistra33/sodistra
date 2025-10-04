@@ -195,9 +195,17 @@ export const ProjectsManager = () => {
               </div>
               <div>
                 <Label htmlFor="featured_image">Image principale</Label>
-                <Input id="featured_image" type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                <Input 
+                  id="featured_image" 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  disabled={uploading}
+                  className="cursor-pointer" 
+                />
+                {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
                 {editingProject?.featured_image_url && (
-                  <img src={editingProject.featured_image_url} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                  <img src={editingProject.featured_image_url} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
                 )}
                 <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={editingProject?.featured_image_url} />
               </div>

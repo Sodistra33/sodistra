@@ -355,20 +355,20 @@ CREATE POLICY "Public can view hero images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'hero-images');
 
-DROP POLICY IF EXISTS "Admins can upload hero images" ON storage.objects;
-CREATE POLICY "Admins can upload hero images"
+DROP POLICY IF EXISTS "Authenticated can upload hero images" ON storage.objects;
+CREATE POLICY "Authenticated can upload hero images"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'hero-images' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'hero-images');
 
-DROP POLICY IF EXISTS "Admins can update hero images" ON storage.objects;
-CREATE POLICY "Admins can update hero images"
+DROP POLICY IF EXISTS "Authenticated can update hero images" ON storage.objects;
+CREATE POLICY "Authenticated can update hero images"
   ON storage.objects FOR UPDATE TO authenticated
-  USING (bucket_id = 'hero-images' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'hero-images');
 
-DROP POLICY IF EXISTS "Admins can delete hero images" ON storage.objects;
-CREATE POLICY "Admins can delete hero images"
+DROP POLICY IF EXISTS "Authenticated can delete hero images" ON storage.objects;
+CREATE POLICY "Authenticated can delete hero images"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'hero-images' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'hero-images');
 
 -- Policies pour project-images
 DROP POLICY IF EXISTS "Public can view project images" ON storage.objects;
@@ -376,15 +376,15 @@ CREATE POLICY "Public can view project images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'project-images');
 
-DROP POLICY IF EXISTS "Admins can upload project images" ON storage.objects;
-CREATE POLICY "Admins can upload project images"
+DROP POLICY IF EXISTS "Authenticated can upload project images" ON storage.objects;
+CREATE POLICY "Authenticated can upload project images"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'project-images' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'project-images');
 
-DROP POLICY IF EXISTS "Admins can delete project images" ON storage.objects;
-CREATE POLICY "Admins can delete project images"
+DROP POLICY IF EXISTS "Authenticated can delete project images" ON storage.objects;
+CREATE POLICY "Authenticated can delete project images"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'project-images' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'project-images');
 
 -- Policies pour blog-images
 DROP POLICY IF EXISTS "Public can view blog images" ON storage.objects;
@@ -392,15 +392,15 @@ CREATE POLICY "Public can view blog images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'blog-images');
 
-DROP POLICY IF EXISTS "Admins can upload blog images" ON storage.objects;
-CREATE POLICY "Admins can upload blog images"
+DROP POLICY IF EXISTS "Authenticated can upload blog images" ON storage.objects;
+CREATE POLICY "Authenticated can upload blog images"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'blog-images' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'blog-images');
 
-DROP POLICY IF EXISTS "Admins can delete blog images" ON storage.objects;
-CREATE POLICY "Admins can delete blog images"
+DROP POLICY IF EXISTS "Authenticated can delete blog images" ON storage.objects;
+CREATE POLICY "Authenticated can delete blog images"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'blog-images' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'blog-images');
 
 -- Policies pour partner-logos
 DROP POLICY IF EXISTS "Public can view partner logos" ON storage.objects;
@@ -408,15 +408,15 @@ CREATE POLICY "Public can view partner logos"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'partner-logos');
 
-DROP POLICY IF EXISTS "Admins can upload partner logos" ON storage.objects;
-CREATE POLICY "Admins can upload partner logos"
+DROP POLICY IF EXISTS "Authenticated can upload partner logos" ON storage.objects;
+CREATE POLICY "Authenticated can upload partner logos"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'partner-logos' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'partner-logos');
 
-DROP POLICY IF EXISTS "Admins can delete partner logos" ON storage.objects;
-CREATE POLICY "Admins can delete partner logos"
+DROP POLICY IF EXISTS "Authenticated can delete partner logos" ON storage.objects;
+CREATE POLICY "Authenticated can delete partner logos"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'partner-logos' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'partner-logos');
 
 -- Policies pour about-images
 DROP POLICY IF EXISTS "Public can view about images" ON storage.objects;
@@ -424,15 +424,15 @@ CREATE POLICY "Public can view about images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'about-images');
 
-DROP POLICY IF EXISTS "Admins can upload about images" ON storage.objects;
-CREATE POLICY "Admins can upload about images"
+DROP POLICY IF EXISTS "Authenticated can upload about images" ON storage.objects;
+CREATE POLICY "Authenticated can upload about images"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'about-images' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'about-images');
 
-DROP POLICY IF EXISTS "Admins can delete about images" ON storage.objects;
-CREATE POLICY "Admins can delete about images"
+DROP POLICY IF EXISTS "Authenticated can delete about images" ON storage.objects;
+CREATE POLICY "Authenticated can delete about images"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'about-images' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'about-images');
 
 -- Policies pour brochures
 DROP POLICY IF EXISTS "Public can view brochures" ON storage.objects;
@@ -440,15 +440,15 @@ CREATE POLICY "Public can view brochures"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'brochures');
 
-DROP POLICY IF EXISTS "Admins can upload brochures" ON storage.objects;
-CREATE POLICY "Admins can upload brochures"
+DROP POLICY IF EXISTS "Authenticated can upload brochures" ON storage.objects;
+CREATE POLICY "Authenticated can upload brochures"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'brochures' AND public.has_role(auth.uid(), 'admin'));
+  WITH CHECK (bucket_id = 'brochures');
 
-DROP POLICY IF EXISTS "Admins can delete brochures" ON storage.objects;
-CREATE POLICY "Admins can delete brochures"
+DROP POLICY IF EXISTS "Authenticated can delete brochures" ON storage.objects;
+CREATE POLICY "Authenticated can delete brochures"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'brochures' AND public.has_role(auth.uid(), 'admin'));
+  USING (bucket_id = 'brochures');
 
 -- ========================================
 -- FIN DU SCRIPT
