@@ -38,7 +38,7 @@ const Advantages = () => {
         <img 
           src={logoWatermark} 
           alt="" 
-          className="w-[600px] h-auto"
+          className="w-[1200px] h-auto"
         />
       </div>
 
@@ -64,7 +64,7 @@ const Advantages = () => {
             >
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mb-6 mx-auto">
-                  <advantage.icon className="text-accent-foreground" size={60} />
+                  <advantage.icon className="text-accent-foreground" size={52} />
                 </div>
                 <h3 className="text-xl font-bold mb-3">{advantage.title}</h3>
                 <p className="text-primary-foreground/70 leading-relaxed">{advantage.description}</p>
