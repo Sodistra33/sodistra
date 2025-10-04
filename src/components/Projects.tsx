@@ -110,10 +110,10 @@ const Projects = () => {
             <Card
               key={project.id}
               onClick={() => navigate(`/projet/${project.id}`)}
-              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer animate-slide-up border-border"
+              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer animate-slide-up border-none bg-gradient-to-br from-blue-500/20 via-blue-400/10 to-transparent"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="relative aspect-video overflow-hidden">
+              <div className="relative aspect-video overflow-hidden rounded-t-lg">
                 <img
                   src={project.image}
                   alt={project.title}
@@ -124,8 +124,8 @@ const Projects = () => {
                     variant={project.status === "Terminé" ? "default" : "secondary"}
                     className={
                       project.status === "Terminé"
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-orange-500 hover:bg-orange-600"
+                        ? "bg-green-500 hover:bg-green-600 text-white"
+                        : "bg-orange-500 hover:bg-orange-600 text-white"
                     }
                   >
                     {project.status}
@@ -133,9 +133,14 @@ const Projects = () => {
                 </div>
               </div>
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-accent mb-2 group-hover:text-accent transition-colors">
+                <h3 className="text-xl font-bold text-accent mb-2 group-hover:text-accent/80 transition-colors">
                   {project.title}
                 </h3>
+                {project.description && (
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {project.description}
+                  </p>
+                )}
               </CardContent>
             </Card>
           ))}
