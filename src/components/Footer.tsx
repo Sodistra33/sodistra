@@ -1,5 +1,5 @@
 import { Facebook, Linkedin, Mail, Phone } from "lucide-react";
-import logoSodistra from "@/assets/logo-sodistra.png";
+import logoSodistra from "@/assets/logo-sodistra-footer.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -16,9 +16,8 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <img src={logoSodistra} alt="Logo SODISTRA" className="w-10 h-10 object-contain" />
-              <span className="text-xl font-bold">SODISTRA</span>
+            <div className="mb-4">
+              <img src={logoSodistra} alt="Logo SODISTRA" className="h-12 w-auto object-contain" />
             </div>
             <p className="text-primary-foreground/70 mb-4">
               Votre partenaire de confiance pour tous vos projets de construction en Côte d'Ivoire.
