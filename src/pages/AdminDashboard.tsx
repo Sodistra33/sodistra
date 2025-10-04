@@ -5,7 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { LogOut } from "lucide-react";
+import { 
+  LogOut, 
+  FolderKanban, 
+  Newspaper, 
+  Users, 
+  FileText, 
+  Briefcase, 
+  Image, 
+  Mail,
+  Wrench 
+} from "lucide-react";
 import { ProjectsManager } from "@/components/admin/ProjectsManager";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { PartnersManager } from "@/components/admin/PartnersManager";
@@ -19,6 +29,16 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    projects: 0,
+    blog: 0,
+    partners: 0,
+    messages: 0,
+    services: 0,
+    hero: 0,
+    brochures: 0,
+    about: 0
+  });
 
   useEffect(() => {
     checkAuth();
@@ -44,6 +64,44 @@ const AdminDashboard = () => {
 
     setUser(session.user);
     setLoading(false);
+    loadStats();
+  };
+
+  const loadStats = async () => {
+    try {
+      const [
+        projectsRes,
+        blogRes,
+        partnersRes,
+        messagesRes,
+        servicesRes,
+        heroRes,
+        brochuresRes,
+        aboutRes
+      ] = await Promise.all([
+        supabase.from('projects').select('id', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('id', { count: 'exact', head: true }),
+        supabase.from('partners').select('id', { count: 'exact', head: true }),
+        supabase.from('contact_messages').select('id', { count: 'exact', head: true }),
+        supabase.from('services').select('id', { count: 'exact', head: true }),
+        supabase.from('hero_images').select('id', { count: 'exact', head: true }),
+        supabase.from('brochures').select('id', { count: 'exact', head: true }),
+        supabase.from('about_content').select('id', { count: 'exact', head: true })
+      ]);
+
+      setStats({
+        projects: projectsRes.count || 0,
+        blog: blogRes.count || 0,
+        partners: partnersRes.count || 0,
+        messages: messagesRes.count || 0,
+        services: servicesRes.count || 0,
+        hero: heroRes.count || 0,
+        brochures: brochuresRes.count || 0,
+        about: aboutRes.count || 0
+      });
+    } catch (error) {
+      console.error('Error loading stats:', error);
+    }
   };
 
   const handleLogout = async () => {
@@ -169,26 +227,141 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="pt-4">
-                <div className="space-y-4">
-                  <p className="text-foreground/80 leading-relaxed">
-                    Utilisez les onglets ci-dessus pour naviguer entre les différentes sections de gestion.
-                  </p>
-                  <div className="flex flex-wrap gap-3 pt-2">
-                    <div className="flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-lg border border-accent/20">
-                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-                      <span className="text-sm font-medium text-primary">Système actif</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-lg border border-primary/20">
-                      <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-sm font-medium text-primary">Gestion rapide</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
             </Card>
+
+            {/* Statistiques */}
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold text-foreground">Statistiques du site</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Projets */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Projets</CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <FolderKanban className="h-5 w-5 text-primary" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-primary">{stats.projects}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Total de projets</p>
+                  </CardContent>
+                </Card>
+
+                {/* Articles de blog */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Articles</CardTitle>
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Newspaper className="h-5 w-5 text-accent" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-accent">{stats.blog}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Articles de blog</p>
+                  </CardContent>
+                </Card>
+
+                {/* Partenaires */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Partenaires</CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Users className="h-5 w-5 text-primary" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-primary">{stats.partners}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Partenaires actifs</p>
+                  </CardContent>
+                </Card>
+
+                {/* Messages */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Messages</CardTitle>
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Mail className="h-5 w-5 text-accent" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-accent">{stats.messages}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Messages de contact</p>
+                  </CardContent>
+                </Card>
+
+                {/* Services */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Services</CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Wrench className="h-5 w-5 text-primary" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-primary">{stats.services}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Services proposés</p>
+                  </CardContent>
+                </Card>
+
+                {/* Images Hero */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Images Hero</CardTitle>
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Image className="h-5 w-5 text-accent" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-accent">{stats.hero}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Images d'accueil</p>
+                  </CardContent>
+                </Card>
+
+                {/* Brochures */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Brochures</CardTitle>
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <FileText className="h-5 w-5 text-primary" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-primary">{stats.brochures}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Brochures disponibles</p>
+                  </CardContent>
+                </Card>
+
+                {/* À propos */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">À propos</CardTitle>
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Briefcase className="h-5 w-5 text-accent" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-accent">{stats.about}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Contenus À propos</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="hero"><HeroManager /></TabsContent>
