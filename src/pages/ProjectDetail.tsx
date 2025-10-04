@@ -40,21 +40,10 @@ const ProjectDetail = () => {
         .select('*')
         .eq('id', id)
         .eq('is_published', true)
-        .maybeSingle();
+        .single();
 
       if (error) throw error;
-      
-      if (data) {
-        // Calculer le statut basé sur la date d'achèvement
-        const isCompleted = data.completion_date 
-          ? new Date(data.completion_date) <= new Date() 
-          : false;
-        
-        setProject({
-          ...data,
-          status: isCompleted ? 'completed' : 'en_cours'
-        });
-      }
+      setProject(data);
     } catch (error) {
       console.error('Error fetching project:', error);
     } finally {
@@ -134,12 +123,12 @@ const ProjectDetail = () => {
               <div className="flex items-center gap-3 mb-4">
                 <Badge 
                   className={`text-sm ${
-                    project.status === "completed" 
-                      ? "bg-green-600 text-white" 
-                      : "bg-orange-500 text-white"
+                    project.status === "en_cours" 
+                      ? "bg-accent text-accent-foreground" 
+                      : "bg-green-600 text-white"
                   }`}
                 >
-                  {project.status === "completed" ? "Terminé" : "En cours"}
+                  {project.status === "en_cours" ? "En cours" : "Terminé"}
                 </Badge>
               </div>
 
@@ -173,7 +162,7 @@ const ProjectDetail = () => {
                         <Calendar className="text-accent mt-1" size={20} />
                         <div>
                           <p className="text-sm text-muted-foreground">
-                            {project.status === "completed" ? "Date de réalisation" : "Date de fin prévue"}
+                            {project.status === "en_cours" ? "Date de fin" : "Date de réalisation"}
                           </p>
                           <p className="font-semibold text-primary">
                             {new Date(project.completion_date).toLocaleDateString('fr-FR', {
