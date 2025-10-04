@@ -38,7 +38,7 @@ const Services = () => {
         setServices([
           {
             id: '1',
-            title: "Construction de bâtiments",
+            title: "Construction d bâtiments",
             description: "Conception et réalisation de bâtiments résidentiels, commerciaux et industriels de haute qualité.",
             icon_name: "Building2",
             display_order: 0,
