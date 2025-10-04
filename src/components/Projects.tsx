@@ -110,15 +110,19 @@ const Projects = () => {
             <Card
               key={project.id}
               onClick={() => navigate(`/projet/${project.id}`)}
-              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer animate-slide-up border-none bg-gradient-to-br from-blue-500/20 via-blue-400/10 to-transparent"
+              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer animate-slide-up border-none h-[400px]"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="relative aspect-video overflow-hidden rounded-t-lg">
+              <div className="relative w-full h-full overflow-hidden">
                 <img
                   src={project.image}
                   alt={project.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
+                {/* Gradient overlay - transparent at top, dark at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/40 to-blue-950/90" />
+                
+                {/* Status badge */}
                 <div className="absolute top-4 right-4">
                   <Badge
                     variant={project.status === "Terminé" ? "default" : "secondary"}
@@ -131,17 +135,19 @@ const Projects = () => {
                     {project.status}
                   </Badge>
                 </div>
+
+                {/* Text content overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-accent mb-2 group-hover:text-accent/80 transition-colors">
+                    {project.title}
+                  </h3>
+                  {project.description && (
+                    <p className="text-sm text-white/90 line-clamp-2">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
               </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-accent mb-2 group-hover:text-accent/80 transition-colors">
-                  {project.title}
-                </h3>
-                {project.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {project.description}
-                  </p>
-                )}
-              </CardContent>
             </Card>
           ))}
         </div>
