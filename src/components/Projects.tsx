@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 import building1 from "@/assets/project-building-1.jpg";
 import building2 from "@/assets/project-building-2.jpg";
 import infrastructure1 from "@/assets/project-infrastructure-1.jpg";
@@ -24,6 +26,28 @@ const Projects = () => {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState("tous");
   const [showAll, setShowAll] = useState(false);
+  const [dbProjects, setDbProjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('completion_date', { ascending: false });
+
+      if (error) throw error;
+      setDbProjects(data || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const projects: Project[] = [
     {
@@ -90,10 +114,26 @@ const Projects = () => {
     { id: "renovations", label: "Rénovations" },
   ];
 
+  // Combiner les projets de la base de données avec les projets statiques
+  const allProjects = [
+    ...projects,
+    ...dbProjects.map((p: any) => ({
+      id: parseInt(p.id) || Math.random(),
+      title: p.title,
+      category: p.category,
+      image: p.image_url || building1,
+      status: p.status === "completed" ? "Terminé" : "En cours",
+      description: p.description,
+      client: p.client,
+      date: new Date(p.completion_date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
+      gallery: p.gallery_images || [],
+    }))
+  ];
+
   const filteredProjects =
     activeFilter === "tous"
-      ? projects
-      : projects.filter((project) => project.category === activeFilter);
+      ? allProjects
+      : allProjects.filter((project) => project.category === activeFilter);
 
   const displayedProjects = showAll ? filteredProjects : filteredProjects.slice(0, 6);
 

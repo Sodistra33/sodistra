@@ -1,12 +1,36 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+
 const Partners = () => {
-  const partners = [
-    { name: "Partenaire 1", logo: "P1" },
-    { name: "Partenaire 2", logo: "P2" },
-    { name: "Partenaire 3", logo: "P3" },
-    { name: "Partenaire 4", logo: "P4" },
-    { name: "Partenaire 5", logo: "P5" },
-    { name: "Partenaire 6", logo: "P6" },
-  ];
+  const [partners, setPartners] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPartners();
+  }, []);
+
+  const fetchPartners = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('partners')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+
+      if (error) throw error;
+      setPartners(data || []);
+    } catch (error) {
+      console.error('Error fetching partners:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les partenaires",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="py-20 bg-background border-y border-border">
@@ -20,19 +44,33 @@ const Partners = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-          {partners.map((partner, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-center p-6 grayscale hover:grayscale-0 transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="w-24 h-24 bg-secondary rounded-xl flex items-center justify-center border border-border">
-                <span className="text-2xl font-bold text-muted-foreground">{partner.logo}</span>
+        {loading ? (
+          <p className="text-center text-muted-foreground">Chargement des partenaires...</p>
+        ) : partners.length === 0 ? (
+          <p className="text-center text-muted-foreground">Aucun partenaire pour le moment.</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+            {partners.map((partner, index) => (
+              <div
+                key={partner.id}
+                className="flex items-center justify-center p-6 grayscale hover:grayscale-0 transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {partner.logo_path ? (
+                  <img 
+                    src={partner.logo_path} 
+                    alt={partner.name}
+                    className="w-full h-24 object-contain"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-secondary rounded-xl flex items-center justify-center border border-border">
+                    <span className="text-2xl font-bold text-muted-foreground">{partner.name.substring(0, 2)}</span>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

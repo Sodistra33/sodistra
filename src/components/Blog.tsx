@@ -2,9 +2,37 @@ import { Calendar, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [dbArticles, setDbArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('is_published', true)
+        .order('published_at', { ascending: false })
+        .limit(6);
+
+      if (error) throw error;
+      setDbArticles(data || []);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const articles = [
     {
       id: 1,
@@ -62,7 +90,66 @@ const Blog = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article, index) => (
+          {loading ? (
+            <p className="col-span-full text-center text-muted-foreground">Chargement des articles...</p>
+          ) : (
+            <>
+              {/* Articles de la base de données */}
+              {dbArticles.map((article: any, index: number) => (
+                <Card
+                  key={`db-${article.id}`}
+                  className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="aspect-video overflow-hidden">
+                    <img
+                      src={article.featured_image_url}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
+                        {article.category}
+                      </span>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Calendar size={16} className="mr-1" />
+                        {new Date(article.published_at).toLocaleDateString('fr-FR')}
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <Button 
+                        variant="link" 
+                        className="p-0 h-auto text-accent"
+                        onClick={() => navigate(`/actualite/${article.id}`)}
+                      >
+                        Lire la suite →
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleShare(article);
+                        }}
+                        className="text-muted-foreground hover:text-accent"
+                      >
+                        <Share2 size={18} />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              
+              {/* Articles statiques si pas assez d'articles en BDD */}
+              {dbArticles.length < 3 && articles.slice(0, 3 - dbArticles.length).map((article, index) => (
             <Card
               key={article.id}
               className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
@@ -113,7 +200,9 @@ const Blog = () => {
                 </div>
               </div>
             </Card>
-          ))}
+              ))}
+            </>
+          )}
         </div>
       </div>
     </section>
