@@ -233,9 +233,12 @@ export type Database = {
       projects: {
         Row: {
           category: string
+          client: string | null
           completion_date: string | null
           created_at: string
           description: string | null
+          featured_image_url: string | null
+          gallery_images: string[] | null
           id: string
           images: string[] | null
           is_published: boolean | null
@@ -245,9 +248,12 @@ export type Database = {
         }
         Insert: {
           category: string
+          client?: string | null
           completion_date?: string | null
           created_at?: string
           description?: string | null
+          featured_image_url?: string | null
+          gallery_images?: string[] | null
           id?: string
           images?: string[] | null
           is_published?: boolean | null
@@ -257,9 +263,12 @@ export type Database = {
         }
         Update: {
           category?: string
+          client?: string | null
           completion_date?: string | null
           created_at?: string
           description?: string | null
+          featured_image_url?: string | null
+          gallery_images?: string[] | null
           id?: string
           images?: string[] | null
           is_published?: boolean | null
