@@ -117,7 +117,7 @@ const Hero = () => {
                 </div>
 
                 <div className="relative z-10 container mx-auto px-4 text-center">
-                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
+                  <h1 className="text-5xl md:text-7xl font-bold text-accent mb-6 animate-fade-in">
                     {hero.title}
                   </h1>
                   {hero.subtitle && (

@@ -12,6 +12,7 @@ import { PartnersManager } from "@/components/admin/PartnersManager";
 import { BrochuresManager } from "@/components/admin/BrochuresManager";
 import { AboutManager } from "@/components/admin/AboutManager";
 import { HeroManager } from "@/components/admin/HeroManager";
+import { ServicesManager } from "@/components/admin/ServicesManager";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -104,6 +105,12 @@ const AdminDashboard = () => {
               Hero
             </TabsTrigger>
             <TabsTrigger 
+              value="services"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all"
+            >
+              Services
+            </TabsTrigger>
+            <TabsTrigger 
               value="projects"
               className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all"
             >
@@ -178,6 +185,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="hero"><HeroManager /></TabsContent>
+          <TabsContent value="services"><ServicesManager /></TabsContent>
           <TabsContent value="projects"><ProjectsManager /></TabsContent>
           <TabsContent value="blog"><BlogManager /></TabsContent>
           <TabsContent value="about"><AboutManager /></TabsContent>

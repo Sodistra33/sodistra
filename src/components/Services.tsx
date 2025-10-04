@@ -1,5 +1,6 @@
 import { Building2, HardHat, Wrench, FileText, Briefcase, Package, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -107,8 +108,30 @@ const Services = () => {
   if (loading) {
     return (
       <section id="services" className="py-20 bg-background">
-        <div className="container mx-auto px-4 flex justify-center">
-          <Loader2 className="animate-spin h-12 w-12 text-accent" />
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">
+              Nos services
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
+              Quels services <span className="text-accent">offrons-nous ?</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Une gamme complète de services pour répondre à tous vos besoins en construction
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="border-border">
+                <CardContent className="p-8">
+                  <Skeleton className="w-16 h-16 rounded-2xl mb-6" />
+                  <Skeleton className="h-6 w-3/4 mb-3" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     );

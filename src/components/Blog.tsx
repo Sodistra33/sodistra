@@ -2,9 +2,9 @@ import { Calendar, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/use-toast";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Blog = () => {
         .select('*')
         .eq('is_published', true)
         .order('published_at', { ascending: false })
-        .limit(6);
+        .limit(3);
 
       if (error) throw error;
       setDbArticles(data || []);
@@ -33,34 +33,7 @@ const Blog = () => {
     }
   };
 
-  const articles = [
-    {
-      id: 1,
-      title: "Participation au Salon International de la Construction 2025",
-      date: "15 Mars 2025",
-      excerpt: "SODISTRA sera présente au Salon International de la Construction d'Abidjan. Venez découvrir nos dernières innovations et rencontrer notre équipe.",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
-      category: "Événement",
-    },
-    {
-      id: 2,
-      title: "Nouveau projet : Centre commercial moderne à Cocody",
-      date: "10 Mars 2025",
-      excerpt: "Nous sommes fiers d'annoncer le lancement d'un nouveau projet ambitieux : la construction d'un centre commercial de 15 000 m² à Cocody.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
-      category: "Nouveauté",
-    },
-    {
-      id: 3,
-      title: "Journée Portes Ouvertes : Découvrez nos chantiers",
-      date: "5 Mars 2025",
-      excerpt: "SODISTRA organise une journée portes ouvertes sur nos chantiers en cours. Une occasion unique de voir nos équipes en action.",
-      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&h=600&fit=crop",
-      category: "Événement",
-    },
-  ];
-
-  const handleShare = (article: typeof articles[0]) => {
+  const handleShare = (article: any) => {
     if (navigator.share) {
       navigator.share({
         title: article.title,
@@ -89,121 +62,94 @@ const Blog = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {loading ? (
-            <p className="col-span-full text-center text-muted-foreground">Chargement des articles...</p>
-          ) : (
-            <>
-              {/* Articles de la base de données */}
-              {dbArticles.map((article: any, index: number) => (
-                <Card
-                  key={`db-${article.id}`}
-                  className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={article.featured_image_url}
-                      alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
-                        {article.category}
-                      </span>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Calendar size={16} className="mr-1" />
-                        {new Date(article.published_at).toLocaleDateString('fr-FR')}
+        {loading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="overflow-hidden">
+                <Skeleton className="aspect-video w-full" />
+                <div className="p-6 space-y-3">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <>
+            {dbArticles.length === 0 ? (
+              <p className="text-center text-muted-foreground">Aucune actualité disponible pour le moment.</p>
+            ) : (
+              <>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {dbArticles.map((article: any, index: number) => (
+                    <Card
+                      key={`db-${article.id}`}
+                      className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      <div className="aspect-video overflow-hidden">
+                        <img
+                          src={article.featured_image_url}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
                       </div>
-                    </div>
-                    <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
-                      {article.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-4 line-clamp-3">
-                      {article.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <Button 
-                        variant="link" 
-                        className="p-0 h-auto text-accent"
-                        onClick={() => navigate(`/actualite/${article.id}`)}
-                      >
-                        Lire la suite →
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleShare(article);
-                        }}
-                        className="text-muted-foreground hover:text-accent"
-                      >
-                        <Share2 size={18} />
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-              
-              {/* Articles statiques si pas assez d'articles en BDD */}
-              {dbArticles.length < 3 && articles.slice(0, 3 - dbArticles.length).map((article, index) => (
-            <Card
-              key={article.id}
-              className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="aspect-video overflow-hidden">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
-                    {article.category}
-                  </span>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar size={16} className="mr-1" />
-                    {article.date}
-                  </div>
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
+                            {article.category}
+                          </span>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Calendar size={16} className="mr-1" />
+                            {new Date(article.published_at).toLocaleDateString('fr-FR')}
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
+                          {article.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-4 line-clamp-3">
+                          {article.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <Button 
+                            variant="link" 
+                            className="p-0 h-auto text-accent"
+                            onClick={() => navigate(`/actualite/${article.id}`)}
+                          >
+                            Lire la suite →
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleShare(article);
+                            }}
+                            className="text-muted-foreground hover:text-accent"
+                          >
+                            <Share2 size={18} />
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
-                <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-muted-foreground mb-4 line-clamp-3">
-                  {article.excerpt}
-                </p>
-                <div className="flex items-center justify-between">
-                  <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-accent"
-                    onClick={() => navigate(`/actualite/${article.id}`)}
-                  >
-                    Lire la suite →
-                  </Button>
+
+                <div className="text-center mt-12">
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleShare(article);
-                    }}
-                    className="text-muted-foreground hover:text-accent"
+                    size="lg"
+                    onClick={() => navigate('/actualites')}
+                    className="bg-accent hover:bg-accent-light text-accent-foreground"
                   >
-                    <Share2 size={18} />
+                    Voir plus d'actualités
                   </Button>
                 </div>
-              </div>
-            </Card>
-              ))}
-            </>
-          )}
-        </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </section>
   );
