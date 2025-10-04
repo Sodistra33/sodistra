@@ -129,7 +129,13 @@ export const ProjectsManager = () => {
         .from('project-images')
         .getPublicUrl(filePath);
 
-      (e.target.form?.elements.namedItem('featured_image_url') as HTMLInputElement).value = publicUrl;
+      const urlInput = e.target.form?.elements.namedItem('featured_image_url') as HTMLInputElement;
+      if (urlInput) urlInput.value = publicUrl;
+      
+      if (editingProject) {
+        setEditingProject({ ...editingProject, featured_image_url: publicUrl });
+      }
+      
       toast({ title: "Succès", description: "Image uploadée" });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -190,7 +196,10 @@ export const ProjectsManager = () => {
               <div>
                 <Label htmlFor="featured_image">Image principale</Label>
                 <Input id="featured_image" type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                <Input id="featured_image_url" name="featured_image_url" placeholder="URL de l'image" defaultValue={editingProject?.featured_image_url} className="mt-2" required />
+                {editingProject?.featured_image_url && (
+                  <img src={editingProject.featured_image_url} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                )}
+                <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={editingProject?.featured_image_url} />
               </div>
               <div>
                 <Label htmlFor="is_published">Statut</Label>

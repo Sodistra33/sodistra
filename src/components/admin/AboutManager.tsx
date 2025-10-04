@@ -123,7 +123,13 @@ export const AboutManager = () => {
         .from('about-images')
         .getPublicUrl(filePath);
 
-      (e.target.form?.elements.namedItem('image_path') as HTMLInputElement).value = publicUrl;
+      const urlInput = e.target.form?.elements.namedItem('image_path') as HTMLInputElement;
+      if (urlInput) urlInput.value = publicUrl;
+      
+      if (editingContent) {
+        setEditingContent({ ...editingContent, image_path: publicUrl });
+      }
+      
       toast({ title: "Succès", description: "Image uploadée" });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -184,7 +190,10 @@ export const AboutManager = () => {
               <div>
                 <Label htmlFor="image">Image</Label>
                 <Input id="image" type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                <Input id="image_path" name="image_path" placeholder="URL de l'image" defaultValue={editingContent?.image_path} className="mt-2" required />
+                {editingContent?.image_path && (
+                  <img src={editingContent.image_path} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                )}
+                <Input id="image_path" name="image_path" type="hidden" defaultValue={editingContent?.image_path} />
               </div>
               <div>
                 <Label htmlFor="display_order">Ordre d'affichage</Label>

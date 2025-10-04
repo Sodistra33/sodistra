@@ -1,8 +1,6 @@
-import { CheckCircle2 } from "lucide-react";
-import teamImage from "@/assets/team-photo.jpg";
-import building1 from "@/assets/project-building-1.jpg";
-import building2 from "@/assets/project-building-2.jpg";
-import infrastructure1 from "@/assets/project-infrastructure-1.jpg";
+import { useState, useEffect } from "react";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Carousel,
   CarouselContent,
@@ -10,13 +8,57 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
+interface AboutContent {
+  id: string;
+  title: string;
+  description: string;
+  image_path: string;
+}
+
 const About = () => {
+  const [contents, setContents] = useState<AboutContent[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const values = [
     "Excellence et qualité garanties",
     "Plus de 17 ans d'expérience",
     "Équipe de professionnels qualifiés",
     "Respect des délais et budgets",
   ];
+
+  useEffect(() => {
+    fetchContents();
+  }, []);
+
+  const fetchContents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('about_content')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setContents(data || []);
+    } catch (error) {
+      console.error('Error fetching about content:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-secondary flex items-center justify-center">
+        <Loader2 className="animate-spin text-primary" size={48} />
+      </section>
+    );
+  }
+
+  const mainContent = contents[0] || {
+    title: "La meilleure construction avec une cohérence de conception",
+    description: "SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l'assainissement, la construction de zones industrielles et d'ouvrages divers.",
+  };
 
   return (
     <section id="apropos" className="py-20 bg-secondary">
@@ -27,19 +69,16 @@ const About = () => {
               À propos de nous
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">
-              La meilleure construction avec une cohérence de{" "}
-              <span className="text-accent">conception</span>
+              {mainContent.title}
             </h2>
             <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-              SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux 
-              de construction/réhabilitation, les travaux routiers et de voirie, l'assainissement, 
-              la construction de zones industrielles et d'ouvrages divers.
+              {mainContent.description}
             </p>
-            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Depuis 2006, nous avons mis en place des procédures rigoureuses pour assurer la qualité 
-              de nos prestations, notamment avec l'investissement dans un laboratoire mobile pour le 
-              contrôle qualité sur site.
-            </p>
+            {contents[1] && (
+              <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+                {contents[1].description}
+              </p>
+            )}
             <div className="space-y-4">
               {values.map((value, index) => (
                 <div key={index} className="flex items-center gap-3">
@@ -51,29 +90,31 @@ const About = () => {
           </div>
 
           <div className="relative animate-slide-up animate-delay-200">
-            <Carousel
-              plugins={[
-                Autoplay({
-                  delay: 3000,
-                }),
-              ]}
-              className="w-full"
-            >
-              <CarouselContent>
-                {[teamImage, building1, building2, infrastructure1].map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                      <img
-                        src={image}
-                        alt={`SODISTRA ${index + 1}`}
-                        className="w-full h-[500px] object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+            {contents.length > 0 ? (
+              <Carousel
+                plugins={[Autoplay({ delay: 3000 })]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {contents.map((content) => (
+                    <CarouselItem key={content.id}>
+                      <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                        <img
+                          src={content.image_path}
+                          alt={content.title}
+                          className="w-full h-[500px] object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            ) : (
+              <div className="relative rounded-2xl overflow-hidden shadow-lg bg-primary/10 h-[500px] flex items-center justify-center">
+                <p className="text-muted-foreground">Aucune image disponible</p>
+              </div>
+            )}
             <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-2xl p-8 shadow-lg z-10">
               <div className="text-5xl font-bold mb-2">17+</div>
               <div className="font-semibold">Années d'expérience</div>

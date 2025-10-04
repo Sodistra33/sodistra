@@ -122,7 +122,13 @@ export const PartnersManager = () => {
         .from('partner-logos')
         .getPublicUrl(filePath);
 
-      (e.target.form?.elements.namedItem('logo_path') as HTMLInputElement).value = publicUrl;
+      const urlInput = e.target.form?.elements.namedItem('logo_path') as HTMLInputElement;
+      if (urlInput) urlInput.value = publicUrl;
+      
+      if (editingPartner) {
+        setEditingPartner({ ...editingPartner, logo_path: publicUrl });
+      }
+      
       toast({ title: "Succès", description: "Logo uploadé" });
     } catch (error) {
       console.error('Error uploading logo:', error);
@@ -158,7 +164,10 @@ export const PartnersManager = () => {
               <div>
                 <Label htmlFor="logo">Logo</Label>
                 <Input id="logo" type="file" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
-                <Input id="logo_path" name="logo_path" placeholder="URL du logo" defaultValue={editingPartner?.logo_path} className="mt-2" required />
+                {editingPartner?.logo_path && (
+                  <img src={editingPartner.logo_path} alt="Preview" className="mt-2 h-20 object-contain rounded" />
+                )}
+                <Input id="logo_path" name="logo_path" type="hidden" defaultValue={editingPartner?.logo_path} />
               </div>
               <div>
                 <Label htmlFor="website_url">Site web (optionnel)</Label>
