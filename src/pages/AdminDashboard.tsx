@@ -13,6 +13,7 @@ import { BrochuresManager } from "@/components/admin/BrochuresManager";
 import { AboutManager } from "@/components/admin/AboutManager";
 import { HeroManager } from "@/components/admin/HeroManager";
 import { ServicesManager } from "@/components/admin/ServicesManager";
+import ContactMessagesManager from "@/components/admin/ContactMessagesManager";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -140,6 +141,12 @@ const AdminDashboard = () => {
             >
               Brochures
             </TabsTrigger>
+            <TabsTrigger 
+              value="contact"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all"
+            >
+              Contact
+            </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -191,6 +198,7 @@ const AdminDashboard = () => {
           <TabsContent value="about"><AboutManager /></TabsContent>
           <TabsContent value="partners"><PartnersManager /></TabsContent>
           <TabsContent value="brochures"><BrochuresManager /></TabsContent>
+          <TabsContent value="contact"><ContactMessagesManager /></TabsContent>
         </Tabs>
       </main>
     </div>

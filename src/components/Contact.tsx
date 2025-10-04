@@ -24,8 +24,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Sauvegarder dans la base de données
-      const { error: dbError } = await supabase
+      const { error } = await supabase
         .from('contact_messages')
         .insert([{
           name: formData.name,
@@ -35,17 +34,7 @@ const Contact = () => {
           message: formData.message
         }]);
 
-      if (dbError) throw dbError;
-
-      // Envoyer l'email
-      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
-      });
-
-      if (emailError) {
-        console.error('Email sending error:', emailError);
-        // On continue même si l'email échoue car le message est sauvegardé
-      }
+      if (error) throw error;
 
       toast({
         title: "Message envoyé !",
