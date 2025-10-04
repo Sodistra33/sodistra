@@ -52,11 +52,8 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-2">
-            <img src={logoSodistra} alt="Logo SODISTRA" className="w-10 h-10 object-contain" />
-            <span className={`text-xl font-bold ${isScrolled ? "text-primary" : "text-white"}`}>
-              SODISTRA
-            </span>
+          <div className="flex items-center">
+            <img src={logoSodistra} alt="Logo SODISTRA" className="h-12 w-auto object-contain" />
           </div>
 
           <div className="hidden lg:flex items-center space-x-8">
