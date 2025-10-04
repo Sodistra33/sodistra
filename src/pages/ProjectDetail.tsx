@@ -43,6 +43,16 @@ const ProjectDetail = () => {
         .single();
 
       if (error) throw error;
+      
+      // Calculer le statut basé sur la date d'achèvement
+      if (data) {
+        const isCompleted = data.completion_date 
+          ? new Date(data.completion_date) <= new Date() 
+          : false;
+        
+        data.status = isCompleted ? 'completed' : 'en_cours';
+      }
+      
       setProject(data);
     } catch (error) {
       console.error('Error fetching project:', error);
@@ -124,8 +134,8 @@ const ProjectDetail = () => {
                 <Badge 
                   className={`text-sm ${
                     project.status === "en_cours" 
-                      ? "bg-accent text-accent-foreground" 
-                      : "bg-green-600 text-white"
+                      ? "bg-orange-500 hover:bg-orange-600 text-white" 
+                      : "bg-green-500 hover:bg-green-600 text-white"
                   }`}
                 >
                   {project.status === "en_cours" ? "En cours" : "Terminé"}
