@@ -162,7 +162,7 @@ const ProjectDetail = () => {
                         <Calendar className="text-accent mt-1" size={20} />
                         <div>
                           <p className="text-sm text-muted-foreground">
-                            {project.status === "en_cours" ? "Date de fin" : "Date de réalisation"}
+                            {project.status === "en_cours" ? "Date de fin prévue" : "Date de réalisation"}
                           </p>
                           <p className="font-semibold text-primary">
                             {new Date(project.completion_date).toLocaleDateString('fr-FR', {
