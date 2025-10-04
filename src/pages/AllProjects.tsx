@@ -48,17 +48,24 @@ const AllProjects = () => {
   };
 
   // Map database projects to Project interface
-  const displayedProjects: Project[] = dbProjects.map(project => ({
-    id: project.id.toString(),
-    title: project.title,
-    category: project.category || 'batiments',
-    image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
-    status: project.status === 'completed' ? 'Terminé' : 'En cours',
-    description: project.description || '',
-    client: project.client || '',
-    date: project.completion_date || '',
-    gallery: project.gallery_images || []
-  }));
+  const displayedProjects: Project[] = dbProjects.map(project => {
+    // Calculer le statut basé sur la date d'achèvement
+    const isCompleted = project.completion_date 
+      ? new Date(project.completion_date) <= new Date() 
+      : false;
+    
+    return {
+      id: project.id.toString(),
+      title: project.title,
+      category: project.category || 'batiments',
+      image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
+      status: isCompleted ? 'Terminé' : 'En cours',
+      description: project.description || '',
+      client: project.client || '',
+      date: project.completion_date || '',
+      gallery: project.gallery_images || []
+    };
+  });
 
   return (
     <div className="min-h-screen bg-background">
