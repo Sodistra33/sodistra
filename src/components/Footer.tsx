@@ -1,9 +1,31 @@
 import { Facebook, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef } from "react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowScrollButton(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => {
+      if (footerRef.current) {
+        observer.unobserve(footerRef.current);
+      }
+    };
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.querySelector(id);
@@ -17,7 +39,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer ref={footerRef} className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
@@ -90,14 +112,16 @@ const Footer = () => {
         </div>
       </div>
 
-      <Button
-        onClick={scrollToTop}
-        className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110"
-        size="icon"
-        aria-label="Retour en haut"
-      >
-        <ArrowUp size={24} />
-      </Button>
+      {showScrollButton && (
+        <Button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110"
+          size="icon"
+          aria-label="Retour en haut"
+        >
+          <ArrowUp size={24} />
+        </Button>
+      )}
     </footer>
   );
 };
