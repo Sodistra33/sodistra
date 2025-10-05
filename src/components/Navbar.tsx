@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoSodistra from "@/assets/logo-sodistra.png";
+import logoSodistraBlue from "@/assets/logo-sodistra-blue.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
@@ -53,7 +54,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <img src={logoSodistra} alt="Logo SODISTRA" className="h-12 w-auto object-contain" />
+            <img 
+              src={isScrolled ? logoSodistraBlue : logoSodistra} 
+              alt="Logo SODISTRA" 
+              className="h-12 w-auto object-contain" 
+            />
           </div>
 
           <div className="hidden lg:flex items-center space-x-8">
