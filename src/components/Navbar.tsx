@@ -45,6 +45,14 @@ const Navbar = () => {
     }
   };
 
+  const handleLogoClick = () => {
+    if (location.pathname !== '/') {
+      navigate('/');
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -54,9 +62,10 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <button 
-            onClick={() => navigate('/')} 
-            className="flex items-center focus:outline-none"
+            onClick={handleLogoClick}
+            className="flex items-center focus:outline-none hover:opacity-80 transition-opacity"
             aria-label="Retour à l'accueil"
+            type="button"
           >
             <img 
               src={isScrolled ? logoSodistraBlue : logoSodistra} 
