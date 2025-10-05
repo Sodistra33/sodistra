@@ -1,5 +1,6 @@
-import { Facebook, Linkedin, Mail, Phone } from "lucide-react";
+import { Facebook, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
+import { Button } from "@/components/ui/button";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,6 +10,10 @@ const Footer = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -84,6 +89,15 @@ const Footer = () => {
           <p>© {currentYear} SODISTRA. Tous droits réservés.</p>
         </div>
       </div>
+
+      <Button
+        onClick={scrollToTop}
+        className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110"
+        size="icon"
+        aria-label="Retour en haut"
+      >
+        <ArrowUp size={24} />
+      </Button>
     </footer>
   );
 };
