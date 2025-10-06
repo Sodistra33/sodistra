@@ -21,6 +21,7 @@ export type Database = {
           display_order: number | null
           id: string
           image_path: string | null
+          images: string[] | null
           is_active: boolean | null
           title: string
           updated_at: string
@@ -31,6 +32,7 @@ export type Database = {
           display_order?: number | null
           id?: string
           image_path?: string | null
+          images?: string[] | null
           is_active?: boolean | null
           title: string
           updated_at?: string
@@ -41,6 +43,7 @@ export type Database = {
           display_order?: number | null
           id?: string
           image_path?: string | null
+          images?: string[] | null
           is_active?: boolean | null
           title?: string
           updated_at?: string

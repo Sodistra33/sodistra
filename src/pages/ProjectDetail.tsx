@@ -30,6 +30,7 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchProject();
   }, [id]);
 
@@ -216,7 +217,12 @@ const ProjectDetail = () => {
                   <Button
                     size="lg"
                     className="flex-1 bg-accent hover:bg-accent-light text-accent-foreground"
-                    onClick={() => navigate("/#contact")}
+                    onClick={() => {
+                      navigate("/");
+                      setTimeout(() => {
+                        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                      }, 100);
+                    }}
                   >
                     Contactez-nous
                   </Button>

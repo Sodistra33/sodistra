@@ -14,6 +14,7 @@ interface AboutContent {
   title: string;
   description: string;
   image_path: string;
+  images: string[];
   display_order: number;
   is_active: boolean;
 }
@@ -24,6 +25,7 @@ export const AboutManager = () => {
   const [editingContent, setEditingContent] = useState<AboutContent | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
 
   useEffect(() => {
     fetchContents();
@@ -53,7 +55,8 @@ export const AboutManager = () => {
     const contentData = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      image_path: formData.get('image_path') as string,
+      image_path: currentImages.length > 0 ? currentImages[0] : (formData.get('image_path') as string),
+      images: currentImages,
       display_order: parseInt(formData.get('display_order') as string) || 0,
       is_active: formData.get('is_active') === 'true',
     };
@@ -78,6 +81,7 @@ export const AboutManager = () => {
 
       setIsDialogOpen(false);
       setEditingContent(null);
+      setCurrentImages([]);
       fetchContents();
     } catch (error) {
       console.error('Error saving content:', error);
@@ -104,39 +108,45 @@ export const AboutManager = () => {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('about-images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('about-images')
-        .getPublicUrl(filePath);
-
-      const urlInput = e.target.form?.elements.namedItem('image_path') as HTMLInputElement;
-      if (urlInput) urlInput.value = publicUrl;
+      const uploadedUrls: string[] = [];
       
-      if (editingContent) {
-        setEditingContent({ ...editingContent, image_path: publicUrl });
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('about-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('about-images')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(publicUrl);
       }
       
-      toast({ title: "Succès", description: "Image uploadée" });
+      setCurrentImages([...currentImages, ...uploadedUrls]);
+      
+      toast({ title: "Succès", description: `${uploadedUrls.length} image(s) uploadée(s)` });
     } catch (error) {
-      console.error('Error uploading image:', error);
-      toast({ title: "Erreur", description: "Impossible d'uploader l'image", variant: "destructive" });
+      console.error('Error uploading images:', error);
+      toast({ title: "Erreur", description: "Impossible d'uploader les images", variant: "destructive" });
     } finally {
       setUploading(false);
     }
+  };
+
+  const removeImage = (index: number) => {
+    setCurrentImages(currentImages.filter((_, i) => i !== index));
   };
 
   const moveContent = async (id: string, direction: 'up' | 'down') => {
@@ -170,7 +180,10 @@ export const AboutManager = () => {
         <h2 className="text-2xl font-bold">Gestion "À Propos"</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingContent(null)}>
+            <Button onClick={() => {
+              setEditingContent(null);
+              setCurrentImages([]);
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Nouveau Contenu
             </Button>
           </DialogTrigger>
@@ -188,10 +201,32 @@ export const AboutManager = () => {
                 <Textarea id="description" name="description" defaultValue={editingContent?.description} required rows={4} />
               </div>
               <div>
-                <Label htmlFor="image">Image</Label>
-                <Input id="image" type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                {editingContent?.image_path && (
-                  <img src={editingContent.image_path} alt="Preview" className="mt-2 h-32 object-cover rounded" />
+                <Label htmlFor="image">Images (plusieurs images possibles)</Label>
+                <Input 
+                  id="image" 
+                  type="file" 
+                  accept="image/*" 
+                  multiple 
+                  onChange={handleImageUpload} 
+                  disabled={uploading} 
+                />
+                {currentImages.length > 0 && (
+                  <div className="mt-2 grid grid-cols-3 gap-2">
+                    {currentImages.map((url, index) => (
+                      <div key={index} className="relative">
+                        <img src={url} alt={`Preview ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-1 right-1 h-6 w-6"
+                          onClick={() => removeImage(index)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 )}
                 <Input id="image_path" name="image_path" type="hidden" defaultValue={editingContent?.image_path} />
               </div>
@@ -207,7 +242,10 @@ export const AboutManager = () => {
                 </select>
               </div>
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Annuler</Button>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                  setCurrentImages([]);
+                }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
                   {editingContent ? 'Mettre à jour' : 'Créer'}
@@ -236,7 +274,11 @@ export const AboutManager = () => {
                 <Button variant="outline" size="icon" onClick={() => moveContent(content.id, 'down')} disabled={index === contents.length - 1}>
                   <ArrowDown className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" onClick={() => { setEditingContent(content); setIsDialogOpen(true); }}>
+                <Button variant="outline" size="icon" onClick={() => { 
+                  setEditingContent(content); 
+                  setCurrentImages(content.images || [content.image_path].filter(Boolean));
+                  setIsDialogOpen(true); 
+                }}>
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button variant="destructive" size="icon" onClick={() => handleDelete(content.id)}>

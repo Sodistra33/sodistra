@@ -13,6 +13,7 @@ interface AboutContent {
   title: string;
   description: string;
   image_path: string;
+  images: string[];
 }
 
 const About = () => {
@@ -96,18 +97,23 @@ const About = () => {
                 className="w-full"
               >
                 <CarouselContent>
-                  {contents.map((content) => (
-                    <CarouselItem key={content.id}>
-                      <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                        <img
-                          src={content.image_path}
-                          alt={content.title}
-                          className="w-full h-[500px] object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
-                      </div>
-                    </CarouselItem>
-                  ))}
+                  {contents.flatMap((content) => 
+                    (content.images && content.images.length > 0 
+                      ? content.images 
+                      : [content.image_path]
+                    ).filter(Boolean).map((imageUrl, idx) => (
+                      <CarouselItem key={`${content.id}-${idx}`}>
+                        <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                          <img
+                            src={imageUrl}
+                            alt={content.title}
+                            className="w-full h-[500px] object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                        </div>
+                      </CarouselItem>
+                    ))
+                  )}
                 </CarouselContent>
               </Carousel>
             ) : (
