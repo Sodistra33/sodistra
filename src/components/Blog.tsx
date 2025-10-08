@@ -18,16 +18,16 @@ const Blog = () => {
   const fetchArticles = async () => {
     try {
       const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('is_published', true)
-        .order('published_at', { ascending: false })
+        .from("blog_posts")
+        .select("*")
+        .eq("is_published", true)
+        .order("published_at", { ascending: false })
         .limit(3);
 
       if (error) throw error;
       setDbArticles(data || []);
     } catch (error) {
-      console.error('Error fetching articles:', error);
+      console.error("Error fetching articles:", error);
     } finally {
       setLoading(false);
     }
@@ -35,15 +35,17 @@ const Blog = () => {
 
   const handleShare = (article: any) => {
     const shareUrl = `${window.location.origin}/actualite/${article.id}`;
-    
+
     if (navigator.share) {
-      navigator.share({
-        title: article.title,
-        text: article.excerpt,
-        url: shareUrl,
-      }).catch(() => {
-        console.log("Partage annulé");
-      });
+      navigator
+        .share({
+          title: article.title,
+          text: article.excerpt,
+          url: shareUrl,
+        })
+        .catch(() => {
+          console.log("Partage annulé");
+        });
     } else {
       // Fallback: copier le lien dans le presse-papier
       navigator.clipboard.writeText(shareUrl).then(() => {
@@ -56,14 +58,12 @@ const Blog = () => {
     <section id="actualites" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-            Actualités & Événements
-          </span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Métiers & nos Valeurs</span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
             Restez <span className="text-accent">informés</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Découvrez nos dernières actualités, événements et nouveautés
+            Découvrez nos dernières actualités et actions RSE
           </p>
         </div>
 
@@ -108,18 +108,16 @@ const Blog = () => {
                           </span>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar size={16} className="mr-1" />
-                            {new Date(article.published_at).toLocaleDateString('fr-FR')}
+                            {new Date(article.published_at).toLocaleDateString("fr-FR")}
                           </div>
                         </div>
                         <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
                           {article.title}
                         </h3>
-                        <p className="text-muted-foreground mb-4 line-clamp-3">
-                          {article.excerpt}
-                        </p>
+                        <p className="text-muted-foreground mb-4 line-clamp-3">{article.excerpt}</p>
                         <div className="flex items-center justify-between">
-                          <Button 
-                            variant="link" 
+                          <Button
+                            variant="link"
                             className="p-0 h-auto text-accent"
                             onClick={() => navigate(`/actualite/${article.id}`)}
                           >
@@ -145,7 +143,7 @@ const Blog = () => {
                 <div className="text-center mt-12">
                   <Button
                     size="lg"
-                    onClick={() => navigate('/actualites')}
+                    onClick={() => navigate("/actualites")}
                     className="bg-accent hover:bg-accent-light text-accent-foreground"
                   >
                     Voir plus d'actualités
