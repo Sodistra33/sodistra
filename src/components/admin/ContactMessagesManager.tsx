@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Mail, Phone, Calendar, CheckCircle } from "lucide-react";
+import { Loader2, Mail, Phone, Calendar, CheckCircle, Download, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -17,6 +17,7 @@ interface ContactMessage {
   message: string;
   is_read: boolean;
   created_at: string;
+  attachment_url: string | null;
 }
 
 const ContactMessagesManager = () => {
@@ -65,6 +66,36 @@ const ContactMessagesManager = () => {
       toast({
         title: "Erreur",
         description: "Impossible de mettre à jour le statut",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const downloadAttachment = async (attachmentUrl: string) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('contact-attachments')
+        .download(attachmentUrl);
+
+      if (error) throw error;
+
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = attachmentUrl.split('/').pop() || 'attachment';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Téléchargement réussi",
+        description: "Le fichier a été téléchargé",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de télécharger le fichier",
         variant: "destructive",
       });
     }
@@ -146,6 +177,21 @@ const ContactMessagesManager = () => {
                     {message.message}
                   </p>
                 </div>
+                {message.attachment_url && (
+                  <div className="pt-4 border-t">
+                    <p className="text-sm font-semibold text-primary mb-2">Pièce jointe:</p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => downloadAttachment(message.attachment_url!)}
+                      className="flex items-center gap-2"
+                    >
+                      <FileText className="h-4 w-4" />
+                      <Download className="h-4 w-4" />
+                      Télécharger le fichier
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Calendar, User, Building2, Loader2, MapPin } from "lucide-react";
+import { ArrowLeft, Calendar, User, Building2, Loader2, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -92,22 +92,46 @@ const ProjectDetail = () => {
         <div className="container mx-auto px-4">
           <Button
             variant="ghost"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="mb-8 hover:text-accent"
           >
             <ArrowLeft className="mr-2" size={20} />
-            Retour aux projets
+            Retour
           </Button>
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Gallery */}
             <div className="space-y-4">
-              <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+              <div className="aspect-[4/3] overflow-hidden rounded-2xl relative group">
                 <img
                   src={project.gallery_images?.[selectedImage] || project.featured_image_url}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
+                {project.gallery_images && project.gallery_images.length > 1 && (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => setSelectedImage((prev) => 
+                        prev === 0 ? project.gallery_images!.length - 1 : prev - 1
+                      )}
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => setSelectedImage((prev) => 
+                        prev === project.gallery_images!.length - 1 ? 0 : prev + 1
+                      )}
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </>
+                )}
               </div>
               {project.gallery_images && project.gallery_images.length > 0 && (
                 <div className="grid grid-cols-4 gap-4">
