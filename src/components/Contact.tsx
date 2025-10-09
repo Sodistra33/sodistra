@@ -123,7 +123,7 @@ const Contact = () => {
     <section id="contact" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Rejoignez-nous</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
             Candidature <span className="text-accent">spontanée</span>
           </h2>
