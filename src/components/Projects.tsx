@@ -6,11 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
 export interface Project {
@@ -37,38 +33,38 @@ const Projects = () => {
   const fetchProjects = async () => {
     try {
       const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('is_published', true)
-        .order('completion_date', { ascending: false })
+        .from("projects")
+        .select("*")
+        .eq("is_published", true)
+        .order("completion_date", { ascending: false })
         .limit(5);
 
       if (error) throw error;
       setDbProjects(data || []);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
     }
   };
 
   // Map database projects to Project interface
-  const displayedProjects: Project[] = dbProjects.map(project => {
+  const displayedProjects: Project[] = dbProjects.map((project) => {
     // Calculer le statut basé sur la date d'achèvement
-    const isCompleted = project.completion_date 
-      ? new Date(project.completion_date) <= new Date() 
-      : false;
-    
+    const isCompleted = project.completion_date ? new Date(project.completion_date) <= new Date() : false;
+
     return {
       id: project.id.toString(),
       title: project.title,
-      category: project.category || 'batiments',
-      image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
-      status: isCompleted ? 'Terminé' : 'En cours',
-      description: project.description || '',
-      client: project.client || '',
-      date: project.completion_date || '',
-      gallery: project.gallery_images || []
+      category: project.category || "batiments",
+      image:
+        project.featured_image_url ||
+        "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
+      status: isCompleted ? "Terminé" : "En cours",
+      description: project.description || "",
+      client: project.client || "",
+      date: project.completion_date || "",
+      gallery: project.gallery_images || [],
     };
   });
 
@@ -77,9 +73,7 @@ const Projects = () => {
       <section id="realisations" className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-              Nos Réalisations
-            </span>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Réalisations</span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
               Découvrez nos <span className="text-accent">projets</span>
             </h2>
@@ -107,9 +101,7 @@ const Projects = () => {
     <section id="realisations" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-            Nos Réalisations
-          </span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Réalisations</span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
             Découvrez nos <span className="text-accent">projets</span>
           </h2>
@@ -125,7 +117,7 @@ const Projects = () => {
           }}
           plugins={[
             Autoplay({
-              delay: 3000,
+              delay: 2000,
             }),
           ]}
           className="w-full"
@@ -145,7 +137,7 @@ const Projects = () => {
                     />
                     {/* Gradient overlay - transparent at top, dark at bottom */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/40 to-blue-950/90" />
-                    
+
                     {/* Status badge */}
                     <div className="absolute top-4 right-4">
                       <Badge
@@ -166,9 +158,7 @@ const Projects = () => {
                         {project.title}
                       </h3>
                       {project.description && (
-                        <p className="text-sm text-white/90 line-clamp-2">
-                          {project.description}
-                        </p>
+                        <p className="text-sm text-white/90 line-clamp-2">{project.description}</p>
                       )}
                     </div>
                   </div>
@@ -182,7 +172,7 @@ const Projects = () => {
           <div className="text-center mt-12">
             <Button
               size="lg"
-              onClick={() => navigate('/projets')}
+              onClick={() => navigate("/projets")}
               className="bg-accent hover:bg-accent-light text-accent-foreground"
             >
               Voir tous les projets
