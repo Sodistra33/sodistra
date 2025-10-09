@@ -62,12 +62,12 @@ const BlogDetail = () => {
           <Button onClick={() => {
             navigate("/");
             setTimeout(() => {
-              const element = document.getElementById("actualites");
-              if (element) {
-                const navbarHeight = 64;
-                const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-                window.scrollTo({ top: elementPosition - navbarHeight, behavior: 'smooth' });
-              }
+                const element = document.getElementById("actualites");
+                if (element) {
+                  const offset = 100;
+                  const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+                  window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                }
             }, 100);
           }}>Retour</Button>
         </div>
@@ -106,9 +106,9 @@ const BlogDetail = () => {
               setTimeout(() => {
                 const element = document.getElementById("actualites");
                 if (element) {
-                  const navbarHeight = 64;
+                  const offset = 100;
                   const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-                  window.scrollTo({ top: elementPosition - navbarHeight, behavior: 'smooth' });
+                  window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
                 }
               }, 100);
             }}

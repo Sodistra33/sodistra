@@ -82,9 +82,9 @@ const AllProjects = () => {
                 setTimeout(() => {
                   const element = document.getElementById('projets');
                   if (element) {
-                    const navbarHeight = 64;
+                    const offset = 100;
                     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                    window.scrollTo({ top: elementPosition - navbarHeight, behavior: 'smooth' });
+                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
                   }
                 }, 100);
               }}
