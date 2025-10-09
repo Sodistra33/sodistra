@@ -77,7 +77,13 @@ const AllProjects = () => {
           <div className="text-center mb-12 animate-slide-up">
             <Button
               variant="outline"
-              onClick={() => navigate('/#projets')}
+              onClick={() => {
+                navigate('/');
+                setTimeout(() => {
+                  const element = document.getElementById('projets');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }}
               className="mb-8"
             >
               ← Retour
