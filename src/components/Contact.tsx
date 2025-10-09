@@ -24,7 +24,7 @@ const Contact = () => {
     const file = e.target.files?.[0];
     if (file) {
       // Vérifier le type de fichier (PDF ou images)
-      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+      const allowedTypes = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
       if (!allowedTypes.includes(file.type)) {
         toast({
           title: "Type de fichier non autorisé",
@@ -55,29 +55,27 @@ const Contact = () => {
 
       // Upload du fichier si présent
       if (attachment) {
-        const fileExt = attachment.name.split('.').pop();
+        const fileExt = attachment.name.split(".").pop();
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('contact-attachments')
-          .upload(filePath, attachment);
+        const { error: uploadError } = await supabase.storage.from("contact-attachments").upload(filePath, attachment);
 
         if (uploadError) throw uploadError;
 
         attachmentUrl = filePath;
       }
 
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert([{
+      const { error } = await supabase.from("contact_messages").insert([
+        {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           subject: formData.subject,
           message: formData.message,
-          attachment_url: attachmentUrl
-        }]);
+          attachment_url: attachmentUrl,
+        },
+      ]);
 
       if (error) throw error;
 
@@ -85,11 +83,11 @@ const Contact = () => {
         title: "Candidature envoyée !",
         description: "Nous vous répondrons dans les plus brefs délais.",
       });
-      
+
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       setAttachment(null);
     } catch (error: any) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue. Veuillez réessayer.",
@@ -125,14 +123,13 @@ const Contact = () => {
     <section id="contact" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-            Rejoignez-nous
-          </span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Rejoignez-nous</span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
             Candidature <span className="text-accent">spontanée</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Envoyez-nous votre CV et présentez-vous pour rejoindre notre équipe
+            Envoyez-nous votre CV en remplissant le formulaire ou contactez-nous directement pour la réalisation de vos
+            projets
           </p>
         </div>
 
@@ -193,7 +190,7 @@ const Contact = () => {
                       className="bg-background resize-none"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-primary mb-2">
                       CV ou document (PDF, JPG, PNG - Max 5MB)
@@ -256,10 +253,7 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold text-primary mb-2">{info.title}</h3>
                       {info.link !== "#" ? (
-                        <a
-                          href={info.link}
-                          className="text-muted-foreground hover:text-accent transition-colors"
-                        >
+                        <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors">
                           {info.content}
                         </a>
                       ) : (
