@@ -59,7 +59,7 @@ const BlogDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-primary mb-4">Article non trouvé</h1>
-          <Button onClick={() => navigate("/")}>Retour à l'accueil</Button>
+          <Button onClick={() => navigate("/#actualites")}>Retour</Button>
         </div>
       </div>
     );

@@ -56,8 +56,8 @@ const AllNews = () => {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 animate-slide-up">
-            <Button variant="outline" onClick={() => navigate("/")} className="mb-8">
-              ← Retour à l'accueil
+            <Button variant="outline" onClick={() => navigate("/#actualites")} className="mb-8">
+              ← Retour
             </Button>
 
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">

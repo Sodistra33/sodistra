@@ -41,7 +41,7 @@ const Projects = () => {
         .select('*')
         .eq('is_published', true)
         .order('completion_date', { ascending: false })
-        .limit(3);
+        .limit(5);
 
       if (error) throw error;
       setDbProjects(data || []);

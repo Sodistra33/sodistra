@@ -77,10 +77,10 @@ const AllProjects = () => {
           <div className="text-center mb-12 animate-slide-up">
             <Button
               variant="outline"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/#projets')}
               className="mb-8"
             >
-              ← Retour à l'accueil
+              ← Retour
             </Button>
             
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">
