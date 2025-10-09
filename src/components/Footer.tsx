@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
+import { Facebook, Linkedin, Instagram, Mail, Phone, ArrowUp } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
@@ -51,16 +51,31 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://www.facebook.com/profile.php?id=100088177029907"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                aria-label="Facebook"
               >
                 <Facebook size={20} />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/sodistra-s-a/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram size={20} />
               </a>
             </div>
           </div>
