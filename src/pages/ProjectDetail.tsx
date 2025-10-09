@@ -223,7 +223,16 @@ const ProjectDetail = () => {
                     onClick={() => {
                       navigate("/");
                       setTimeout(() => {
-                        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                        const contactSection = document.getElementById("contact");
+                        if (contactSection) {
+                          const offset = 80;
+                          const elementPosition = contactSection.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - offset;
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                          });
+                        }
                       }, 100);
                     }}
                   >
