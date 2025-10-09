@@ -82,7 +82,7 @@ const AllProjects = () => {
                 setTimeout(() => {
                   const element = document.getElementById('projets');
                   if (element) {
-                    const offset = 200; // Ajustement pour la navbar
+                    const offset = 98; // Ajustement pour la navbar
                     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
                     window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
                   }
