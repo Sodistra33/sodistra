@@ -225,13 +225,7 @@ const ProjectDetail = () => {
                       setTimeout(() => {
                         const contactSection = document.getElementById("contact");
                         if (contactSection) {
-                          const offset = 80;
-                          const elementPosition = contactSection.getBoundingClientRect().top;
-                          const offsetPosition = elementPosition + window.pageYOffset - offset;
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                          });
+                          contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
                         }
                       }, 100);
                     }}
