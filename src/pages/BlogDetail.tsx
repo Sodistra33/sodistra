@@ -59,7 +59,7 @@ const BlogDetail = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-primary mb-4">Article non trouvé</h1>
-          <Button onClick={() => navigate("/#about")}>Retour</Button>
+          <Button onClick={() => navigate("/#actualites")}>Retour</Button>
         </div>
       </div>
     );
@@ -91,12 +91,12 @@ const BlogDetail = () => {
       <div className="pt-24 pb-20 bg-secondary">
         <div className="container mx-auto px-4">
           <Button
-            onClick={() => navigate("/actualites")}
+            onClick={() => navigate("/#actualites")}
             variant="ghost"
             className="mb-8 text-primary hover:text-accent"
           >
             <ArrowLeft className="mr-2" size={20} />
-            Retour aux actualités
+            Retour
           </Button>
 
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
