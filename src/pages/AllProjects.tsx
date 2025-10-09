@@ -81,7 +81,11 @@ const AllProjects = () => {
                 navigate('/');
                 setTimeout(() => {
                   const element = document.getElementById('projets');
-                  element?.scrollIntoView({ behavior: 'smooth' });
+                  if (element) {
+                    const offset = 80; // Ajustement pour la navbar
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                  }
                 }, 100);
               }}
               className="mb-8"
