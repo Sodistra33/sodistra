@@ -63,7 +63,7 @@ const AllNews = () => {
                 setTimeout(() => {
                   const element = document.getElementById("actualites");
                   if (element) {
-                    const navbarHeight = 10;
+                    const navbarHeight = 64;
                     const elementPosition = element.getBoundingClientRect().top + window.scrollY;
                     window.scrollTo({ top: elementPosition - navbarHeight, behavior: 'smooth' });
                   }
