@@ -56,7 +56,21 @@ const AllNews = () => {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 animate-slide-up">
-            <Button variant="outline" onClick={() => navigate("/#actualites")} className="mb-8">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                navigate("/");
+                setTimeout(() => {
+                  const element = document.getElementById("actualites");
+                  if (element) {
+                    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+                    const offset = 80;
+                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                  }
+                }, 100);
+              }} 
+              className="mb-8"
+            >
               ← Retour
             </Button>
 
