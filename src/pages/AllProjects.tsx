@@ -82,7 +82,7 @@ const AllProjects = () => {
                 setTimeout(() => {
                   const element = document.getElementById('projets');
                   if (element) {
-                    const offset = 100;
+                    const offset = 80;
                     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
                     window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
                   }

@@ -63,7 +63,7 @@ const AllNews = () => {
                 setTimeout(() => {
             const element = document.getElementById("actualites");
             if (element) {
-              const offset = 100;
+              const offset = 80;
               const elementPosition = element.getBoundingClientRect().top + window.scrollY;
               window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
             }
