@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
 interface AboutContent {
@@ -34,15 +30,15 @@ const About = () => {
   const fetchContents = async () => {
     try {
       const { data, error } = await supabase
-        .from('about_content')
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order', { ascending: true });
+        .from("about_content")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
 
       if (error) throw error;
       setContents(data || []);
     } catch (error) {
-      console.error('Error fetching about content:', error);
+      console.error("Error fetching about content:", error);
     } finally {
       setLoading(false);
     }
@@ -58,7 +54,8 @@ const About = () => {
 
   const mainContent = contents[0] || {
     title: "La meilleure construction avec une cohérence de conception",
-    description: "SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l'assainissement, la construction de zones industrielles et d'ouvrages divers.",
+    description:
+      "SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l'assainissement, la construction de zones industrielles et d'ouvrages divers.",
   };
 
   return (
@@ -66,19 +63,11 @@ const About = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-              À propos de nous
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">
-              {mainContent.title}
-            </h2>
-            <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-              {mainContent.description}
-            </p>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">À propos de nous</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">{mainContent.title}</h2>
+            <p className="text-muted-foreground text-lg mb-6 leading-relaxed">{mainContent.description}</p>
             {contents[1] && (
-              <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-                {contents[1].description}
-              </p>
+              <p className="text-muted-foreground text-lg mb-8 leading-relaxed">{contents[1].description}</p>
             )}
             <div className="space-y-4">
               {values.map((value, index) => (
@@ -92,27 +81,19 @@ const About = () => {
 
           <div className="relative animate-slide-up animate-delay-200">
             {contents.length > 0 ? (
-              <Carousel
-                plugins={[Autoplay({ delay: 3000 })]}
-                className="w-full"
-              >
+              <Carousel plugins={[Autoplay({ delay: 2000 })]} className="w-full">
                 <CarouselContent>
-                  {contents.flatMap((content) => 
-                    (content.images && content.images.length > 0 
-                      ? content.images 
-                      : [content.image_path]
-                    ).filter(Boolean).map((imageUrl, idx) => (
-                      <CarouselItem key={`${content.id}-${idx}`}>
-                        <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                          <img
-                            src={imageUrl}
-                            alt={content.title}
-                            className="w-full h-[500px] object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
-                        </div>
-                      </CarouselItem>
-                    ))
+                  {contents.flatMap((content) =>
+                    (content.images && content.images.length > 0 ? content.images : [content.image_path])
+                      .filter(Boolean)
+                      .map((imageUrl, idx) => (
+                        <CarouselItem key={`${content.id}-${idx}`}>
+                          <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                            <img src={imageUrl} alt={content.title} className="w-full h-[500px] object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                          </div>
+                        </CarouselItem>
+                      )),
                   )}
                 </CarouselContent>
               </Carousel>
