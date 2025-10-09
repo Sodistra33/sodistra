@@ -13,7 +13,7 @@ const Footer = () => {
       ([entry]) => {
         setShowScrollButton(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (footerRef.current) {
@@ -51,7 +51,7 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://www.facebook.com/profile.php?id=100088177029907"
+                href="https://www.facebook.com/share/p/16YFSrTZfY/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
