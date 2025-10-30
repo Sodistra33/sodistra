@@ -17,6 +17,7 @@ interface BlogPost {
   content: string;
   category: string;
   featured_image_url: string;
+  gallery_images: string[];
   is_published: boolean;
   published_at: string;
 }
@@ -28,6 +29,7 @@ export const BlogManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>('');
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useEffect(() => {
     fetchPosts();
@@ -60,6 +62,7 @@ export const BlogManager = () => {
       content: formData.get('content') as string,
       category: formData.get('category') as string,
       featured_image_url: formData.get('featured_image_url') as string,
+      gallery_images: galleryImages,
       is_published: formData.get('is_published') === 'true',
       published_at: formData.get('is_published') === 'true' ? new Date().toISOString() : null,
     };
@@ -146,6 +149,49 @@ export const BlogManager = () => {
     }
   };
 
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadedUrls: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('blog-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('blog-images')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(publicUrl);
+      }
+
+      const newGallery = [...galleryImages, ...uploadedUrls];
+      setGalleryImages(newGallery);
+      
+      toast({ title: "Succès", description: `${uploadedUrls.length} image(s) uploadée(s)` });
+    } catch (error) {
+      console.error('Error uploading gallery images:', error);
+      toast({ title: "Erreur", description: "Impossible d'uploader les images", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setGalleryImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   if (loading) {
     return <div className="flex justify-center p-8"><Loader2 className="animate-spin" /></div>;
   }
@@ -159,6 +205,7 @@ export const BlogManager = () => {
             <Button onClick={() => { 
               setEditingPost(null); 
               setPreviewImage('');
+              setGalleryImages([]);
             }}>
               <Plus className="mr-2 h-4 w-4" /> Nouvel Article
             </Button>
@@ -201,6 +248,34 @@ export const BlogManager = () => {
                 <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={previewImage || editingPost?.featured_image_url} />
               </div>
               <div>
+                <Label htmlFor="gallery_images">Galerie d'images</Label>
+                <Input 
+                  id="gallery_images" 
+                  type="file" 
+                  accept="image/*" 
+                  multiple
+                  onChange={handleGalleryUpload} 
+                  disabled={uploading}
+                  className="cursor-pointer"
+                />
+                {galleryImages.length > 0 && (
+                  <div className="mt-2 grid grid-cols-3 gap-2">
+                    {galleryImages.map((url, index) => (
+                      <div key={index} className="relative group">
+                        <img src={url} alt={`Gallery ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        <button
+                          type="button"
+                          onClick={() => removeGalleryImage(index)}
+                          className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
                 <Label htmlFor="is_published">Statut</Label>
                 <Select name="is_published" defaultValue={editingPost?.is_published ? 'true' : 'false'}>
                   <SelectTrigger>
@@ -216,6 +291,7 @@ export const BlogManager = () => {
                 <Button type="button" variant="outline" onClick={() => {
                   setIsDialogOpen(false);
                   setPreviewImage('');
+                  setGalleryImages([]);
                 }}>Annuler</Button>
                 <Button type="submit" disabled={uploading}>
                   {uploading ? <Loader2 className="animate-spin mr-2" /> : null}
@@ -244,6 +320,7 @@ export const BlogManager = () => {
                 <Button variant="outline" size="icon" onClick={() => { 
                   setEditingPost(post); 
                   setPreviewImage(post.featured_image_url);
+                  setGalleryImages(post.gallery_images || []);
                   setIsDialogOpen(true); 
                 }}>
                   <Pencil className="h-4 w-4" />

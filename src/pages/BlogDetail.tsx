@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Calendar, Share2, ArrowLeft, Loader2 } from "lucide-react";
+import { Calendar, Share2, ArrowLeft, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,6 +12,7 @@ interface BlogPost {
   content: string;
   excerpt: string;
   featured_image_url: string | null;
+  gallery_images: string[];
   category: string;
   published_at: string;
   is_published: boolean;
@@ -22,6 +23,7 @@ const BlogDetail = () => {
   const navigate = useNavigate();
   const [article, setArticle] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -100,15 +102,47 @@ const BlogDetail = () => {
           </Button>
 
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
-            {article.featured_image_url && (
-              <div className="aspect-[21/9] overflow-hidden">
+            {(article.gallery_images && article.gallery_images.length > 0) || article.featured_image_url ? (
+              <div className="aspect-[21/9] overflow-hidden relative">
                 <img
-                  src={article.featured_image_url}
+                  src={
+                    article.gallery_images && article.gallery_images.length > 0
+                      ? article.gallery_images[selectedImage]
+                      : article.featured_image_url!
+                  }
                   alt={article.title}
                   className="w-full h-full object-cover"
                 />
+                {article.gallery_images && article.gallery_images.length > 1 && (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg"
+                      onClick={() =>
+                        setSelectedImage((prev) =>
+                          prev === 0 ? article.gallery_images!.length - 1 : prev - 1
+                        )
+                      }
+                    >
+                      <ChevronLeft className="h-6 w-6 text-primary" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg"
+                      onClick={() =>
+                        setSelectedImage((prev) =>
+                          prev === article.gallery_images!.length - 1 ? 0 : prev + 1
+                        )
+                      }
+                    >
+                      <ChevronRight className="h-6 w-6 text-primary" />
+                    </Button>
+                  </>
+                )}
               </div>
-            )}
+            ) : null}
 
             <div className="p-8 md:p-12">
               <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
