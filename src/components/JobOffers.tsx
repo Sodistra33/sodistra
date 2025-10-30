@@ -52,26 +52,22 @@ const JobOffers = () => {
     }
   };
 
-  const handleShare = async (job: JobOffer, platform: string) => {
+  const handleCopyLink = async () => {
     const url = window.location.href;
-    const text = `${job.title} - SODISTRA`;
     
-    let shareUrl = "";
-    switch (platform) {
-      case "facebook":
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-        break;
-      case "linkedin":
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-        break;
-      case "twitter":
-        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-        break;
-      default:
-        return;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({
+        title: "Lien copié !",
+        description: "Le lien de l'offre a été copié dans le presse-papiers.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de copier le lien.",
+        variant: "destructive",
+      });
     }
-
-    window.open(shareUrl, "_blank", "width=600,height=400");
   };
 
   if (loading) {
@@ -119,8 +115,9 @@ const JobOffers = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleShare(job, "facebook")}
+                  onClick={handleCopyLink}
                   className="h-8 w-8"
+                  title="Copier le lien"
                 >
                   <Share2 className="h-4 w-4" />
                 </Button>
@@ -171,32 +168,6 @@ const JobOffers = () => {
                 <CareerApplicationForm jobTitle={job.title} />
               </DialogContent>
             </Dialog>
-            <div className="flex gap-2 pt-2 border-t border-border">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleShare(job, "linkedin")}
-                className="flex-1"
-              >
-                LinkedIn
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleShare(job, "facebook")}
-                className="flex-1"
-              >
-                Facebook
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleShare(job, "twitter")}
-                className="flex-1"
-              >
-                Twitter
-              </Button>
-            </div>
           </CardContent>
         </Card>
       ))}
