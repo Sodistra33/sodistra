@@ -120,11 +120,11 @@ const Services = () => {
               Une gamme complète de services pour répondre à tous vos besoins en construction
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
               <Card key={i} className="border-border">
-                <CardContent className="p-8">
-                  <Skeleton className="w-16 h-16 rounded-2xl mb-6" />
+                <CardContent className="p-6">
+                  <Skeleton className="w-12 h-12 rounded-2xl mb-4" />
                   <Skeleton className="h-6 w-3/4 mb-3" />
                   <Skeleton className="h-4 w-full mb-2" />
                   <Skeleton className="h-4 w-full" />
@@ -152,7 +152,7 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => {
             const isYellow = index % 2 === 0;
             const IconComponent = getIcon(service.icon_name);
@@ -166,9 +166,9 @@ const Services = () => {
                 }`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <CardContent className="p-8">
+                <CardContent className="p-6">
                   <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 ${
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-300 ${
                       isYellow
                         ? "bg-gradient-to-br from-primary to-primary-light group-hover:bg-primary-foreground"
                         : "bg-gradient-to-br from-accent to-accent-light group-hover:bg-accent-foreground"
@@ -180,11 +180,11 @@ const Services = () => {
                           ? "text-primary-foreground group-hover:text-accent"
                           : "text-accent-foreground group-hover:text-primary"
                       }`}
-                      size={32}
+                      size={24}
                     />
                   </div>
                   <h3
-                    className={`text-xl font-bold mb-3 transition-colors duration-300 ${
+                    className={`text-lg font-bold mb-2 transition-colors duration-300 ${
                       isYellow
                         ? "text-primary group-hover:text-accent-foreground"
                         : "text-primary group-hover:text-primary-foreground"
@@ -193,7 +193,7 @@ const Services = () => {
                     {service.title}
                   </h3>
                   <p
-                    className={`leading-relaxed transition-colors duration-300 ${
+                    className={`text-sm leading-relaxed transition-colors duration-300 ${
                       isYellow
                         ? "text-muted-foreground group-hover:text-accent-foreground"
                         : "text-muted-foreground group-hover:text-primary-foreground"
