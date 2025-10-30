@@ -24,6 +24,7 @@ interface Project {
 
 export const ProjectsManager = () => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,6 +33,7 @@ export const ProjectsManager = () => {
 
   useEffect(() => {
     fetchProjects();
+    fetchServices();
   }, []);
 
   const fetchProjects = async () => {
@@ -48,6 +50,22 @@ export const ProjectsManager = () => {
       toast({ title: "Erreur", description: "Impossible de charger les projets", variant: "destructive" });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('title')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      toast({ title: "Erreur", description: "Impossible de charger les services", variant: "destructive" });
     }
   };
 
@@ -223,14 +241,16 @@ export const ProjectsManager = () => {
               </div>
               <div>
                 <Label htmlFor="category">Catégorie</Label>
-                <Select name="category" defaultValue={editingProject?.category || 'Construction'}>
+                <Select name="category" defaultValue={editingProject?.category || (services[0]?.title || '')}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Sélectionner une catégorie" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Construction">Construction</SelectItem>
-                    <SelectItem value="Infrastructure">Infrastructure</SelectItem>
-                    <SelectItem value="Rénovation">Rénovation</SelectItem>
+                    {services.map((service) => (
+                      <SelectItem key={service.title} value={service.title}>
+                        {service.title}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

@@ -24,7 +24,7 @@ const Navbar = () => {
     { label: "Services", href: "#services" },
     { label: "Réalisations", href: "#realisations" },
     { label: "Atouts", href: "#atouts" },
-    { label: "Actualités", href: "#actualites" },
+    { label: "Actions RSE", href: "#actualites" },
     { label: "Carrière", href: "/carriere" },
     { label: "Contact", href: "#contact" },
   ];
@@ -40,14 +40,25 @@ const Navbar = () => {
     
     // Si on n'est pas sur la page d'accueil, naviguer d'abord vers l'accueil
     if (location.pathname !== '/') {
-      navigate('/' + href);
+      navigate('/');
+      // Attendre que la page d'accueil soit chargée puis scroller vers la section
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+        }
+      }, 100);
       return;
     }
     
     // Sinon, faire défiler vers la section
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
     }
   };
 

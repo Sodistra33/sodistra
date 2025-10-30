@@ -24,21 +24,14 @@ export interface Project {
 const AllProjects = () => {
   const navigate = useNavigate();
   const [dbProjects, setDbProjects] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  const categories = [
-    { value: "all", label: "Tous les projets" },
-    { value: "batiments", label: "Bâtiments" },
-    { value: "routes", label: "Routes" },
-    { value: "ponts", label: "Ponts" },
-    { value: "hydraulique", label: "Hydraulique" },
-    { value: "renovation", label: "Rénovation" },
-  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchProjects();
+    fetchServices();
   }, []);
 
   const fetchProjects = async () => {
@@ -58,6 +51,21 @@ const AllProjects = () => {
     }
   };
 
+  const fetchServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('title')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    }
+  };
+
   // Map database projects to Project interface
   const allProjects: Project[] = dbProjects.map(project => {
     const isCompleted = project.completion_date 
@@ -67,7 +75,7 @@ const AllProjects = () => {
     return {
       id: project.id.toString(),
       title: project.title,
-      category: project.category || 'batiments',
+      category: project.category || '',
       image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
       status: isCompleted ? 'Terminé' : 'En cours',
       description: project.description || '',
@@ -76,6 +84,15 @@ const AllProjects = () => {
       gallery: project.gallery_images || []
     };
   });
+
+  // Create categories dynamically from services
+  const categories = [
+    { value: "all", label: "Tous les projets" },
+    ...services.map(service => ({
+      value: service.title,
+      label: service.title
+    }))
+  ];
 
   // Filter projects by category
   const displayedProjects = selectedCategory === "all" 
