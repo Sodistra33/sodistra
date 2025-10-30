@@ -20,17 +20,23 @@ const Navbar = () => {
   }, []);
 
   const menuItems = [
-    { label: "Accueil", href: "#accueil" },
     { label: "À propos", href: "#apropos" },
     { label: "Services", href: "#services" },
     { label: "Réalisations", href: "#realisations" },
     { label: "Atouts", href: "#atouts" },
     { label: "Actualités", href: "#actualites" },
+    { label: "Carrière", href: "/carriere" },
     { label: "Contact", href: "#contact" },
   ];
 
-  const scrollToSection = (href: string) => {
+  const handleNavigation = (href: string) => {
     setIsMobileMenuOpen(false);
+    
+    // Si c'est une route complète (ex: /carriere), naviguer directement
+    if (href.startsWith('/') && !href.includes('#')) {
+      navigate(href);
+      return;
+    }
     
     // Si on n'est pas sur la page d'accueil, naviguer d'abord vers l'accueil
     if (location.pathname !== '/') {
@@ -78,7 +84,7 @@ const Navbar = () => {
             {menuItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href)}
                 className={`text-sm font-medium transition-colors hover:text-accent ${
                   isScrolled ? "text-foreground" : "text-white"
                 }`}
@@ -117,7 +123,7 @@ const Navbar = () => {
             {menuItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href)}
                 className="block w-full text-left py-3 text-sm font-medium text-foreground hover:text-accent transition-colors"
               >
                 {item.label}

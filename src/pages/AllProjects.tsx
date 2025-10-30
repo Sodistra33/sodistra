@@ -25,6 +25,16 @@ const AllProjects = () => {
   const navigate = useNavigate();
   const [dbProjects, setDbProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const categories = [
+    { value: "all", label: "Tous les projets" },
+    { value: "batiments", label: "Bâtiments" },
+    { value: "routes", label: "Routes" },
+    { value: "ponts", label: "Ponts" },
+    { value: "hydraulique", label: "Hydraulique" },
+    { value: "renovation", label: "Rénovation" },
+  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,8 +59,7 @@ const AllProjects = () => {
   };
 
   // Map database projects to Project interface
-  const displayedProjects: Project[] = dbProjects.map(project => {
-    // Calculer le statut basé sur la date d'achèvement
+  const allProjects: Project[] = dbProjects.map(project => {
     const isCompleted = project.completion_date 
       ? new Date(project.completion_date) <= new Date() 
       : false;
@@ -67,6 +76,11 @@ const AllProjects = () => {
       gallery: project.gallery_images || []
     };
   });
+
+  // Filter projects by category
+  const displayedProjects = selectedCategory === "all" 
+    ? allProjects 
+    : allProjects.filter(project => project.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,6 +116,23 @@ const AllProjects = () => {
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Découvrez l'ensemble de notre portfolio de projets réussis en Côte d'Ivoire
             </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-12 animate-slide-up">
+            {categories.map((category) => (
+              <Button
+                key={category.value}
+                variant={selectedCategory === category.value ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.value)}
+                className={
+                  selectedCategory === category.value
+                    ? "bg-accent hover:bg-accent-light text-accent-foreground"
+                    : ""
+                }
+              >
+                {category.label}
+              </Button>
+            ))}
           </div>
 
           {loading ? (

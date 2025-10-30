@@ -14,6 +14,7 @@ import { AboutManager } from "@/components/admin/AboutManager";
 import { HeroManager } from "@/components/admin/HeroManager";
 import { ServicesManager } from "@/components/admin/ServicesManager";
 import ContactMessagesManager from "@/components/admin/ContactMessagesManager";
+import JobOffersManager from "@/components/admin/JobOffersManager";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
@@ -26,7 +27,8 @@ const AdminDashboard = () => {
     services: 0,
     hero: 0,
     brochures: 0,
-    about: 0
+    about: 0,
+    jobOffers: 0
   });
   useEffect(() => {
     checkAuth();
@@ -59,7 +61,7 @@ const AdminDashboard = () => {
   };
   const loadStats = async () => {
     try {
-      const [projectsRes, blogRes, partnersRes, messagesRes, servicesRes, heroRes, brochuresRes, aboutRes] = await Promise.all([supabase.from('projects').select('id', {
+      const [projectsRes, blogRes, partnersRes, messagesRes, servicesRes, heroRes, brochuresRes, aboutRes, jobOffersRes] = await Promise.all([supabase.from('projects').select('id', {
         count: 'exact',
         head: true
       }), supabase.from('blog_posts').select('id', {
@@ -83,6 +85,9 @@ const AdminDashboard = () => {
       }), supabase.from('about_content').select('id', {
         count: 'exact',
         head: true
+      }), supabase.from('job_offers').select('id', {
+        count: 'exact',
+        head: true
       })]);
       setStats({
         projects: projectsRes.count || 0,
@@ -92,7 +97,8 @@ const AdminDashboard = () => {
         services: servicesRes.count || 0,
         hero: heroRes.count || 0,
         brochures: brochuresRes.count || 0,
-        about: aboutRes.count || 0
+        about: aboutRes.count || 0,
+        jobOffers: jobOffersRes.count || 0
       });
     } catch (error) {
       console.error('Error loading stats:', error);
@@ -163,6 +169,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="contact" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
               Contact
+            </TabsTrigger>
+            <TabsTrigger value="jobs" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
+              Offres d'emploi
             </TabsTrigger>
           </TabsList>
 
@@ -291,8 +300,21 @@ const AdminDashboard = () => {
                   </CardContent>
                 </Card>
 
-                {/* À propos */}
-                
+                {/* Offres d'emploi */}
+                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Offres d'emploi</CardTitle>
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Briefcase className="h-5 w-5 text-accent" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-accent">{stats.jobOffers}</div>
+                    <p className="text-xs text-muted-foreground mt-1">Postes disponibles</p>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </TabsContent>
@@ -301,6 +323,7 @@ const AdminDashboard = () => {
           <TabsContent value="services"><ServicesManager /></TabsContent>
           <TabsContent value="projects"><ProjectsManager /></TabsContent>
           <TabsContent value="blog"><BlogManager /></TabsContent>
+          <TabsContent value="jobs"><JobOffersManager /></TabsContent>
           <TabsContent value="about"><AboutManager /></TabsContent>
           <TabsContent value="partners"><PartnersManager /></TabsContent>
           <TabsContent value="brochures"><BrochuresManager /></TabsContent>

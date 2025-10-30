@@ -8,6 +8,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import BlogDetail from "./pages/BlogDetail";
 import AllProjects from "./pages/AllProjects";
 import AllNews from "./pages/AllNews";
+import Career from "./pages/Career";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/projet/:id" element={<ProjectDetail />} />
           <Route path="/actualites" element={<AllNews />} />
           <Route path="/actualite/:id" element={<BlogDetail />} />
+          <Route path="/carriere" element={<Career />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/migration" element={<MigrationTool />} />
