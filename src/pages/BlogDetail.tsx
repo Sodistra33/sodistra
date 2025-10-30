@@ -103,7 +103,7 @@ const BlogDetail = () => {
 
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
             {(article.gallery_images && article.gallery_images.length > 0) || article.featured_image_url ? (
-              <div className="aspect-[21/9] overflow-hidden relative bg-muted">
+              <div className="aspect-square overflow-hidden relative bg-muted flex items-center justify-center">
                 <img
                   src={
                     article.gallery_images && article.gallery_images.length > 0
@@ -111,7 +111,7 @@ const BlogDetail = () => {
                       : article.featured_image_url!
                   }
                   alt={article.title}
-                  className="w-full h-full object-contain"
+                  className="max-w-full max-h-full object-contain"
                 />
                 {article.gallery_images && article.gallery_images.length > 1 && (
                   <>
