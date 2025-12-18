@@ -2,8 +2,8 @@ import { Building2, HardHat, Wrench, FileText, Briefcase, Package, Loader2 } fro
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-
 interface Service {
   id: string;
   title: string;
@@ -14,8 +14,13 @@ interface Service {
 }
 
 const Services = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleServiceClick = (serviceTitle: string) => {
+    navigate(`/projets?category=${encodeURIComponent(serviceTitle)}`);
+  };
 
   useEffect(() => {
     fetchServices();
@@ -159,7 +164,8 @@ const Services = () => {
             return (
               <Card
                 key={service.id}
-                className={`group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-slide-up border-border ${
+                onClick={() => handleServiceClick(service.title)}
+                className={`group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-slide-up border-border cursor-pointer ${
                   isYellow
                     ? "hover:bg-accent hover:border-accent"
                     : "hover:bg-primary hover:border-primary"
