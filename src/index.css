@@ -179,4 +179,17 @@ All colors MUST be HSL.
   .animate-roll-truck {
     animation: rollTruck 8s linear infinite;
   }
+  
+  @keyframes rollTruckReverse {
+    0% {
+      transform: translateX(calc(100vw + 100px)) scaleX(-1);
+    }
+    100% {
+      transform: translateX(-100px) scaleX(-1);
+    }
+  }
+  
+  .animate-roll-truck-reverse {
+    animation: rollTruckReverse 10s linear infinite;
+  }
 }

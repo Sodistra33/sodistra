@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
+import bulldozer from "@/assets/bulldozer.png";
 import {
   Carousel,
   CarouselContent,
@@ -158,6 +159,11 @@ const Hero = () => {
           src={chargeuseTruck} 
           alt="Chargeuse" 
           className="h-16 w-auto animate-roll-truck"
+        />
+        <img 
+          src={bulldozer} 
+          alt="Bulldozer" 
+          className="h-14 w-auto animate-roll-truck-reverse absolute bottom-0"
         />
       </div>
     </section>
