@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoSodistra from "@/assets/logo-sodistra.png";
-import logoSodistraBlue from "@/assets/logo-sodistra-blue.png";
+import logoSodistraBlanc from "@/assets/logo-sodistra-blanc.png";
+import logoSodistraBleu from "@/assets/logo-sodistra-bleu.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
@@ -85,7 +85,7 @@ const Navbar = () => {
             type="button"
           >
             <img 
-              src={isScrolled ? logoSodistraBlue : logoSodistra} 
+              src={isScrolled ? logoSodistraBleu : logoSodistraBlanc} 
               alt="Logo SODISTRA" 
               className="h-12 w-auto object-contain cursor-pointer" 
             />
