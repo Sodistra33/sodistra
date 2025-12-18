@@ -1,13 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 const Contact = () => {
   const contactInfo = [
     {
       icon: Phone,
       title: "Téléphone",
-      content: "(+225) 27 22 47 39 96",
-      link: "tel:+22527224739396",
+      content: "(+225) 27 22 47 99 96 / (+225) 07 09 59 65 02",
+      link: "tel:+22527224799996",
+    },
+    {
+      icon: Clock,
+      title: "Heures d'ouverture",
+      content: "Lun-Ven: 8h-12h / 14h30-17h30 | Sam: 8h-12h",
+      link: "#",
     },
     {
       icon: Mail,
@@ -18,8 +24,8 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Adresse",
-      content: "Cocody Riviera Palmeraie, Abidjan, Côte d'Ivoire",
-      link: "#",
+      content: "Cocody Riviera Palmeraie Akouedo ILOT 25, 23 BP 2793 Abj 23",
+      link: "https://maps.app.goo.gl/i5voQ4qgAwMRBFbSA",
     },
   ];
 
@@ -47,7 +53,12 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-primary mb-2">{info.title}</h3>
                     {info.link !== "#" ? (
-                      <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors">
+                      <a 
+                        href={info.link} 
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                        target={info.link.startsWith("http") ? "_blank" : undefined}
+                        rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                      >
                         {info.content}
                       </a>
                     ) : (
@@ -64,7 +75,7 @@ const Contact = () => {
               <div className="h-96 bg-muted">
                 <iframe
                   title="SODISTRA Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!3d3972.2989419728395!2d-3.9795835!3d5.372195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjInMTkuOSJOIDPCsDU4JzQ2LjUiVw!5e0!3m2!1sen!2sci!4v1234567890"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!3d3972.298941972839!2d-3.9795835!3d5.372195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjInMTkuOSJOIDPCsDU4JzQ2LjUiVw!5e0!3m2!1sfr!2sci!4v1702900000000"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
