@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
 const Partners = () => {
   const [partners, setPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchPartners();
@@ -35,6 +37,9 @@ const Partners = () => {
   // Duplicate partners for seamless loop
   const displayPartners = partners.length > 0 ? [...partners, ...partners] : [];
 
+  const handleTouchStart = () => setIsPaused(true);
+  const handleTouchEnd = () => setIsPaused(false);
+
   return (
     <section className="py-20 bg-background border-y border-border overflow-hidden">
       <div className="container mx-auto px-4">
@@ -52,8 +57,19 @@ const Partners = () => {
         ) : partners.length === 0 ? (
           <p className="text-center text-muted-foreground">Aucun partenaire pour le moment.</p>
         ) : (
-          <div className="relative">
-            <div className="flex animate-marquee gap-12 items-center">
+          <div 
+            ref={scrollRef}
+            className="relative overflow-x-auto scrollbar-hide touch-pan-x"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleTouchStart}
+            onMouseUp={handleTouchEnd}
+            onMouseLeave={handleTouchEnd}
+          >
+            <div 
+              className={`flex gap-12 items-center ${isPaused ? '' : 'animate-marquee'}`}
+              style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
+            >
               {displayPartners.map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
