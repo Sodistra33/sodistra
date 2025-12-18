@@ -32,8 +32,11 @@ const Partners = () => {
     }
   };
 
+  // Duplicate partners for seamless loop
+  const displayPartners = partners.length > 0 ? [...partners, ...partners] : [];
+
   return (
-    <section className="py-20 bg-background border-y border-border">
+    <section className="py-20 bg-background border-y border-border overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
@@ -49,26 +52,27 @@ const Partners = () => {
         ) : partners.length === 0 ? (
           <p className="text-center text-muted-foreground">Aucun partenaire pour le moment.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-            {partners.map((partner, index) => (
-              <div
-                key={partner.id}
-                className="flex items-center justify-center p-6 grayscale hover:grayscale-0 transition-all duration-300 animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {partner.logo_path ? (
-                  <img 
-                    src={partner.logo_path} 
-                    alt={partner.name}
-                    className="w-full h-24 object-contain"
-                  />
-                ) : (
-                  <div className="w-24 h-24 bg-secondary rounded-xl flex items-center justify-center border border-border">
-                    <span className="text-2xl font-bold text-muted-foreground">{partner.name.substring(0, 2)}</span>
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="relative">
+            <div className="flex animate-marquee gap-12 items-center">
+              {displayPartners.map((partner, index) => (
+                <div
+                  key={`${partner.id}-${index}`}
+                  className="flex-shrink-0 flex items-center justify-center p-6 grayscale hover:grayscale-0 transition-all duration-300"
+                >
+                  {partner.logo_path ? (
+                    <img 
+                      src={partner.logo_path} 
+                      alt={partner.name}
+                      className="w-32 h-20 object-contain"
+                    />
+                  ) : (
+                    <div className="w-24 h-20 bg-secondary rounded-xl flex items-center justify-center border border-border">
+                      <span className="text-2xl font-bold text-muted-foreground">{partner.name.substring(0, 2)}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
