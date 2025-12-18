@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Upload, X, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,15 +12,69 @@ interface CareerApplicationFormProps {
   jobTitle?: string;
 }
 
+const departmentPositions = [
+  {
+    department: "Direction Générale",
+    positions: [
+      "Assistanat de direction",
+      "Secrétariat"
+    ]
+  },
+  {
+    department: "Département de la comptabilité et des finances",
+    positions: [
+      "Service comptable et trésorerie",
+      "Service du contrôle (Contrôleur interne)",
+      "Service des achats et achats mécaniques"
+    ]
+  },
+  {
+    department: "Département administratif et des Ressources Humaines",
+    positions: [
+      "Service des ressources humaines",
+      "Service HSES (Hygiène, Santé, Environnement et Sûreté)"
+    ]
+  },
+  {
+    department: "Département technique",
+    positions: [
+      "Service des marchés et contrats",
+      "Service planning et budget",
+      "Service qualité et laboratoire",
+      "Bureau d'études",
+      "Service topographique",
+      "Service électricité",
+      "Pôle route",
+      "Pôle bâtiment",
+      "Pôle aménagement hydro-agricole"
+    ]
+  },
+  {
+    department: "Département parc matériel",
+    positions: [
+      "Service mécanique",
+      "Service logistique",
+      "Service production (les centrales)",
+      "Service planification GM"
+    ]
+  },
+  {
+    department: "Autres",
+    positions: [
+      "Service informatique"
+    ]
+  }
+];
+
 const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attachment, setAttachment] = useState<File | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState(jobTitle || "");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    subject: jobTitle || "",
     message: "",
   });
 
@@ -49,6 +104,16 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!selectedPosition) {
+      toast({
+        title: "Poste requis",
+        description: "Veuillez sélectionner un poste",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -71,7 +136,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          subject: formData.subject,
+          subject: `Candidature spontanée - ${selectedPosition}`,
           message: formData.message,
           attachment_url: attachmentUrl,
         },
@@ -84,7 +149,8 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
         description: "Nous vous répondrons dans les plus brefs délais.",
       });
 
-      setFormData({ name: "", email: "", phone: "", subject: jobTitle || "", message: "" });
+      setFormData({ name: "", email: "", phone: "", message: "" });
+      setSelectedPosition(jobTitle || "");
       setAttachment(null);
     } catch (error: any) {
       console.error("Error submitting form:", error);
@@ -134,14 +200,27 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
             />
           </div>
           <div>
-            <Input
-              placeholder="Sujet de votre message"
-              value={formData.subject}
-              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-              required
+            <Select
+              value={selectedPosition}
+              onValueChange={setSelectedPosition}
               disabled={isSubmitting}
-              className="bg-background"
-            />
+            >
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Sélectionnez un poste" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50 max-h-[300px]">
+                {departmentPositions.map((dept) => (
+                  <SelectGroup key={dept.department}>
+                    <SelectLabel className="font-semibold text-primary">{dept.department}</SelectLabel>
+                    {dept.positions.map((position) => (
+                      <SelectItem key={position} value={position}>
+                        {position}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <Textarea
