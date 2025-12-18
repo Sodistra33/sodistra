@@ -3,35 +3,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CareerApplicationForm from "@/components/CareerApplicationForm";
 import JobOffers from "@/components/JobOffers";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Phone, MapPin, Briefcase, FileText } from "lucide-react";
+import { Briefcase, FileText } from "lucide-react";
 
 const Career = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const contactInfo = [
-    {
-      icon: Phone,
-      title: "Téléphone",
-      content: "(+225) 27 22 47 39 96",
-      link: "tel:+22527224739396",
-    },
-    {
-      icon: Mail,
-      title: "Email",
-      content: "contact@sodistra-ci.net",
-      link: "mailto:contact@sodistra-ci.net",
-    },
-    {
-      icon: MapPin,
-      title: "Adresse",
-      content: "Cocody Riviera Palmeraie, Abidjan, Côte d'Ivoire",
-      link: "#",
-    },
-  ];
 
   return (
     <div className="min-h-screen">
@@ -89,51 +67,8 @@ const Career = () => {
                 </p>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-12">
-                <div className="animate-slide-up">
-                  <CareerApplicationForm />
-                </div>
-
-                <div className="space-y-8 animate-slide-up animate-delay-200">
-                  {contactInfo.map((info, index) => (
-                    <Card key={index} className="border-border hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center flex-shrink-0">
-                            <info.icon className="text-primary-foreground" size={24} />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-primary mb-2">{info.title}</h3>
-                            {info.link !== "#" ? (
-                              <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors">
-                                {info.content}
-                              </a>
-                            ) : (
-                              <p className="text-muted-foreground">{info.content}</p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-
-                  <Card className="border-border overflow-hidden">
-                    <CardContent className="p-0">
-                      <div className="h-64 bg-muted">
-                        <iframe
-                          title="SODISTRA Location"
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!3d3972.2989419728395!2d-3.9795835!3d5.372195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjInMTkuOSJOIDPCsDU4JzQ2LjUiVw!5e0!3m2!1sen!2sci!4v1234567890"
-                          width="100%"
-                          height="100%"
-                          style={{ border: 0 }}
-                          allowFullScreen
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+              <div className="max-w-2xl mx-auto animate-slide-up">
+                <CareerApplicationForm />
               </div>
             </TabsContent>
           </Tabs>
