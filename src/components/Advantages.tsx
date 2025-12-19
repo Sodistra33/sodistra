@@ -12,7 +12,7 @@ const Advantages = () => {
     {
       icon: Award,
       title: "Expertise locale",
-      description: "Près de 20 ans d'expérience en Côte d'Ivoire avec une connaissance approfondie du terrain.",
+      description: "20 ans d'expérience en Côte d'Ivoire avec une connaissance approfondie du terrain.",
     },
     {
       icon: Clock,
