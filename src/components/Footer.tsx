@@ -1,19 +1,29 @@
-import { Facebook, Linkedin, Instagram, Mail, Phone, ArrowUp } from "lucide-react";
+import { Facebook, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
 import bulldozer from "@/assets/bulldozer.png";
+import { supabase } from "@/integrations/supabase/client";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [services, setServices] = useState<{ id: string; title: string }[]>([]);
   const footerRef = useRef<HTMLElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      setShowScrollButton(entry.isIntersecting);
-    }, {
-      threshold: 0.1
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowScrollButton(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,
+      }
+    );
     if (footerRef.current) {
       observer.observe(footerRef.current);
     }
@@ -23,21 +33,65 @@ const Footer = () => {
       }
     };
   }, []);
-  const scrollToSection = (id: string) => {
-    const element = document.querySelector(id);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const { data } = await supabase
+        .from("services")
+        .select("id, title")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (data) setServices(data);
+    };
+    fetchServices();
+  }, []);
+
+  const handleNavigation = (href: string) => {
+    if (href.startsWith("/") && !href.includes("#")) {
+      navigate(href);
+      return;
+    }
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({ top: elementPosition - offset, behavior: "smooth" });
+        }
+      }, 100);
+      return;
+    }
+
+    const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({
-        behavior: "smooth"
-      });
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({ top: elementPosition - offset, behavior: "smooth" });
     }
   };
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
-  return <footer ref={footerRef} className="bg-primary text-primary-foreground relative overflow-hidden">
+
+  const navigationItems = [
+    { label: "À propos", href: "#apropos" },
+    { label: "Services", href: "#services" },
+    { label: "Réalisations", href: "#realisations" },
+    { label: "Atouts", href: "#atouts" },
+    { label: "Actions RSE", href: "#actualites" },
+    { label: "Carrière", href: "/carriere" },
+    { label: "Contact", href: "#contact" },
+  ];
+
+  return (
+    <footer ref={footerRef} className="bg-primary text-primary-foreground relative overflow-hidden">
       {/* Bulldozers animation */}
       <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none">
         <img src={chargeuseTruck} alt="Chargeuse" className="h-12 w-auto animate-roll-truck opacity-30" />
@@ -53,33 +107,56 @@ const Footer = () => {
               Votre partenaire de confiance pour tous vos projets de construction en Côte d'Ivoire.
             </p>
             <div className="flex gap-4">
-              <a href="https://www.facebook.com/share/p/16YFSrTZfY/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors" aria-label="Facebook">
+              <a
+                href="https://www.facebook.com/share/p/16YFSrTZfY/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                aria-label="Facebook"
+              >
                 <Facebook size={20} />
               </a>
-              <a href="https://www.linkedin.com/company/sodistra-s-a/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors" aria-label="LinkedIn">
+              <a
+                href="https://www.linkedin.com/company/sodistra-s-a/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                aria-label="LinkedIn"
+              >
                 <Linkedin size={20} />
               </a>
-              {/* Instagram - masqué pour le moment */}
             </div>
           </div>
 
           <div>
             <h3 className="font-bold text-lg mb-4">Navigation</h3>
             <ul className="space-y-2">
-              {["Accueil", "À propos", "Services", "Réalisations", "Contact"].map(item => <li key={item}>
-                  
-                </li>)}
+              {navigationItems.map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => handleNavigation(item.href)}
+                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h3 className="font-bold text-lg mb-4">Services</h3>
             <ul className="space-y-2 text-primary-foreground/70">
-              <li>Construction de bâtiments</li>
-              <li>Génie civil</li>
-              <li>Rénovation</li>
-              <li>Études techniques</li>
-              <li>Projets clé en main</li>
+              {services.map((service) => (
+                <li key={service.id}>
+                  <button
+                    onClick={() => handleNavigation("#services")}
+                    className="hover:text-accent transition-colors text-left"
+                  >
+                    {service.title}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -103,9 +180,17 @@ const Footer = () => {
         </div>
       </div>
 
-      {showScrollButton && <Button onClick={scrollToTop} className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110" size="icon" aria-label="Retour en haut">
+      {showScrollButton && (
+        <Button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110"
+          size="icon"
+          aria-label="Retour en haut"
+        >
           <ArrowUp size={24} />
-        </Button>}
-    </footer>;
+        </Button>
+      )}
+    </footer>
+  );
 };
 export default Footer;
