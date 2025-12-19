@@ -18,6 +18,7 @@ interface HeroImage {
   image_path: string;
   button_text: string | null;
   button_link: string | null;
+  gallery_images: string[];
 }
 
 const Hero = () => {
@@ -36,10 +37,14 @@ const Hero = () => {
         .from('hero_images')
         .select('*')
         .eq('is_active', true)
-        .order('display_order', { ascending: true });
+        .order('display_order', { ascending: true })
+        .limit(1)
+        .maybeSingle();
 
       if (error) throw error;
-      setHeroImages(data || []);
+      if (data) {
+        setHeroImages([data]);
+      }
     } catch (error) {
       console.error('Error fetching hero images:', error);
     } finally {
@@ -101,23 +106,24 @@ const Hero = () => {
     );
   }
 
-  const firstHero = heroImages[0];
+  const hero = heroImages[0];
+  const allImages = hero?.gallery_images?.length > 0 ? hero.gallery_images : [hero?.image_path];
 
   return (
     <section id="accueil" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image carousel */}
       <div className="absolute inset-0">
         <Carousel
-          plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
+          plugins={[Autoplay({ delay: 2000, stopOnInteraction: false })]}
           className="w-full h-full"
           opts={{ loop: true }}
         >
           <CarouselContent className="h-full">
-            {heroImages.map((hero) => (
-              <CarouselItem key={hero.id} className="h-full">
+            {allImages.map((imagePath, index) => (
+              <CarouselItem key={index} className="h-full">
                 <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
-                  style={{ backgroundImage: `url(${hero.image_path})` }}
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: `url(${imagePath})` }}
                 />
               </CarouselItem>
             ))}
@@ -129,13 +135,13 @@ const Hero = () => {
       {/* Static text content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-          {firstHero?.title || "Votre partenaire de confiance"}
+          {hero?.title || "Votre partenaire de confiance"}
           <br />
           <span className="text-accent">dans la construction</span>
         </h1>
-        {firstHero?.subtitle && (
+        {hero?.subtitle && (
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
-            {firstHero.subtitle}
+            {hero.subtitle}
           </p>
         )}
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
@@ -145,7 +151,7 @@ const Hero = () => {
               onClick={handleDownloadBrochure}
               className="bg-accent hover:bg-accent-light text-accent-foreground text-lg px-8 py-6"
             >
-              {firstHero?.button_text || "Télécharger notre brochure"}
+              {hero?.button_text || "Télécharger notre brochure"}
               <ArrowRight className="ml-2" size={20} />
             </Button>
           )}
