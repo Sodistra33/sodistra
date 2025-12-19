@@ -27,11 +27,6 @@ const Contact = () => {
     content: "Lun-Ven: 8h-12h / 14h30-17h30 | Sam: 8h-12h",
     link: "#"
   }, {
-    icon: Mail,
-    title: "Email",
-    content: "contact@sodistra-ci.net",
-    link: "mailto:contact@sodistra-ci.net"
-  }, {
     icon: MapPin,
     title: "Adresse",
     content: "Cocody Riviera Palmeraie Akouedo ILOT 25, 23 BP 2793 Abj 23",
