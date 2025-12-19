@@ -159,9 +159,25 @@ const Contact = () => {
 
           {/* Contact Info & Map */}
           <div className="space-y-6">
-            {contactInfo.map((info, index) => <Card key={index} className="border-border hover:shadow-md transition-shadow animate-slide-up">
-                
-              </Card>)}
+            {contactInfo.map((info, index) => (
+              <Card key={index} className="border-border hover:shadow-md transition-shadow animate-slide-up">
+                <CardContent className="p-4 flex items-start gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <info.icon className="text-primary" size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-primary mb-1">{info.title}</h4>
+                    {info.link !== "#" ? (
+                      <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors text-sm">
+                        {info.content}
+                      </a>
+                    ) : (
+                      <p className="text-muted-foreground text-sm">{info.content}</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
 
             <Card className="border-border overflow-hidden animate-slide-up animate-delay-200">
               <CardContent className="p-0">
