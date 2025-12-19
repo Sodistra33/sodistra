@@ -2,6 +2,8 @@ import { Facebook, Linkedin, Instagram, Mail, Phone, ArrowUp } from "lucide-reac
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
+import chargeuseTruck from "@/assets/chargeuse-truck.png";
+import bulldozer from "@/assets/bulldozer.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -39,7 +41,20 @@ const Footer = () => {
   };
 
   return (
-    <footer ref={footerRef} className="bg-primary text-primary-foreground">
+    <footer ref={footerRef} className="bg-primary text-primary-foreground relative overflow-hidden">
+      {/* Bulldozers animation */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none">
+        <img 
+          src={chargeuseTruck} 
+          alt="Chargeuse" 
+          className="h-12 w-auto animate-roll-truck opacity-30"
+        />
+        <img 
+          src={bulldozer} 
+          alt="Bulldozer" 
+          className="h-10 w-auto animate-roll-truck-reverse absolute bottom-0 opacity-30"
+        />
+      </div>
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
