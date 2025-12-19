@@ -144,6 +144,18 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
 
       if (error) throw error;
 
+      // Envoyer l'email de notification
+      await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `Candidature spontanée - ${selectedPosition}`,
+          message: formData.message,
+          type: "candidature"
+        }
+      });
+
       toast({
         title: "Candidature envoyée !",
         description: "Nous vous répondrons dans les plus brefs délais.",
