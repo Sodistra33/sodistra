@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Instagram, MessageCircle, Phone, ArrowUp } from "lucide-react";
+import { Facebook, Linkedin, Instagram, MessageCircle, Phone, ArrowUp, LucideIcon } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
@@ -14,7 +14,7 @@ interface SocialLink {
   icon_name: string;
 }
 
-const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+const iconMap: Record<string, LucideIcon> = {
   Facebook,
   Instagram,
   Linkedin,
@@ -168,22 +168,32 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Navigation</h3>
             <ul className="space-y-2">
-              {navigationItems.map(item => <li key={item.label}>
-                  <button onClick={() => handleNavigation(item.href)} className="text-primary-foreground/70 hover:text-accent transition-colors">
+              {navigationItems.map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => handleNavigation(item.href)}
+                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                  >
                     {item.label}
                   </button>
-                </li>)}
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h3 className="font-bold text-lg mb-4">Services</h3>
             <ul className="space-y-2 text-primary-foreground/70">
-              {services.map(service => <li key={service.id}>
-                  <button onClick={() => handleNavigation("#services")} className="hover:text-accent transition-colors text-left">
+              {services.map((service) => (
+                <li key={service.id}>
+                  <button
+                    onClick={() => handleNavigation("#services")}
+                    className="hover:text-accent transition-colors text-left"
+                  >
                     {service.title}
                   </button>
-                </li>)}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -194,7 +204,6 @@ const Footer = () => {
                 <Phone size={18} className="flex-shrink-0" />
                 <span>(+225) 27 22 47 39 96</span>
               </li>
-              
             </ul>
           </div>
         </div>
@@ -204,9 +213,18 @@ const Footer = () => {
         </div>
       </div>
 
-      {showScrollButton && <Button onClick={scrollToTop} className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110" size="icon" aria-label="Retour en haut">
+      {showScrollButton && (
+        <Button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-accent hover:bg-accent-light text-accent-foreground shadow-lg transition-all duration-300 hover:scale-110"
+          size="icon"
+          aria-label="Retour en haut"
+        >
           <ArrowUp size={24} />
-        </Button>}
-    </footer>;
+        </Button>
+      )}
+    </footer>
+  );
 };
+
 export default Footer;
