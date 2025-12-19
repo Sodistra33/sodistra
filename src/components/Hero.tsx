@@ -43,7 +43,9 @@ const Hero = () => {
 
       if (error) throw error;
       if (data) {
-        setHeroImages([data]);
+        // Cast to include gallery_images which may not be in the generated types yet
+        const heroData = data as unknown as HeroImage;
+        setHeroImages([heroData]);
       }
     } catch (error) {
       console.error('Error fetching hero images:', error);
