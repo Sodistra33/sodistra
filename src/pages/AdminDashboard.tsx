@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { LogOut, FolderKanban, Newspaper, Users, FileText, Briefcase, Image, Mail, Wrench } from "lucide-react";
+import { LogOut, FolderKanban, Newspaper, Users, FileText, Briefcase, Image, Mail, Wrench, Share2 } from "lucide-react";
 import { ProjectsManager } from "@/components/admin/ProjectsManager";
 import { BlogManager } from "@/components/admin/BlogManager";
 import { PartnersManager } from "@/components/admin/PartnersManager";
@@ -15,6 +15,7 @@ import { HeroManager } from "@/components/admin/HeroManager";
 import { ServicesManager } from "@/components/admin/ServicesManager";
 import ContactMessagesManager from "@/components/admin/ContactMessagesManager";
 import JobOffersManager from "@/components/admin/JobOffersManager";
+import SocialLinksManager from "@/components/admin/SocialLinksManager";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
@@ -173,6 +174,9 @@ const AdminDashboard = () => {
             <TabsTrigger value="jobs" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
               Offres d'emploi
             </TabsTrigger>
+            <TabsTrigger value="social" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
+              Réseaux sociaux
+            </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -328,6 +332,7 @@ const AdminDashboard = () => {
           <TabsContent value="partners"><PartnersManager /></TabsContent>
           <TabsContent value="brochures"><BrochuresManager /></TabsContent>
           <TabsContent value="contact"><ContactMessagesManager /></TabsContent>
+          <TabsContent value="social"><SocialLinksManager /></TabsContent>
         </Tabs>
       </main>
     </div>;
