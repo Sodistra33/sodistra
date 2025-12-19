@@ -173,6 +173,7 @@ export type Database = {
           button_text: string | null
           created_at: string
           display_order: number | null
+          gallery_images: string[] | null
           id: string
           image_path: string
           is_active: boolean | null
@@ -185,6 +186,7 @@ export type Database = {
           button_text?: string | null
           created_at?: string
           display_order?: number | null
+          gallery_images?: string[] | null
           id?: string
           image_path: string
           is_active?: boolean | null
@@ -197,6 +199,7 @@ export type Database = {
           button_text?: string | null
           created_at?: string
           display_order?: number | null
+          gallery_images?: string[] | null
           id?: string
           image_path?: string
           is_active?: boolean | null
