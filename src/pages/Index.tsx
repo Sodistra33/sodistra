@@ -8,19 +8,34 @@ import Blog from "@/components/Blog";
 import Partners from "@/components/Partners";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import AnimatedSection from "@/components/AnimatedSection";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <div id="about"><About /></div>
-      <div id="services"><Services /></div>
-      <div id="projets"><Projects /></div>
-      <div id="advantages"><Advantages /></div>
-      <div id="actualites"><Blog /></div>
-      <div id="partners"><Partners /></div>
-      <div id="contact"><Contact /></div>
+      <AnimatedSection>
+        <div id="about"><About /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="services"><Services /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="projets"><Projects /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="advantages"><Advantages /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="actualites"><Blog /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="partners"><Partners /></div>
+      </AnimatedSection>
+      <AnimatedSection delay={100}>
+        <div id="contact"><Contact /></div>
+      </AnimatedSection>
       <Footer />
     </div>
   );
