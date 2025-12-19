@@ -4,12 +4,6 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
 import bulldozer from "@/assets/bulldozer.png";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 
 interface HeroImage {
   id: string;
@@ -109,30 +103,40 @@ const Hero = () => {
   }
 
   const hero = heroImages[0];
-  const allImages = hero?.gallery_images?.length > 0 ? hero.gallery_images : [hero?.image_path];
+  const allImages = hero?.gallery_images && hero.gallery_images.length > 0 
+    ? hero.gallery_images 
+    : [hero?.image_path].filter(Boolean);
+
+  // State for cycling through images
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [allImages.length]);
 
   return (
     <section id="accueil" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image carousel */}
-      <div className="absolute inset-0">
-        <Carousel
-          plugins={[Autoplay({ delay: 2000, stopOnInteraction: false })]}
-          className="w-full h-full"
-          opts={{ loop: true }}
-        >
-          <CarouselContent className="h-full">
-            {allImages.map((imagePath, index) => (
-              <CarouselItem key={index} className="h-full">
-                <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${imagePath})` }}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary-light/75" />
-      </div>
+      {/* Background images - cycling through gallery */}
+      {allImages.length > 0 && (
+        <div className="absolute inset-0 z-0">
+          {allImages.map((imagePath, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ backgroundImage: `url(${imagePath})` }}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary-light/75" />
+        </div>
+      )}
 
       {/* Static text content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
