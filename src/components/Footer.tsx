@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Mail, Phone, ArrowUp } from "lucide-react";
+import { Facebook, Linkedin, Instagram, MessageCircle, Phone, ArrowUp } from "lucide-react";
 import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
@@ -6,22 +6,37 @@ import { useNavigate, useLocation } from "react-router-dom";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
 import bulldozer from "@/assets/bulldozer.png";
 import { supabase } from "@/integrations/supabase/client";
+
+interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  icon_name: string;
+}
+
+const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+  Facebook,
+  Instagram,
+  Linkedin,
+  MessageCircle,
+};
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [services, setServices] = useState<{
-    id: string;
-    title: string;
-  }[]>([]);
+  const [services, setServices] = useState<{ id: string; title: string }[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const footerRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      setShowScrollButton(entry.isIntersecting);
-    }, {
-      threshold: 0.1
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowScrollButton(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
     if (footerRef.current) {
       observer.observe(footerRef.current);
     }
@@ -31,17 +46,27 @@ const Footer = () => {
       }
     };
   }, []);
+
   useEffect(() => {
-    const fetchServices = async () => {
-      const {
-        data
-      } = await supabase.from("services").select("id, title").eq("is_active", true).order("display_order", {
-        ascending: true
-      });
-      if (data) setServices(data);
+    const fetchData = async () => {
+      const [servicesRes, socialRes] = await Promise.all([
+        supabase
+          .from("services")
+          .select("id, title")
+          .eq("is_active", true)
+          .order("display_order", { ascending: true }),
+        supabase
+          .from("social_links")
+          .select("id, platform, url, icon_name")
+          .eq("is_active", true)
+          .order("display_order", { ascending: true }),
+      ]);
+      if (servicesRes.data) setServices(servicesRes.data);
+      if (socialRes.data) setSocialLinks(socialRes.data);
     };
-    fetchServices();
+    fetchData();
   }, []);
+
   const handleNavigation = (href: string) => {
     if (href.startsWith("/") && !href.includes("#")) {
       navigate(href);
@@ -53,10 +78,11 @@ const Footer = () => {
         const element = document.querySelector(href);
         if (element) {
           const offset = 80;
-          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const elementPosition =
+            element.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({
             top: elementPosition - offset,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       }, 100);
@@ -65,63 +91,77 @@ const Footer = () => {
     const element = document.querySelector(href);
     if (element) {
       const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const elementPosition =
+        element.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({
         top: elementPosition - offset,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
+
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const navigationItems = [{
-    label: "À propos",
-    href: "#apropos"
-  }, {
-    label: "Services",
-    href: "#services"
-  }, {
-    label: "Réalisations",
-    href: "#realisations"
-  }, {
-    label: "Atouts",
-    href: "#atouts"
-  }, {
-    label: "Actions RSE",
-    href: "#actualites"
-  }, {
-    label: "Carrière",
-    href: "/carriere"
-  }, {
-    label: "Contact",
-    href: "#contact"
-  }];
-  return <footer ref={footerRef} className="bg-primary text-primary-foreground relative overflow-hidden">
+
+  const navigationItems = [
+    { label: "À propos", href: "#apropos" },
+    { label: "Services", href: "#services" },
+    { label: "Réalisations", href: "#realisations" },
+    { label: "Atouts", href: "#atouts" },
+    { label: "Actions RSE", href: "#actualites" },
+    { label: "Carrière", href: "/carriere" },
+    { label: "Contact", href: "#contact" },
+  ];
+
+  return (
+    <footer
+      ref={footerRef}
+      className="bg-primary text-primary-foreground relative overflow-hidden"
+    >
       {/* Bulldozers animation */}
       <div className="absolute bottom-0 left-0 right-0 z-10 overflow-hidden pointer-events-none">
-        <img src={chargeuseTruck} alt="Chargeuse" className="h-12 w-auto animate-roll-truck opacity-30" />
-        <img src={bulldozer} alt="Bulldozer" className="h-10 w-auto animate-roll-truck-reverse absolute bottom-0 opacity-30" />
+        <img
+          src={chargeuseTruck}
+          alt="Chargeuse"
+          className="h-12 w-auto animate-roll-truck opacity-30"
+        />
+        <img
+          src={bulldozer}
+          alt="Bulldozer"
+          className="h-10 w-auto animate-roll-truck-reverse absolute bottom-0 opacity-30"
+        />
       </div>
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="mb-4">
-              <img src={logoSodistra} alt="Logo SODISTRA" className="h-12 w-auto object-contain" />
+              <img
+                src={logoSodistra}
+                alt="Logo SODISTRA"
+                className="h-12 w-auto object-contain"
+              />
             </div>
             <p className="text-primary-foreground/70 mb-4">
-              Votre partenaire de confiance pour tous vos projets de construction en Côte d'Ivoire.
+              Votre partenaire de confiance pour tous vos projets de
+              construction en Côte d'Ivoire.
             </p>
             <div className="flex gap-4">
-              <a href="https://www.facebook.com/share/p/16YFSrTZfY/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors" aria-label="Facebook">
-                <Facebook size={20} />
-              </a>
-              <a href="https://www.linkedin.com/company/sodistra-s-a/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors" aria-label="LinkedIn">
-                <Linkedin size={20} />
-              </a>
+              {socialLinks.map((link) => {
+                const Icon = iconMap[link.icon_name] || Facebook;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                    aria-label={link.platform}
+                  >
+                    <Icon size={20} />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
