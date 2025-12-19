@@ -48,7 +48,7 @@ const Blog = () => {
   return <section id="actualites" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Métiers & nos Valeurs</span>
+          
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
             Restez <span className="text-accent">informés de nos actions RSE</span>
           </h2>
