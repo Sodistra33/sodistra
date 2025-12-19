@@ -101,58 +101,64 @@ const Hero = () => {
     );
   }
 
+  const firstHero = heroImages[0];
+
   return (
     <section id="accueil" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <Carousel
-        plugins={[Autoplay({ delay: 5000 })]}
-        className="w-full h-screen"
-      >
-        <CarouselContent>
-          {heroImages.map((hero) => (
-            <CarouselItem key={hero.id}>
-              <div className="relative min-h-screen flex items-center justify-center">
+      {/* Background image carousel */}
+      <div className="absolute inset-0">
+        <Carousel
+          plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
+          className="w-full h-full"
+          opts={{ loop: true }}
+        >
+          <CarouselContent className="h-full">
+            {heroImages.map((hero) => (
+              <CarouselItem key={hero.id} className="h-full">
                 <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
                   style={{ backgroundImage: `url(${hero.image_path})` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary-light/75" />
-                </div>
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary-light/75" />
+      </div>
 
-                <div className="relative z-10 container mx-auto px-4 text-center">
-                  <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-                    {hero.title}
-                  </h1>
-                  {hero.subtitle && (
-                    <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
-                      {hero.subtitle}
-                    </p>
-                  )}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
-                    {brochureUrl && (
-                      <Button
-                        size="lg"
-                        onClick={handleDownloadBrochure}
-                        className="bg-accent hover:bg-accent-light text-accent-foreground text-lg px-8 py-6"
-                      >
-                        {hero.button_text || "Télécharger notre brochure"}
-                        <ArrowRight className="ml-2" size={20} />
-                      </Button>
-                    )}
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      onClick={() => scrollToSection("#realisations")}
-                      className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white text-lg px-8 py-6"
-                    >
-                      Voir nos réalisations
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+      {/* Static text content */}
+      <div className="relative z-10 container mx-auto px-4 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
+          {firstHero?.title || "Votre partenaire de confiance"}
+          <br />
+          <span className="text-accent">dans la construction</span>
+        </h1>
+        {firstHero?.subtitle && (
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
+            {firstHero.subtitle}
+          </p>
+        )}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
+          {brochureUrl && (
+            <Button
+              size="lg"
+              onClick={handleDownloadBrochure}
+              className="bg-accent hover:bg-accent-light text-accent-foreground text-lg px-8 py-6"
+            >
+              {firstHero?.button_text || "Télécharger notre brochure"}
+              <ArrowRight className="ml-2" size={20} />
+            </Button>
+          )}
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => scrollToSection("#realisations")}
+            className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white text-lg px-8 py-6"
+          >
+            Voir nos réalisations
+          </Button>
+        </div>
+      </div>
 
       <div className="absolute bottom-8 left-0 right-0 z-20 overflow-hidden">
         <img 
