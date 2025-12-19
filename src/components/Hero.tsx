@@ -19,11 +19,27 @@ const Hero = () => {
   const [heroImages, setHeroImages] = useState<HeroImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [brochureUrl, setBrochureUrl] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const hero = heroImages[0];
+  const allImages = hero?.gallery_images && hero.gallery_images.length > 0 
+    ? hero.gallery_images 
+    : hero?.image_path ? [hero.image_path] : [];
 
   useEffect(() => {
     fetchHeroImages();
     fetchBrochure();
   }, []);
+
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [allImages.length]);
 
   const fetchHeroImages = async () => {
     try {
@@ -37,7 +53,6 @@ const Hero = () => {
 
       if (error) throw error;
       if (data) {
-        // Cast to include gallery_images which may not be in the generated types yet
         const heroData = data as unknown as HeroImage;
         setHeroImages([heroData]);
       }
@@ -101,24 +116,6 @@ const Hero = () => {
       </section>
     );
   }
-
-  const hero = heroImages[0];
-  const allImages = hero?.gallery_images && hero.gallery_images.length > 0 
-    ? hero.gallery_images 
-    : [hero?.image_path].filter(Boolean);
-
-  // State for cycling through images
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  useEffect(() => {
-    if (allImages.length <= 1) return;
-    
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [allImages.length]);
 
   return (
     <section id="accueil" className="relative min-h-screen flex items-center justify-center overflow-hidden">
