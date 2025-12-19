@@ -288,6 +288,7 @@ export type Database = {
           images: string[] | null
           is_published: boolean | null
           location: string | null
+          status: string
           title: string
           updated_at: string
         }
@@ -303,6 +304,7 @@ export type Database = {
           images?: string[] | null
           is_published?: boolean | null
           location?: string | null
+          status?: string
           title: string
           updated_at?: string
         }
@@ -318,6 +320,7 @@ export type Database = {
           images?: string[] | null
           is_published?: boolean | null
           location?: string | null
+          status?: string
           title?: string
           updated_at?: string
         }

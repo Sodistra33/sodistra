@@ -20,6 +20,7 @@ interface Project {
   featured_image_url: string;
   gallery_images?: string[];
   is_published: boolean;
+  status: string;
 }
 
 export const ProjectsManager = () => {
@@ -82,6 +83,7 @@ export const ProjectsManager = () => {
       featured_image_url: formData.get('featured_image_url') as string,
       gallery_images: galleryImages.length > 0 ? galleryImages : null,
       is_published: formData.get('is_published') === 'true',
+      status: formData.get('status') as 'in_progress' | 'completed',
     };
 
     try {
@@ -310,7 +312,19 @@ export const ProjectsManager = () => {
                 )}
               </div>
               <div>
-                <Label htmlFor="is_published">Statut</Label>
+                <Label htmlFor="status">Statut du projet</Label>
+                <Select name="status" defaultValue={editingProject?.status || 'completed'}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="in_progress">En cours</SelectItem>
+                    <SelectItem value="completed">Terminé</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="is_published">Publication</Label>
                 <Select name="is_published" defaultValue={editingProject?.is_published ? 'true' : 'false'}>
                   <SelectTrigger>
                     <SelectValue />
@@ -345,11 +359,14 @@ export const ProjectsManager = () => {
                 <p className="text-sm text-muted-foreground mt-1">
                   {project.category} • {project.location} • {new Date(project.completion_date).toLocaleDateString('fr-FR')}
                 </p>
-                <p className="text-sm mt-1">
+                <div className="flex gap-2 mt-1">
+                  <span className={`inline-block px-2 py-1 rounded text-xs ${project.status === 'completed' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'}`}>
+                    {project.status === 'completed' ? 'Terminé' : 'En cours'}
+                  </span>
                   <span className={`inline-block px-2 py-1 rounded text-xs ${project.is_published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                     {project.is_published ? 'Publié' : 'Brouillon'}
                   </span>
-                </p>
+                </div>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="icon" onClick={() => { 

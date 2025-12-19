@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Mail, Phone, Calendar, CheckCircle, Download, FileText } from "lucide-react";
+import { Loader2, Mail, Phone, Calendar, CheckCircle, Download, FileText, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -66,6 +66,31 @@ const ContactMessagesManager = () => {
       toast({
         title: "Erreur",
         description: "Impossible de mettre à jour le statut",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteMessage = async (id: string) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce message ?")) return;
+    
+    try {
+      const { error } = await supabase
+        .from("contact_messages")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      setMessages(messages.filter(msg => msg.id !== id));
+      toast({
+        title: "Message supprimé",
+        description: "Le message a été supprimé avec succès",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le message",
         variant: "destructive",
       });
     }
@@ -141,14 +166,23 @@ const ContactMessagesManager = () => {
                       {format(new Date(message.created_at), "PPP 'à' HH:mm", { locale: fr })}
                     </div>
                   </div>
-                  <Button
-                    variant={message.is_read ? "outline" : "default"}
-                    size="sm"
-                    onClick={() => toggleReadStatus(message.id, message.is_read)}
-                  >
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    {message.is_read ? "Non lu" : "Lu"}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={message.is_read ? "outline" : "default"}
+                      size="sm"
+                      onClick={() => toggleReadStatus(message.id, message.is_read)}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      {message.is_read ? "Non lu" : "Lu"}
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => deleteMessage(message.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
