@@ -33,10 +33,10 @@ const handler = async (req: Request): Promise<Response> => {
       ? `[Candidature] ${subject}`
       : `[Contact Site Web] ${subject}`;
 
-    // Envoyer l'email à l'adresse configurée
+    // Envoyer l'email à recrutement@sodistraci.com
     const emailResponse = await resend.emails.send({
-      from: "SODISTRA <onboarding@resend.dev>",
-      to: ["azyzkouyo@gmail.com"],
+      from: "SODISTRA <noreply@sodistraci.com>",
+      to: ["recrutement@sodistraci.com"],
       reply_to: email,
       subject: emailSubject,
       html: `
