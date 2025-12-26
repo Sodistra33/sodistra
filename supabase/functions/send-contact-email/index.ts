@@ -16,6 +16,8 @@ interface ContactRequest {
   subject: string;
   message: string;
   type?: "contact" | "candidature";
+  attachmentUrl?: string;
+  attachmentName?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -24,14 +26,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, phone, subject, message, type = "contact" }: ContactRequest = await req.json();
+    const { name, email, phone, subject, message, type = "contact", attachmentUrl, attachmentName }: ContactRequest = await req.json();
 
-    console.log("Sending email for:", { name, email, subject, type });
+    console.log("Sending email for:", { name, email, subject, type, attachmentUrl });
 
     const isApplication = type === "candidature" || subject.includes("Candidature");
     const emailSubject = isApplication 
       ? `[Candidature] ${subject}`
       : `[Contact Site Web] ${subject}`;
+
+    // Section pièce jointe
+    const attachmentSection = attachmentUrl ? `
+      <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px;">
+        <h3 style="color: #1a365d; margin-top: 0;">📎 Pièce jointe:</h3>
+        <p style="margin: 0;">
+          <a href="${attachmentUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">
+            ${attachmentName || 'Télécharger le fichier'}
+          </a>
+        </p>
+      </div>
+    ` : '';
 
     // Envoyer l'email à recrutement@sodistraci.com (utilise le domaine Resend par défaut)
     const emailResponse = await resend.emails.send({
@@ -60,6 +74,8 @@ const handler = async (req: Request): Promise<Response> => {
               <h3 style="color: #1a365d; margin-top: 0;">Message:</h3>
               <p style="white-space: pre-wrap; margin: 0;">${message.replace(/\n/g, '<br>')}</p>
             </div>
+            
+            ${attachmentSection}
           </div>
           
           <div style="padding: 15px; background: #e2e8f0; text-align: center; font-size: 12px; color: #666;">

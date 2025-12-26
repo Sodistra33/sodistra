@@ -144,7 +144,14 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
 
       if (error) throw error;
 
-      // Envoyer l'email de notification
+      // Construire l'URL complète de la pièce jointe si elle existe
+      let fullAttachmentUrl = null;
+      if (attachmentUrl) {
+        const { data: urlData } = supabase.storage.from("contact-attachments").getPublicUrl(attachmentUrl);
+        fullAttachmentUrl = urlData.publicUrl;
+      }
+
+      // Envoyer l'email de notification avec la pièce jointe
       await supabase.functions.invoke('send-contact-email', {
         body: {
           name: formData.name,
@@ -152,7 +159,9 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
           phone: formData.phone,
           subject: `Candidature spontanée - ${selectedPosition}`,
           message: formData.message,
-          type: "candidature"
+          type: "candidature",
+          attachmentUrl: fullAttachmentUrl,
+          attachmentName: attachment?.name
         }
       });
 
