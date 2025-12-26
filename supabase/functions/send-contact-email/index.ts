@@ -47,12 +47,33 @@ const handler = async (req: Request): Promise<Response> => {
       </div>
     ` : '';
 
+    const safeAttachmentFilename = (name?: string) => {
+      const fallback = "piece-jointe";
+      const raw = (name ?? fallback).trim();
+      const cleaned = raw.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 120);
+      return cleaned.length ? cleaned : fallback;
+    };
+
     // Envoyer l'email à recrutement@sodistraci.com (utilise le domaine Resend par défaut)
     const emailResponse = await resend.emails.send({
       from: "SODISTRA Contact <onboarding@resend.dev>",
       to: ["recrutement@sodistraci.com"],
       reply_to: email,
       subject: emailSubject,
+      // Ajout d'un texte brut pour améliorer la délivrabilité
+      text: [
+        `${isApplication ? "Nouvelle candidature" : "Nouveau message de contact"}`,
+        `Nom: ${name}`,
+        `Email: ${email}`,
+        phone ? `Téléphone: ${phone}` : null,
+        `Sujet: ${subject}`,
+        "",
+        message,
+        attachmentUrl ? "" : null,
+        attachmentUrl ? `Pièce jointe: ${attachmentUrl}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n"),
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #1a365d; color: white; padding: 20px; text-align: center;">
@@ -84,6 +105,15 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
         </div>
       `,
+      // ✅ Pièce jointe en PJ (pas juste un lien)
+      attachments: attachmentUrl
+        ? [
+            {
+              path: attachmentUrl,
+              filename: safeAttachmentFilename(attachmentName),
+            },
+          ]
+        : undefined,
     });
 
     console.log("Email sent successfully:", emailResponse);
