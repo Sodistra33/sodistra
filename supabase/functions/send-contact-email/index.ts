@@ -33,9 +33,9 @@ const handler = async (req: Request): Promise<Response> => {
       ? `[Candidature] ${subject}`
       : `[Contact Site Web] ${subject}`;
 
-    // Envoyer l'email à recrutement@sodistraci.com
+    // Envoyer l'email à recrutement@sodistraci.com (utilise le domaine Resend par défaut)
     const emailResponse = await resend.emails.send({
-      from: "SODISTRA <noreply@sodistraci.com>",
+      from: "SODISTRA Contact <onboarding@resend.dev>",
       to: ["recrutement@sodistraci.com"],
       reply_to: email,
       subject: emailSubject,
