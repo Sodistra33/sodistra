@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import logoSodistraBlanc from "@/assets/logo-sodistra-blanc.png";
 import logoSodistraBleu from "@/assets/logo-sodistra-bleu.png";
 import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SubMenuItem {
   label: string;
@@ -16,6 +17,11 @@ interface MenuItem {
   subItems?: SubMenuItem[];
 }
 
+interface Service {
+  id: string;
+  title: string;
+}
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,6 +29,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,36 +39,73 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const menuItems: MenuItem[] = [
-    { label: "À propos", href: "#apropos" },
-    { label: "Services", href: "#services" },
-    { 
-      label: "Réalisations", 
-      href: "#realisations",
-      subItems: [
-        { label: "Tous les projets", href: "/projets" },
-        { label: "Bâtiments", href: "/projets?categorie=batiment" },
-        { label: "Infrastructures", href: "/projets?categorie=infrastructure" },
-        { label: "Rénovation", href: "/projets?categorie=renovation" },
-      ]
-    },
-    { label: "Atouts", href: "#atouts" },
-    { label: "Actions RSE", href: "#actualites" },
-    { 
-      label: "Carrière", 
-      href: "/carriere",
-      subItems: [
-        { label: "Offres d'emploi", href: "/carriere#offres" },
-        { label: "Postuler", href: "/carriere#postuler" },
-      ]
-    },
-    { label: "Contact", href: "#contact" },
-  ];
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('id, title')
+        .eq('is_active', true)
+        .order('display_order');
+      
+      if (error) throw error;
+      setServices(data || []);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    }
+  };
+
+  const getMenuItems = (): MenuItem[] => {
+    const serviceSubItems: SubMenuItem[] = services.map(service => ({
+      label: service.title,
+      href: `/projets?category=${encodeURIComponent(service.title)}`
+    }));
+
+    return [
+      { label: "À propos", href: "#apropos" },
+      { 
+        label: "Services", 
+        href: "#services",
+        subItems: serviceSubItems.length > 0 ? serviceSubItems : undefined
+      },
+      { 
+        label: "Réalisations", 
+        href: "#realisations",
+        subItems: [
+          { label: "Tous les projets", href: "/projets" },
+          { label: "Bâtiments", href: "/projets?category=Bâtiments" },
+          { label: "Ponts et Voiries", href: "/projets?category=Ponts%20et%20Voiries" },
+          { label: "Ouvrages Hydro-Agricoles", href: "/projets?category=Ouvrages%20Hydro-Agricoles" },
+          { label: "Assainissement", href: "/projets?category=Assainissement%20et%20Réhabilitations" },
+        ]
+      },
+      { label: "Atouts", href: "#atouts" },
+      { label: "Actions RSE", href: "#actualites" },
+      { 
+        label: "Carrière", 
+        href: "/carriere",
+        subItems: [
+          { label: "Offres d'emploi", href: "/carriere#offres" },
+          { label: "Postuler", href: "/carriere#postuler" },
+        ]
+      },
+      { label: "Contact", href: "#contact" },
+    ];
+  };
 
   const handleNavigation = (href: string) => {
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
     setMobileOpenDropdown(null);
+    
+    // Si c'est une route avec query params (ex: /projets?category=...)
+    if (href.startsWith('/') && href.includes('?')) {
+      navigate(href);
+      return;
+    }
     
     // Si c'est une route complète avec hash (ex: /carriere#offres)
     if (href.includes('#') && href.startsWith('/')) {
@@ -78,7 +122,7 @@ const Navbar = () => {
       return;
     }
     
-    // Si c'est une route complète (ex: /carriere ou /projets?categorie=batiment)
+    // Si c'est une route complète (ex: /carriere)
     if (href.startsWith('/') && !href.includes('#')) {
       navigate(href);
       return;
@@ -127,6 +171,8 @@ const Navbar = () => {
     setMobileOpenDropdown(mobileOpenDropdown === label ? null : label);
   };
 
+  const menuItems = getMenuItems();
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -168,7 +214,7 @@ const Navbar = () => {
                 
                 {/* Dropdown menu */}
                 {item.subItems && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 py-2">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg z-50 py-2">
                     {item.subItems.map((subItem) => (
                       <button
                         key={subItem.label}
