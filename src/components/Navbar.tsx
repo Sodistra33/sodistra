@@ -30,6 +30,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const [services, setServices] = useState<Service[]>([]);
+  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -160,11 +161,18 @@ const Navbar = () => {
   };
 
   const handleMouseEnter = (label: string) => {
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
+    }
     setOpenDropdown(label);
   };
 
   const handleMouseLeave = () => {
-    setOpenDropdown(null);
+    const timeout = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 200);
+    setCloseTimeout(timeout);
   };
 
   const toggleMobileDropdown = (label: string) => {
@@ -212,18 +220,20 @@ const Navbar = () => {
                   {item.subItems && <ChevronDown size={14} className={`transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />}
                 </button>
                 
-                {/* Dropdown menu */}
+                {/* Dropdown menu with bridge area */}
                 {item.subItems && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg z-50 py-2">
+                  <div className="absolute top-full left-0 pt-2">
+                    <div className="w-56 bg-background border border-border rounded-lg shadow-lg z-50 py-2">
                     {item.subItems.map((subItem) => (
-                      <button
-                        key={subItem.label}
-                        onClick={() => handleNavigation(subItem.href)}
-                        className="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-accent transition-colors"
-                      >
-                        {subItem.label}
-                      </button>
-                    ))}
+                        <button
+                          key={subItem.label}
+                          onClick={() => handleNavigation(subItem.href)}
+                          className="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted hover:text-accent transition-colors"
+                        >
+                          {subItem.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
