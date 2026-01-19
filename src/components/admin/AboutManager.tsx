@@ -107,7 +107,7 @@ export const AboutManager = () => {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -136,13 +136,24 @@ export const AboutManager = () => {
       
       setCurrentImages([...currentImages, ...uploadedUrls]);
       
-      toast({ title: "Succès", description: `${uploadedUrls.length} image(s) uploadée(s)` });
+      const videoCount = Array.from(files).filter(f => f.type.startsWith('video/')).length;
+      const imageCount = files.length - videoCount;
+      const messages = [];
+      if (imageCount > 0) messages.push(`${imageCount} image(s)`);
+      if (videoCount > 0) messages.push(`${videoCount} vidéo(s)`);
+      
+      toast({ title: "Succès", description: `${messages.join(' et ')} uploadée(s)` });
     } catch (error) {
-      console.error('Error uploading images:', error);
-      toast({ title: "Erreur", description: "Impossible d'uploader les images", variant: "destructive" });
+      console.error('Error uploading media:', error);
+      toast({ title: "Erreur", description: "Impossible d'uploader les fichiers", variant: "destructive" });
     } finally {
       setUploading(false);
     }
+  };
+
+  const isVideo = (url: string) => {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext));
   };
 
   const removeImage = (index: number) => {
@@ -201,20 +212,25 @@ export const AboutManager = () => {
                 <Textarea id="description" name="description" defaultValue={editingContent?.description} required rows={4} />
               </div>
               <div>
-                <Label htmlFor="image">Images (plusieurs images possibles)</Label>
+                <Label htmlFor="media">Images / Vidéos (plusieurs fichiers possibles)</Label>
                 <Input 
-                  id="image" 
+                  id="media" 
                   type="file" 
-                  accept="image/*" 
+                  accept="image/*,video/*" 
                   multiple 
-                  onChange={handleImageUpload} 
+                  onChange={handleMediaUpload} 
                   disabled={uploading} 
                 />
+                <p className="text-xs text-muted-foreground mt-1">Les vidéos seront lues automatiquement en boucle</p>
                 {currentImages.length > 0 && (
                   <div className="mt-2 grid grid-cols-3 gap-2">
                     {currentImages.map((url, index) => (
                       <div key={index} className="relative">
-                        <img src={url} alt={`Preview ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        {isVideo(url) ? (
+                          <video src={url} className="h-24 w-full object-cover rounded" muted />
+                        ) : (
+                          <img src={url} alt={`Preview ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        )}
                         <Button
                           type="button"
                           variant="destructive"
