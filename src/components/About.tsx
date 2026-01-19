@@ -65,10 +65,11 @@ const About = () => {
           <div className="animate-slide-up">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">À propos de nous</span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">{mainContent.title}</h2>
-            <p className="text-muted-foreground text-lg mb-6 leading-relaxed">{mainContent.description}</p>
-            {contents[1] && (
-              <p className="text-muted-foreground text-lg mb-8 leading-relaxed">{contents[1].description}</p>
-            )}
+            <div className="text-muted-foreground text-lg mb-8 leading-relaxed space-y-4">
+              {mainContent.description.split('\n\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
             <div className="space-y-4">
               {values.map((value, index) => (
                 <div key={index} className="flex items-center gap-3">
