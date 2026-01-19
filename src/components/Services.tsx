@@ -4,6 +4,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+
+// Import custom icons
+import iconAssainissement from "@/assets/icon-assainissement.png";
+import iconHydro from "@/assets/icon-hydro.png";
+import iconRoute from "@/assets/icon-route.png";
+
+// Custom icon mapping for services
+const customIconMap: { [key: string]: string } = {
+  "assainissement": iconAssainissement,
+  "ponts et voirie": iconRoute,
+  "ouvrages hydro": iconHydro,
+  "ouvrages hydrauliques": iconHydro,
+};
 interface Service {
   id: string;
   title: string;
@@ -161,6 +174,9 @@ const Services = () => {
           {services.map((service, index) => {
             const isYellow = index % 2 === 0;
             const IconComponent = getIcon(service.icon_name);
+            const titleLower = service.title.toLowerCase();
+            const customIcon = Object.keys(customIconMap).find(key => titleLower.includes(key));
+            
             return (
               <Card
                 key={service.id}
@@ -180,14 +196,22 @@ const Services = () => {
                         : "bg-gradient-to-br from-accent to-accent-light group-hover:bg-accent-foreground"
                     }`}
                   >
-                    <IconComponent
-                      className={`transition-colors duration-300 ${
-                        isYellow
-                          ? "text-primary-foreground group-hover:text-accent"
-                          : "text-accent-foreground group-hover:text-primary"
-                      }`}
-                      size={24}
-                    />
+                    {customIcon ? (
+                      <img 
+                        src={customIconMap[customIcon]} 
+                        alt={service.title}
+                        className="w-6 h-6 object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300"
+                      />
+                    ) : (
+                      <IconComponent
+                        className={`transition-colors duration-300 ${
+                          isYellow
+                            ? "text-primary-foreground group-hover:text-accent"
+                            : "text-accent-foreground group-hover:text-primary"
+                        }`}
+                        size={24}
+                      />
+                    )}
                   </div>
                   <h3
                     className={`text-lg font-bold mb-2 transition-colors duration-300 ${
