@@ -73,7 +73,7 @@ const Partners = () => {
               {displayPartners.map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
-                  className="flex-shrink-0 flex items-center justify-center p-6 grayscale hover:grayscale-0 transition-all duration-300"
+                  className="flex-shrink-0 flex items-center justify-center p-6"
                 >
                   {partner.logo_path ? (
                     <img 
