@@ -10,12 +10,12 @@ import iconAssainissement from "@/assets/icon-assainissement.png";
 import iconHydro from "@/assets/icon-hydro.png";
 import iconRoute from "@/assets/icon-route.png";
 
-// Custom icon mapping for services
-const customIconMap: { [key: string]: string } = {
-  "assainissement": iconAssainissement,
-  "ponts et voirie": iconRoute,
-  "ouvrages hydro": iconHydro,
-  "ouvrages hydrauliques": iconHydro,
+// Custom icon mapping for services with sizes
+const customIconMap: { [key: string]: { src: string; size?: string } } = {
+  "assainissement": { src: iconAssainissement },
+  "ponts et voirie": { src: iconRoute },
+  "ouvrages hydro": { src: iconHydro, size: "w-8 h-8" },
+  "ouvrages hydrauliques": { src: iconHydro, size: "w-8 h-8" },
 };
 interface Service {
   id: string;
@@ -198,9 +198,9 @@ const Services = () => {
                   >
                     {customIcon ? (
                       <img 
-                        src={customIconMap[customIcon]} 
+                        src={customIconMap[customIcon].src} 
                         alt={service.title}
-                        className="w-6 h-6 object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300"
+                        className={`${customIconMap[customIcon].size || "w-6 h-6"} object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300`}
                       />
                     ) : (
                       <IconComponent
