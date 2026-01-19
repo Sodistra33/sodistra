@@ -44,6 +44,11 @@ const About = () => {
     }
   };
 
+  const isVideo = (url: string) => {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+  };
+
   if (loading) {
     return (
       <section className="py-20 bg-secondary flex items-center justify-center">
@@ -87,11 +92,22 @@ const About = () => {
                   {contents.flatMap((content) =>
                     (content.images && content.images.length > 0 ? content.images : [content.image_path])
                       .filter(Boolean)
-                      .map((imageUrl, idx) => (
+                      .map((mediaUrl, idx) => (
                         <CarouselItem key={`${content.id}-${idx}`}>
                           <div className="relative rounded-2xl overflow-hidden shadow-lg">
-                            <img src={imageUrl} alt={content.title} className="w-full h-[500px] object-cover" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                            {isVideo(mediaUrl) ? (
+                              <video 
+                                src={mediaUrl} 
+                                className="w-full h-[500px] object-cover" 
+                                autoPlay 
+                                loop 
+                                muted 
+                                playsInline
+                              />
+                            ) : (
+                              <img src={mediaUrl} alt={content.title} className="w-full h-[500px] object-cover" />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none" />
                           </div>
                         </CarouselItem>
                       )),
