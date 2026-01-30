@@ -118,9 +118,7 @@ const Hero = () => {
           </p>}
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
           {brochureUrl}
-          <Button size="lg" variant="outline" onClick={() => scrollToSection("#realisations")} className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white text-lg px-8 py-6">
-            Voir nos réalisations
-          </Button>
+          
         </div>
       </div>
 
