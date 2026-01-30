@@ -121,7 +121,7 @@ const About = () => {
             )}
             <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-2xl p-8 shadow-lg z-10">
               <div className="text-5xl font-bold mb-2">20 ans</div>
-              <div className="font-semibold">d'expérience</div>
+              <div className="font-semibold">d'expertise</div>
             </div>
           </div>
         </div>
