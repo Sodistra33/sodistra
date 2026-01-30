@@ -131,17 +131,22 @@ const Hero = () => {
               style={{ backgroundImage: `url(${imagePath})` }}
             />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary-light/75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-primary/60 to-primary-light/50" />
         </div>
       )}
 
       {/* Static text content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-          {hero?.title || "Votre partenaire de confiance"}
-          <br />
-          <span className="text-accent">dans la construction</span>
-        </h1>
+        <div className="overflow-hidden mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold text-white animate-fade-in">
+            <div className="flex whitespace-nowrap animate-marquee-title">
+              <span className="mx-8">{hero?.title || "Votre partenaire de confiance"}</span>
+              <span className="text-accent mx-8">dans la construction</span>
+              <span className="mx-8">{hero?.title || "Votre partenaire de confiance"}</span>
+              <span className="text-accent mx-8">dans la construction</span>
+            </div>
+          </h1>
+        </div>
         {hero?.subtitle && (
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
             {hero.subtitle}

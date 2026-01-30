@@ -206,6 +206,19 @@ All colors MUST be HSL.
     animation: marquee 20s linear infinite;
   }
   
+  @keyframes marqueeTitle {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-marquee-title {
+    animation: marqueeTitle 15s linear infinite;
+  }
+  
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
