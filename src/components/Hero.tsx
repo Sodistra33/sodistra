@@ -137,13 +137,11 @@ const Hero = () => {
 
       {/* Static text content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="overflow-hidden mb-6">
+        <div className="overflow-hidden mb-6 w-full">
           <h1 className="text-5xl md:text-7xl font-bold text-white animate-fade-in">
-            <div className="flex whitespace-nowrap animate-marquee-title">
-              <span className="mx-8">{hero?.title || "Votre partenaire de confiance"}</span>
-              <span className="text-accent mx-8">dans la construction</span>
-              <span className="mx-8">{hero?.title || "Votre partenaire de confiance"}</span>
-              <span className="text-accent mx-8">dans la construction</span>
+            <div className="inline-flex whitespace-nowrap animate-marquee-title">
+              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} <span className="text-accent">dans la construction</span></span>
+              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} <span className="text-accent">dans la construction</span></span>
             </div>
           </h1>
         </div>
