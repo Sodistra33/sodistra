@@ -140,8 +140,8 @@ const Hero = () => {
         <div className="overflow-hidden mb-6 w-full">
           <h1 className="text-5xl md:text-7xl font-bold text-white animate-fade-in">
             <div className="inline-flex whitespace-nowrap animate-marquee-title">
-              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} <span className="text-accent">dans la construction</span></span>
-              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} <span className="text-accent">dans la construction</span></span>
+              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} dans la construction</span>
+              <span className="px-16">{hero?.title || "Votre partenaire de confiance"} dans la construction</span>
             </div>
           </h1>
         </div>
