@@ -18,7 +18,7 @@ const About = () => {
 
   const values = [
     "Excellence et qualité garanties",
-    "20 ans d'expérience",
+    "20 ans d'expertise",
     "Équipe de professionnels qualifiés",
     "Respect des délais et budgets",
   ];
