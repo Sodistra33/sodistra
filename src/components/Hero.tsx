@@ -116,10 +116,7 @@ const Hero = () => {
         {hero?.subtitle && <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
             {hero.subtitle}
           </p>}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-200">
-          {brochureUrl}
-          
-        </div>
+        
       </div>
 
       <div className="absolute bottom-8 left-0 right-0 z-20 overflow-hidden">
