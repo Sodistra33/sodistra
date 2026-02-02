@@ -5,7 +5,8 @@ import logoSodistraBlanc from "@/assets/logo-sodistra-blanc.png";
 import logoSodistraBleu from "@/assets/logo-sodistra-bleu.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 interface SubMenuItem {
   label: string;
   href: string;
@@ -25,6 +26,7 @@ interface Service {
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -66,29 +68,29 @@ const Navbar = () => {
     }));
 
     return [
-      { label: "À propos", href: "#apropos" },
+      { label: t('nav.about'), href: "#apropos" },
       { 
-        label: "Réalisations", 
+        label: t('nav.achievements'), 
         href: "#realisations",
         subItems: [
-          { label: "Tous les projets", href: "/projets" },
-          { label: "Bâtiments", href: "/projets?category=Bâtiments" },
-          { label: "Ponts et Voiries", href: "/projets?category=Ponts%20et%20Voiries" },
-          { label: "Ouvrages Hydro-Agricoles", href: "/projets?category=Ouvrages%20Hydro-Agricoles" },
-          { label: "Assainissement", href: "/projets?category=Assainissement%20et%20Réhabilitations" },
+          { label: t('nav.all_projects'), href: "/projets" },
+          { label: t('nav.buildings'), href: "/projets?category=Bâtiments" },
+          { label: t('nav.bridges_roads'), href: "/projets?category=Ponts%20et%20Voiries" },
+          { label: t('nav.hydro_works'), href: "/projets?category=Ouvrages%20Hydro-Agricoles" },
+          { label: t('nav.sanitation'), href: "/projets?category=Assainissement%20et%20Réhabilitations" },
         ]
       },
-      { label: "Atouts", href: "#atouts" },
-      { label: "Actions RSE", href: "#actualites" },
+      { label: t('nav.advantages'), href: "#atouts" },
+      { label: t('nav.rse'), href: "#actualites" },
       { 
-        label: "Carrière", 
+        label: t('nav.career'), 
         href: "/carriere",
         subItems: [
-          { label: "Offres d'emploi", href: "/carriere#offres" },
-          { label: "Postuler", href: "/carriere#postuler" },
+          { label: t('nav.job_offers'), href: "/carriere#offres" },
+          { label: t('nav.apply'), href: "/carriere#postuler" },
         ]
       },
-      { label: "Contact", href: "#contact" },
+      { label: t('nav.contact'), href: "#contact" },
     ];
   };
 
@@ -235,14 +237,15 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-4">
+            <LanguageSwitcher isScrolled={isScrolled} />
             <Button
               onClick={() => {
                 console.log("Téléchargement de la brochure");
               }}
               className="bg-accent hover:bg-accent-light text-accent-foreground"
             >
-              Télécharger notre brochure
+              {t('nav.download_brochure')}
             </Button>
           </div>
 
@@ -286,13 +289,16 @@ const Navbar = () => {
                 )}
               </div>
             ))}
+            <div className="flex justify-center mt-4 mb-2">
+              <LanguageSwitcher isScrolled={true} />
+            </div>
             <Button
               onClick={() => {
                 console.log("Téléchargement de la brochure");
               }}
-              className="w-full mt-4 bg-accent hover:bg-accent-light text-accent-foreground"
+              className="w-full bg-accent hover:bg-accent-light text-accent-foreground"
             >
-              Télécharger notre brochure
+              {t('nav.download_brochure')}
             </Button>
           </div>
         </div>
