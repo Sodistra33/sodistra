@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useContentTranslations } from "@/contexts/TranslationsContext";
 
 export interface Project {
   id: string;
@@ -24,7 +25,8 @@ export interface Project {
 
 const AllProjects = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const { getProjectTranslation } = useContentTranslations();
   const [searchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category');
   const [dbProjects, setDbProjects] = useState<any[]>([]);
@@ -70,19 +72,23 @@ const AllProjects = () => {
     }
   };
 
-  // Map database projects to Project interface
+  // Map database projects to Project interface with translations
   const allProjects: Project[] = dbProjects.map(project => {
     const isCompleted = project.completion_date 
       ? new Date(project.completion_date) <= new Date() 
       : false;
     
+    const translation = getProjectTranslation(project.id);
+    const displayTitle = (language === 'en' && translation?.title_en) ? translation.title_en : project.title;
+    const displayDescription = (language === 'en' && translation?.description_en) ? translation.description_en : (project.description || '');
+    
     return {
       id: project.id.toString(),
-      title: project.title,
+      title: displayTitle,
       category: project.category || '',
       image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
       status: isCompleted ? t('projects.completed') : t('projects.in_progress'),
-      description: project.description || '',
+      description: displayDescription,
       client: project.client || '',
       date: project.completion_date || '',
       gallery: project.gallery_images || []
