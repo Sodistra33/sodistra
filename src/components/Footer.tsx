@@ -7,6 +7,7 @@ import chargeuseTruck from "@/assets/chargeuse-truck.png";
 import bulldozer from "@/assets/bulldozer.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getServiceTranslationKey } from "@/lib/contentTranslations";
 
 interface SocialLink {
   id: string;
@@ -184,16 +185,20 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">{t('footer.services')}</h3>
             <ul className="space-y-2 text-primary-foreground/70">
-              {services.map((service) => (
-                <li key={service.id}>
-                  <button
-                    onClick={() => handleNavigation("#services")}
-                    className="hover:text-accent transition-colors text-left"
-                  >
-                    {service.title}
-                  </button>
-                </li>
-              ))}
+              {services.map((service) => {
+                const translationKey = getServiceTranslationKey(service.title);
+                const displayTitle = translationKey ? t(translationKey.titleKey) : service.title;
+                return (
+                  <li key={service.id}>
+                    <button
+                      onClick={() => handleNavigation("#services")}
+                      className="hover:text-accent transition-colors text-left"
+                    >
+                      {displayTitle}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
