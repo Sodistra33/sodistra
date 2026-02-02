@@ -35,6 +35,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // About
     'about.section_title': 'À propos de nous',
+    'about.main_title': 'Notre Vision & Mission',
     'about.years': '20 ans',
     'about.years_expertise': 'd\'expertise',
     'about.excellence': 'Excellence et qualité garanties',
@@ -42,14 +43,31 @@ const translations: Record<Language, Record<string, string>> = {
     'about.team': 'Équipe de professionnels qualifiés',
     'about.deadlines': 'Respect des délais et budgets',
     'about.no_image': 'Aucune image disponible',
-    'about.default_title': 'La meilleure construction avec une cohérence de conception',
+    'about.default_title': 'Notre Vision & Mission',
     'about.default_description': 'SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l\'assainissement, la construction de zones industrielles et d\'ouvrages divers.',
+    'about.paragraph1': 'Chez SODISTRA, nous sommes convaincus que construire, c\'est bien plus qu\'ériger des bâtiments : c\'est façonner l\'avenir. Notre mission est de concevoir et réaliser des projets qui transforment les territoires, créent des opportunités et stimulent la croissance locale, car nous croyons en un développement qui allie excellence technique, impact social et respect de l\'environnement.',
+    'about.paragraph2': 'Au-delà des infrastructures, nous créons des connexions humaines et économiques qui dynamisent les territoires, des connexions : entre les personnes, entre les régions, entre le présent et l\'avenir.',
+    'about.paragraph3': 'Avec SODISTRA, chaque pierre posée est un pas vers un futur plus solide, plus inclusif et plus prospère pour l\'Afrique.',
     
     // Services
     'services.section_title': 'Nos services',
     'services.title': 'Quels services',
     'services.title_accent': 'offrons-nous ?',
     'services.subtitle': 'Une gamme complète de services pour répondre à tous vos besoins en construction',
+    
+    // Service titles (for database content translation)
+    'service.batiments': 'Bâtiments',
+    'service.batiments_desc': 'Conception et réalisation de bâtiments résidentiels, commerciaux et industriels de haute qualité.',
+    'service.assainissement': 'Assainissement et Réhabilitations',
+    'service.assainissement_desc': 'Services complets de réhabilitation et d\'entretien pour prolonger la vie de vos structures.',
+    'service.ponts': 'Ponts et Voiries',
+    'service.ponts_desc': 'Nous concevons et réalisons des ponts et dallots durables répondant aux normes les plus exigeantes. Qu\'il s\'agisse d\'ouvrages de franchissement routiers ou hydrauliques.',
+    'service.hydro': 'Ouvrages Hydro-Agricoles',
+    'service.hydro_desc': 'Nous mettons à disposition notre expertise et notre main-d\'œuvre qualifiée pour tous vos projets d\'Ouvrages Hydro-Agricole.',
+    'service.routes': 'Routes neuves',
+    'service.routes_desc': 'Construction de routes neuves et infrastructures routières de qualité.',
+    'service.zones': 'Zones industrielles',
+    'service.zones_desc': 'Aménagement et construction de zones industrielles clé en main.',
     
     // Projects
     'projects.section_title': 'Nos Réalisations',
@@ -64,6 +82,15 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.all_subtitle': 'Découvrez l\'ensemble de notre portfolio de projets réussis en Côte d\'Ivoire',
     'projects.no_projects': 'Aucun projet disponible pour le moment.',
     'projects.all_categories': 'Tous les projets',
+    
+    // Project categories
+    'category.roads': 'Voirie et Bitumage',
+    'category.paving': 'Bitumage',
+    'category.construction': 'Construction',
+    'category.bridge': 'Construction de ponts',
+    'category.sanitation': 'Assainissement',
+    'category.hydraulic': 'Ouvrages hydrauliques',
+    'category.hydro': 'Ouvrages Hydro-Agricoles',
     
     // Project Detail
     'project.not_found': 'Projet non trouvé',
@@ -222,6 +249,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // About
     'about.section_title': 'About us',
+    'about.main_title': 'Our Vision & Mission',
     'about.years': '20 years',
     'about.years_expertise': 'of expertise',
     'about.excellence': 'Guaranteed excellence and quality',
@@ -229,14 +257,31 @@ const translations: Record<Language, Record<string, string>> = {
     'about.team': 'Team of qualified professionals',
     'about.deadlines': 'Meeting deadlines and budgets',
     'about.no_image': 'No image available',
-    'about.default_title': 'The best construction with design consistency',
+    'about.default_title': 'Our Vision & Mission',
     'about.default_description': 'SODISTRA is a general building & public works company specialized in construction/rehabilitation works, road and street works, sanitation, construction of industrial zones and various structures.',
+    'about.paragraph1': 'At SODISTRA, we believe that building is much more than erecting structures: it\'s shaping the future. Our mission is to design and deliver projects that transform territories, create opportunities and stimulate local growth, because we believe in development that combines technical excellence, social impact and environmental respect.',
+    'about.paragraph2': 'Beyond infrastructure, we create human and economic connections that energize territories, connections: between people, between regions, between the present and the future.',
+    'about.paragraph3': 'With SODISTRA, every stone laid is a step towards a stronger, more inclusive and more prosperous future for Africa.',
     
     // Services
     'services.section_title': 'Our services',
     'services.title': 'What services',
     'services.title_accent': 'do we offer?',
     'services.subtitle': 'A complete range of services to meet all your construction needs',
+    
+    // Service titles (for database content translation)
+    'service.batiments': 'Buildings',
+    'service.batiments_desc': 'Design and construction of high-quality residential, commercial and industrial buildings.',
+    'service.assainissement': 'Sanitation and Rehabilitation',
+    'service.assainissement_desc': 'Complete rehabilitation and maintenance services to extend the life of your structures.',
+    'service.ponts': 'Bridges and Roads',
+    'service.ponts_desc': 'We design and build durable bridges and culverts meeting the most demanding standards. Whether for road or hydraulic crossing structures.',
+    'service.hydro': 'Hydro-Agricultural Works',
+    'service.hydro_desc': 'We provide our expertise and qualified workforce for all your Hydro-Agricultural Works projects.',
+    'service.routes': 'New Roads',
+    'service.routes_desc': 'Construction of new roads and quality road infrastructure.',
+    'service.zones': 'Industrial Zones',
+    'service.zones_desc': 'Development and construction of turnkey industrial zones.',
     
     // Projects
     'projects.section_title': 'Our Projects',
@@ -251,6 +296,15 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.all_subtitle': 'Discover our complete portfolio of successful projects in Ivory Coast',
     'projects.no_projects': 'No projects available at the moment.',
     'projects.all_categories': 'All projects',
+    
+    // Project categories
+    'category.roads': 'Roads and Paving',
+    'category.paving': 'Paving',
+    'category.construction': 'Construction',
+    'category.bridge': 'Bridge Construction',
+    'category.sanitation': 'Sanitation',
+    'category.hydraulic': 'Hydraulic Works',
+    'category.hydro': 'Hydro-Agricultural Works',
     
     // Project Detail
     'project.not_found': 'Project not found',

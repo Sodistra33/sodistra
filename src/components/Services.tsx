@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getServiceTranslationKey } from "@/lib/contentTranslations";
 
 // Import custom icons
 import iconAssainissement from "@/assets/icon-assainissement.png";
@@ -30,7 +31,7 @@ interface Service {
 
 const Services = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -180,6 +181,11 @@ const Services = () => {
             const titleLower = service.title.toLowerCase();
             const customIcon = Object.keys(customIconMap).find(key => titleLower.includes(key));
             
+            // Get translated title and description if in English mode
+            const translationKeys = language === 'en' ? getServiceTranslationKey(service.title) : null;
+            const displayTitle = translationKeys ? t(translationKeys.titleKey) : service.title;
+            const displayDescription = translationKeys ? t(translationKeys.descKey) : service.description;
+            
             return (
               <Card
                 key={service.id}
@@ -202,7 +208,7 @@ const Services = () => {
                     {customIcon ? (
                       <img 
                         src={customIconMap[customIcon].src} 
-                        alt={service.title}
+                        alt={displayTitle}
                         className={`${customIconMap[customIcon].size || "w-6 h-6"} object-contain brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300`}
                       />
                     ) : (
@@ -223,7 +229,7 @@ const Services = () => {
                         : "text-primary group-hover:text-primary-foreground"
                     }`}
                   >
-                    {service.title}
+                    {displayTitle}
                   </h3>
                   <p
                     className={`text-sm leading-relaxed transition-colors duration-300 ${
@@ -232,7 +238,7 @@ const Services = () => {
                         : "text-muted-foreground group-hover:text-primary-foreground"
                     }`}
                   >
-                    {service.description}
+                    {displayDescription}
                   </p>
                 </CardContent>
               </Card>
