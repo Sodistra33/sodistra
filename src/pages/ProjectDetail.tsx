@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Project {
   id: string;
@@ -25,6 +26,7 @@ interface Project {
 const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { language, t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState(0);
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,14 @@ const ProjectDetail = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -77,8 +87,8 @@ const ProjectDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">Projet non trouvé</h1>
-          <Button onClick={() => navigate("/")}>Retour à l'accueil</Button>
+          <h1 className="text-4xl font-bold text-primary mb-4">{t('project.not_found')}</h1>
+          <Button onClick={() => navigate("/")}>{t('project.back_home')}</Button>
         </div>
       </div>
     );
@@ -96,7 +106,7 @@ const ProjectDetail = () => {
             className="mb-8 hover:text-accent"
           >
             <ArrowLeft className="mr-2" size={20} />
-            Retour
+            {t('projects.back')}
           </Button>
 
           <div className="grid lg:grid-cols-2 gap-12 items-start">
@@ -145,7 +155,7 @@ const ProjectDetail = () => {
                       : "bg-green-500 hover:bg-green-600 text-white"
                   }`}
                 >
-                  {project.status === "en_cours" ? "En cours" : "Terminé"}
+                  {project.status === "en_cours" ? t('projects.in_progress') : t('projects.completed')}
                 </Badge>
               </div>
 
@@ -160,7 +170,7 @@ const ProjectDetail = () => {
               <div className="space-y-6">
                 <Card className="p-6">
                   <h3 className="text-xl font-bold text-primary mb-4">
-                    Détails du projet
+                    {t('project.details')}
                   </h3>
                   
                   <div className="space-y-4">
@@ -168,7 +178,7 @@ const ProjectDetail = () => {
                       <div className="flex items-start gap-3">
                         <User className="text-accent mt-1" size={20} />
                         <div>
-                          <p className="text-sm text-muted-foreground">Client</p>
+                          <p className="text-sm text-muted-foreground">{t('project.client')}</p>
                           <p className="font-semibold text-primary">{project.client}</p>
                         </div>
                       </div>
@@ -179,14 +189,10 @@ const ProjectDetail = () => {
                         <Calendar className="text-accent mt-1" size={20} />
                         <div>
                           <p className="text-sm text-muted-foreground">
-                            {project.status === "en_cours" ? "Date de fin prévue" : "Date de réalisation"}
+                            {project.status === "en_cours" ? t('project.expected_date') : t('project.completion_date')}
                           </p>
                           <p className="font-semibold text-primary">
-                            {new Date(project.completion_date).toLocaleDateString('fr-FR', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}
+                            {formatDate(project.completion_date)}
                           </p>
                         </div>
                       </div>
@@ -196,7 +202,7 @@ const ProjectDetail = () => {
                       <div className="flex items-start gap-3">
                         <MapPin className="text-accent mt-1" size={20} />
                         <div>
-                          <p className="text-sm text-muted-foreground">Localisation</p>
+                          <p className="text-sm text-muted-foreground">{t('project.location')}</p>
                           <p className="font-semibold text-primary">{project.location}</p>
                         </div>
                       </div>
@@ -205,11 +211,9 @@ const ProjectDetail = () => {
                     <div className="flex items-start gap-3">
                       <Building2 className="text-accent mt-1" size={20} />
                       <div>
-                        <p className="text-sm text-muted-foreground">Catégorie</p>
+                        <p className="text-sm text-muted-foreground">{t('project.category')}</p>
                         <p className="font-semibold text-primary capitalize">
-                          {project.category === 'batiments' ? 'Bâtiments' : 
-                           project.category === 'infrastructures' ? 'Infrastructures' : 
-                           'Rénovations'}
+                          {project.category}
                         </p>
                       </div>
                     </div>
@@ -230,14 +234,14 @@ const ProjectDetail = () => {
                       }, 100);
                     }}
                   >
-                    Contactez-nous
+                    {t('project.contact_us')}
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
                     onClick={() => navigate("/projets")}
                   >
-                    Autres projets
+                    {t('project.other_projects')}
                   </Button>
                 </div>
               </div>

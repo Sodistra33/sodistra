@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 export interface Project {
   id: string;
   title: string;
@@ -22,6 +24,7 @@ export interface Project {
 
 const AllProjects = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category');
   const [dbProjects, setDbProjects] = useState<any[]>([]);
@@ -78,7 +81,7 @@ const AllProjects = () => {
       title: project.title,
       category: project.category || '',
       image: project.featured_image_url || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
-      status: isCompleted ? 'Terminé' : 'En cours',
+      status: isCompleted ? t('projects.completed') : t('projects.in_progress'),
       description: project.description || '',
       client: project.client || '',
       date: project.completion_date || '',
@@ -88,7 +91,7 @@ const AllProjects = () => {
 
   // Create categories dynamically from services
   const categories = [
-    { value: "all", label: "Tous les projets" },
+    { value: "all", label: t('projects.all_categories') },
     ...services.map(service => ({
       value: service.title,
       label: service.title
@@ -122,17 +125,17 @@ const AllProjects = () => {
               }}
               className="mb-8"
             >
-              ← Retour
+              ← {t('projects.back')}
             </Button>
             
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-              Nos Réalisations
+              {t('projects.section_title')}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-              Tous nos <span className="text-accent">projets</span>
+              {t('projects.all_title')} <span className="text-accent">{t('projects.title_accent')}</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Découvrez l'ensemble de notre portfolio de projets réussis en Côte d'Ivoire
+              {t('projects.all_subtitle')}
             </p>
           </div>
 
@@ -170,7 +173,7 @@ const AllProjects = () => {
             <div className="text-center py-20">
               <Building2 className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
               <p className="text-muted-foreground text-lg">
-                Aucun projet disponible pour le moment.
+                {t('projects.no_projects')}
               </p>
             </div>
           ) : (
@@ -194,9 +197,9 @@ const AllProjects = () => {
                     {/* Status badge */}
                     <div className="absolute top-4 right-4">
                       <Badge
-                        variant={project.status === "Terminé" ? "default" : "secondary"}
+                        variant={project.status === t('projects.completed') ? "default" : "secondary"}
                         className={
-                          project.status === "Terminé"
+                          project.status === t('projects.completed')
                             ? "bg-green-500 hover:bg-green-600 text-white"
                             : "bg-orange-500 hover:bg-orange-600 text-white"
                         }
