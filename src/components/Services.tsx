@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import custom icons
 import iconAssainissement from "@/assets/icon-assainissement.png";
@@ -17,6 +18,7 @@ const customIconMap: { [key: string]: { src: string; size?: string } } = {
   "ouvrages hydro": { src: iconHydro, size: "w-8 h-8" },
   "ouvrages hydrauliques": { src: iconHydro, size: "w-8 h-8" },
 };
+
 interface Service {
   id: string;
   title: string;
@@ -28,6 +30,7 @@ interface Service {
 
 const Services = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -129,13 +132,13 @@ const Services = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-              Nos services
+              {t('services.section_title')}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-              Quels services <span className="text-accent">offrons-nous ?</span>
+              {t('services.title')} <span className="text-accent">{t('services.title_accent')}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Une gamme complète de services pour répondre à tous vos besoins en construction
+              {t('services.subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -160,13 +163,13 @@ const Services = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-slide-up">
           <span className="text-accent font-semibold text-sm uppercase tracking-wider">
-            Nos services
+            {t('services.section_title')}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-            Quels services <span className="text-accent">offrons-nous ?</span>
+            {t('services.title')} <span className="text-accent">{t('services.title_accent')}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Une gamme complète de services pour répondre à tous vos besoins en construction
+            {t('services.subtitle')}
           </p>
         </div>
 
