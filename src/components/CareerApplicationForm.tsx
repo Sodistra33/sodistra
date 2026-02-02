@@ -7,66 +7,14 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Upload, X, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CareerApplicationFormProps {
   jobTitle?: string;
 }
 
-const departmentPositions = [
-  {
-    department: "Direction Générale",
-    positions: [
-      "Assistanat de direction",
-      "Secrétariat"
-    ]
-  },
-  {
-    department: "Département de la comptabilité et des finances",
-    positions: [
-      "Service comptable et trésorerie",
-      "Service du contrôle (Contrôleur interne)",
-      "Service des achats et achats mécaniques"
-    ]
-  },
-  {
-    department: "Département administratif et des Ressources Humaines",
-    positions: [
-      "Service des ressources humaines",
-      "Service HSES (Hygiène, Santé, Environnement et Sûreté)"
-    ]
-  },
-  {
-    department: "Département technique",
-    positions: [
-      "Service des marchés et contrats",
-      "Service planning et budget",
-      "Service qualité et laboratoire",
-      "Bureau d'études",
-      "Service topographique",
-      "Service électricité",
-      "Pôle route",
-      "Pôle bâtiment",
-      "Pôle aménagement hydro-agricole"
-    ]
-  },
-  {
-    department: "Département parc matériel",
-    positions: [
-      "Service mécanique",
-      "Service logistique",
-      "Service production (les centrales)",
-      "Service planification GM"
-    ]
-  },
-  {
-    department: "Autres",
-    positions: [
-      "Service informatique"
-    ]
-  }
-];
-
 const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
+  const { t } = useLanguage();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attachment, setAttachment] = useState<File | null>(null);
@@ -78,22 +26,76 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
     message: "",
   });
 
+  const departmentPositions = [
+    {
+      departmentKey: "dept.general_management",
+      positions: [
+        "Assistanat de direction",
+        "Secrétariat"
+      ]
+    },
+    {
+      departmentKey: "dept.accounting_finance",
+      positions: [
+        "Service comptable et trésorerie",
+        "Service du contrôle (Contrôleur interne)",
+        "Service des achats et achats mécaniques"
+      ]
+    },
+    {
+      departmentKey: "dept.admin_hr",
+      positions: [
+        "Service des ressources humaines",
+        "Service HSES (Hygiène, Santé, Environnement et Sûreté)"
+      ]
+    },
+    {
+      departmentKey: "dept.technical",
+      positions: [
+        "Service des marchés et contrats",
+        "Service planning et budget",
+        "Service qualité et laboratoire",
+        "Bureau d'études",
+        "Service topographique",
+        "Service électricité",
+        "Pôle route",
+        "Pôle bâtiment",
+        "Pôle aménagement hydro-agricole"
+      ]
+    },
+    {
+      departmentKey: "dept.equipment",
+      positions: [
+        "Service mécanique",
+        "Service logistique",
+        "Service production (les centrales)",
+        "Service planification GM"
+      ]
+    },
+    {
+      departmentKey: "dept.other",
+      positions: [
+        "Service informatique"
+      ]
+    }
+  ];
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const allowedTypes = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
       if (!allowedTypes.includes(file.type)) {
         toast({
-          title: "Type de fichier non autorisé",
-          description: "Veuillez uploader un fichier PDF ou une image (JPG, PNG)",
+          title: t('form.file_type_error'),
+          description: t('form.file_type_desc'),
           variant: "destructive",
         });
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
         toast({
-          title: "Fichier trop volumineux",
-          description: "La taille maximale est de 5 MB",
+          title: t('form.file_size_error'),
+          description: t('form.file_size_desc'),
           variant: "destructive",
         });
         return;
@@ -107,8 +109,8 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
     
     if (!selectedPosition) {
       toast({
-        title: "Poste requis",
-        description: "Veuillez sélectionner un poste",
+        title: t('form.position_required'),
+        description: t('form.position_required_desc'),
         variant: "destructive",
       });
       return;
@@ -166,8 +168,8 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
       });
 
       toast({
-        title: "Candidature envoyée !",
-        description: "Nous vous répondrons dans les plus brefs délais.",
+        title: t('form.success_title'),
+        description: t('form.success_desc'),
       });
 
       setFormData({ name: "", email: "", phone: "", message: "" });
@@ -176,8 +178,8 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
     } catch (error: any) {
       console.error("Error submitting form:", error);
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
+        title: t('contact.error_title'),
+        description: t('contact.error_desc'),
         variant: "destructive",
       });
     } finally {
@@ -191,7 +193,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <Input
-              placeholder="Votre nom complet"
+              placeholder={t('form.full_name')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -202,7 +204,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
           <div>
             <Input
               type="email"
-              placeholder="Votre adresse email"
+              placeholder={t('form.email_address')}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
@@ -213,7 +215,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
           <div>
             <Input
               type="tel"
-              placeholder="Votre numéro de téléphone"
+              placeholder={t('form.phone_number')}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               disabled={isSubmitting}
@@ -227,12 +229,12 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
               disabled={isSubmitting}
             >
               <SelectTrigger className="bg-background">
-                <SelectValue placeholder="Sélectionnez un poste" />
+                <SelectValue placeholder={t('form.select_position')} />
               </SelectTrigger>
               <SelectContent className="bg-background z-50 max-h-[300px]">
                 {departmentPositions.map((dept) => (
-                  <SelectGroup key={dept.department}>
-                    <SelectLabel className="font-semibold text-primary">{dept.department}</SelectLabel>
+                  <SelectGroup key={dept.departmentKey}>
+                    <SelectLabel className="font-semibold text-primary">{t(dept.departmentKey)}</SelectLabel>
                     {dept.positions.map((position) => (
                       <SelectItem key={position} value={position}>
                         {position}
@@ -245,7 +247,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
           </div>
           <div>
             <Textarea
-              placeholder="Présentez-vous et décrivez vos compétences..."
+              placeholder={t('form.introduce_yourself')}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
@@ -257,7 +259,7 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
 
           <div>
             <label className="block text-sm font-medium text-primary mb-2">
-              CV ou document (PDF, JPG, PNG - Max 5MB)
+              {t('form.cv_label')}
             </label>
             <div className="relative">
               <Input
@@ -295,10 +297,10 @@ const CareerApplicationForm = ({ jobTitle }: CareerApplicationFormProps) => {
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Envoi en cours...
+                {t('form.submitting')}
               </>
             ) : (
-              "Envoyer ma candidature"
+              t('form.submit')
             )}
           </Button>
         </form>

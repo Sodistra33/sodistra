@@ -5,8 +5,11 @@ import CareerApplicationForm from "@/components/CareerApplicationForm";
 import JobOffers from "@/components/JobOffers";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Briefcase, FileText } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Career = () => {
+  const { t } = useLanguage();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -19,11 +22,10 @@ const Career = () => {
         <div className="container mx-auto px-4 py-20">
           <div className="max-w-3xl mx-auto text-center animate-slide-up">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Rejoignez notre <span className="text-accent">équipe</span>
+              {t('career.hero_title')} <span className="text-accent">{t('career.hero_title_accent')}</span>
             </h1>
             <p className="text-lg opacity-90">
-              SODISTRA recherche des talents passionnés pour participer à la réalisation de projets d'envergure.
-              Découvrez nos offres d'emploi ou envoyez-nous votre candidature spontanée.
+              {t('career.hero_subtitle')}
             </p>
           </div>
         </div>
@@ -35,22 +37,22 @@ const Career = () => {
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
               <TabsTrigger value="offers" className="flex items-center gap-2">
                 <Briefcase className="h-4 w-4" />
-                Offres d'emploi
+                {t('career.tab_offers')}
               </TabsTrigger>
               <TabsTrigger value="spontaneous" className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
-                Candidature spontanée
+                {t('career.tab_spontaneous')}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="offers">
               <div className="text-center mb-16 animate-slide-up">
-                <span className="text-accent font-semibold text-sm uppercase tracking-wider">Opportunités</span>
+                <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('career.opportunities')}</span>
                 <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-                  Offres d'emploi <span className="text-accent">disponibles</span>
+                  {t('career.offers_title')} <span className="text-accent">{t('career.offers_title_accent')}</span>
                 </h2>
                 <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                  Consultez nos postes à pourvoir et postulez directement en ligne
+                  {t('career.offers_subtitle')}
                 </p>
               </div>
               <JobOffers />
@@ -58,12 +60,12 @@ const Career = () => {
 
             <TabsContent value="spontaneous">
               <div className="text-center mb-16 animate-slide-up">
-                <span className="text-accent font-semibold text-sm uppercase tracking-wider">Candidature</span>
+                <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('career.application')}</span>
                 <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-                  Candidature <span className="text-accent">spontanée</span>
+                  {t('career.spontaneous_title')} <span className="text-accent">{t('career.spontaneous_title_accent')}</span>
                 </h2>
                 <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                  Aucune offre ne correspond à votre profil ? Envoyez-nous votre CV, nous étudierons votre candidature avec attention
+                  {t('career.spontaneous_subtitle')}
                 </p>
               </div>
 

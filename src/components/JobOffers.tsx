@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CareerApplicationForm from "./CareerApplicationForm";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface JobOffer {
   id: string;
@@ -26,6 +27,7 @@ interface JobOffer {
 }
 
 const JobOffers = () => {
+  const { t } = useLanguage();
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<string>("");
@@ -58,13 +60,13 @@ const JobOffers = () => {
     try {
       await navigator.clipboard.writeText(url);
       toast({
-        title: "Lien copié !",
-        description: "Le lien de l'offre a été copié dans le presse-papiers.",
+        title: t('job.link_copied'),
+        description: t('job.link_copied_desc'),
       });
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Impossible de copier le lien.",
+        title: t('contact.error_title'),
+        description: t('job.copy_error'),
         variant: "destructive",
       });
     }
@@ -95,9 +97,9 @@ const JobOffers = () => {
       <Card className="border-border">
         <CardContent className="p-12 text-center">
           <Briefcase className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-xl font-semibold text-primary mb-2">Aucune offre disponible</h3>
+          <h3 className="text-xl font-semibold text-primary mb-2">{t('job.no_offers_title')}</h3>
           <p className="text-muted-foreground">
-            Il n'y a pas d'offres d'emploi disponibles pour le moment. Revenez plus tard ou envoyez-nous une candidature spontanée.
+            {t('job.no_offers_desc')}
           </p>
         </CardContent>
       </Card>
@@ -140,12 +142,12 @@ const JobOffers = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-semibold text-primary mb-2">Description</h4>
+              <h4 className="font-semibold text-primary mb-2">{t('job.description')}</h4>
               <p className="text-muted-foreground text-sm line-clamp-3">{job.description}</p>
             </div>
             {job.requirements && (
               <div>
-                <h4 className="font-semibold text-primary mb-2">Profil recherché</h4>
+                <h4 className="font-semibold text-primary mb-2">{t('job.requirements')}</h4>
                 <p className="text-muted-foreground text-sm line-clamp-2">{job.requirements}</p>
               </div>
             )}
@@ -155,14 +157,14 @@ const JobOffers = () => {
                   className="w-full bg-accent hover:bg-accent-light text-accent-foreground"
                   onClick={() => setSelectedJob(job.title)}
                 >
-                  Postuler
+                  {t('job.apply')}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Postuler pour : {job.title}</DialogTitle>
+                  <DialogTitle>{t('job.apply_for')} {job.title}</DialogTitle>
                   <DialogDescription>
-                    Remplissez le formulaire ci-dessous pour postuler à cette offre
+                    {t('job.apply_form_desc')}
                   </DialogDescription>
                 </DialogHeader>
                 <CareerApplicationForm jobTitle={job.title} />
