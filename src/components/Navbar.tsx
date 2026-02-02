@@ -33,7 +33,7 @@ const Navbar = () => {
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
-
+  const [brochureUrl, setBrochureUrl] = useState<string | null>(null);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -44,7 +44,29 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchServices();
+    fetchBrochure();
   }, []);
+
+  const fetchBrochure = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('brochures')
+        .select('file_path')
+        .eq('is_active', true)
+        .limit(1)
+        .single();
+      if (error) throw error;
+      setBrochureUrl(data?.file_path || null);
+    } catch (error) {
+      console.error('Error fetching brochure:', error);
+    }
+  };
+
+  const handleDownloadBrochure = () => {
+    if (brochureUrl) {
+      window.open(brochureUrl, '_blank');
+    }
+  };
 
   const fetchServices = async () => {
     try {
@@ -242,10 +264,9 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher isScrolled={isScrolled} />
             <Button
-              onClick={() => {
-                console.log("Téléchargement de la brochure");
-              }}
+              onClick={handleDownloadBrochure}
               className="bg-accent hover:bg-accent-light text-accent-foreground"
+              disabled={!brochureUrl}
             >
               {t('nav.download_brochure')}
             </Button>
@@ -295,10 +316,9 @@ const Navbar = () => {
               <LanguageSwitcher isScrolled={true} />
             </div>
             <Button
-              onClick={() => {
-                console.log("Téléchargement de la brochure");
-              }}
+              onClick={handleDownloadBrochure}
               className="w-full bg-accent hover:bg-accent-light text-accent-foreground"
+              disabled={!brochureUrl}
             >
               {t('nav.download_brochure')}
             </Button>
