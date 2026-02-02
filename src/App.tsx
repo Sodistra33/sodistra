@@ -17,6 +17,7 @@ import MigrationTool from "./pages/MigrationTool";
 
 const queryClient = new QueryClient();
 
+// App component with language provider wrapping all routes
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
