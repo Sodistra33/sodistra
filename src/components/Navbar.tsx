@@ -68,11 +68,6 @@ const Navbar = () => {
     return [
       { label: "À propos", href: "#apropos" },
       { 
-        label: "Services", 
-        href: "#services",
-        subItems: serviceSubItems.length > 0 ? serviceSubItems : undefined
-      },
-      { 
         label: "Réalisations", 
         href: "#realisations",
         subItems: [
