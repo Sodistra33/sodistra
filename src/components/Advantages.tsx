@@ -1,28 +1,31 @@
 import { Shield, Award, Clock, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import logoWatermark from "@/assets/logo-sodistra-watermark.png";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Advantages = () => {
+  const { t } = useLanguage();
+
   const advantages = [
     {
       icon: Shield,
-      title: "Fiabilité garantie",
-      description: "Engagement total sur la qualité et la durabilité de nos constructions avec garanties complètes.",
+      titleKey: 'advantages.reliability_title',
+      descKey: 'advantages.reliability_desc',
     },
     {
       icon: Award,
-      title: "Expertise locale",
-      description: "20 ans d'expérience en Côte d'Ivoire avec une connaissance approfondie du terrain.",
+      titleKey: 'advantages.expertise_title',
+      descKey: 'advantages.expertise_desc',
     },
     {
       icon: Clock,
-      title: "Délais respectés",
-      description: "Gestion rigoureuse des projets pour livrer dans les temps convenus sans compromis sur la qualité.",
+      titleKey: 'advantages.deadlines_title',
+      descKey: 'advantages.deadlines_desc',
     },
     {
       icon: Lightbulb,
-      title: "Innovation",
-      description: "Utilisation des dernières technologies et méthodes de construction pour des résultats optimaux.",
+      titleKey: 'advantages.innovation_title',
+      descKey: 'advantages.innovation_desc',
     },
   ];
 
@@ -40,12 +43,12 @@ const Advantages = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos atouts</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('advantages.section_title')}</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-4">
-            Pourquoi nous <span className="text-accent">choisir ?</span>
+            {t('advantages.title')} <span className="text-accent">{t('advantages.title_accent')}</span>
           </h2>
           <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-            Des valeurs fortes et un engagement total envers la satisfaction de nos clients
+            {t('advantages.subtitle')}
           </p>
         </div>
 
@@ -60,8 +63,8 @@ const Advantages = () => {
                 <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mb-6 mx-auto">
                   <advantage.icon className="text-accent-foreground" size={52} />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-accent">{advantage.title}</h3>
-                <p className="text-primary-foreground/70 leading-relaxed">{advantage.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-accent">{t(advantage.titleKey)}</h3>
+                <p className="text-primary-foreground/70 leading-relaxed">{t(advantage.descKey)}</p>
               </CardContent>
             </Card>
           ))}

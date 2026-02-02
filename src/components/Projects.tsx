@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface Project {
   id: string;
@@ -23,6 +24,7 @@ export interface Project {
 
 const Projects = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [dbProjects, setDbProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,7 +62,7 @@ const Projects = () => {
       image:
         project.featured_image_url ||
         "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
-      status: isCompleted ? "Terminé" : "En cours",
+      status: isCompleted ? t('projects.completed') : t('projects.in_progress'),
       description: project.description || "",
       client: project.client || "",
       date: project.completion_date || "",
@@ -73,12 +75,12 @@ const Projects = () => {
       <section id="realisations" className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Réalisations</span>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('projects.section_title')}</span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-              Découvrez nos <span className="text-accent">projets</span>
+              {t('projects.title')} <span className="text-accent">{t('projects.title_accent')}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Un portfolio diversifié de projets réussis en Côte d'Ivoire
+              {t('projects.subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -101,12 +103,12 @@ const Projects = () => {
     <section id="realisations" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">Nos Réalisations</span>
+          <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('projects.section_title')}</span>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-            Découvrez nos <span className="text-accent">projets</span>
+            {t('projects.title')} <span className="text-accent">{t('projects.title_accent')}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Un portfolio diversifié de projets réussis en Côte d'Ivoire
+            {t('projects.subtitle')}
           </p>
         </div>
 
@@ -138,7 +140,6 @@ const Projects = () => {
                     {/* Gradient overlay - transparent at top, dark at bottom */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/40 to-blue-950/90" />
 
-
                     {/* Text content overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-6">
                       <h3 className="text-2xl font-bold text-accent mb-2 group-hover:text-accent/80 transition-colors">
@@ -162,7 +163,7 @@ const Projects = () => {
               onClick={() => navigate("/projets")}
               className="bg-accent hover:bg-accent-light text-accent-foreground"
             >
-              Voir tous les projets
+              {t('projects.view_all')}
             </Button>
           </div>
         )}

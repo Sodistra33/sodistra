@@ -3,6 +3,7 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AboutContent {
   id: string;
@@ -13,14 +14,15 @@ interface AboutContent {
 }
 
 const About = () => {
+  const { t } = useLanguage();
   const [contents, setContents] = useState<AboutContent[]>([]);
   const [loading, setLoading] = useState(true);
 
   const values = [
-    "Excellence et qualité garanties",
-    "20 ans d'expertise",
-    "Équipe de professionnels qualifiés",
-    "Respect des délais et budgets",
+    t('about.excellence'),
+    t('about.experience'),
+    t('about.team'),
+    t('about.deadlines'),
   ];
 
   useEffect(() => {
@@ -58,9 +60,8 @@ const About = () => {
   }
 
   const mainContent = contents[0] || {
-    title: "La meilleure construction avec une cohérence de conception",
-    description:
-      "SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l'assainissement, la construction de zones industrielles et d'ouvrages divers.",
+    title: t('about.default_title'),
+    description: t('about.default_description'),
   };
 
   return (
@@ -68,7 +69,7 @@ const About = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">À propos de nous</span>
+            <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('about.section_title')}</span>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">{mainContent.title}</h2>
             <div className="text-muted-foreground text-lg mb-8 leading-relaxed space-y-4">
               {mainContent.description.split('\n\n').map((paragraph, index) => (
@@ -116,12 +117,12 @@ const About = () => {
               </Carousel>
             ) : (
               <div className="relative rounded-2xl overflow-hidden shadow-lg bg-primary/10 h-[500px] flex items-center justify-center">
-                <p className="text-muted-foreground">Aucune image disponible</p>
+                <p className="text-muted-foreground">{t('about.no_image')}</p>
               </div>
             )}
             <div className="absolute -bottom-6 -right-6 bg-accent text-accent-foreground rounded-2xl p-8 shadow-lg z-10">
-              <div className="text-5xl font-bold mb-2">20 ans</div>
-              <div className="font-semibold">d'expertise</div>
+              <div className="text-5xl font-bold mb-2">{t('about.years')}</div>
+              <div className="font-semibold">{t('about.years_expertise')}</div>
             </div>
           </div>
         </div>
