@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { isVideoUrl } from "@/lib/mediaUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getCategoryTranslation } from "@/lib/contentTranslations";
+import { useContentTranslations } from "@/contexts/TranslationsContext";
 
 interface BlogPost {
   id: string;
@@ -25,6 +26,7 @@ const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { getBlogTranslation } = useContentTranslations();
   const [article, setArticle] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -64,6 +66,13 @@ const BlogDetail = () => {
     const key = getCategoryTranslation(category);
     return key ? t(key) : category;
   };
+
+  // Get translated content
+  const translation = article ? getBlogTranslation(article.id) : undefined;
+  const displayTitle = (language === 'en' && translation?.title_en) ? translation.title_en : article?.title;
+  const displayContent = (language === 'en' && translation?.content_en) ? translation.content_en : article?.content;
+  const displayExcerpt = (language === 'en' && translation?.excerpt_en) ? translation.excerpt_en : article?.excerpt;
+  const displayCategory = (language === 'en' && translation?.category_en) ? translation.category_en : (article ? translateCategory(article.category) : '');
 
   if (loading) {
     return (
@@ -178,7 +187,7 @@ const BlogDetail = () => {
               <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                 <div className="flex items-center gap-4">
                   <span className="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-semibold rounded-full">
-                    {translateCategory(article.category)}
+                    {displayCategory}
                   </span>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar size={16} className="mr-2" />
@@ -196,7 +205,7 @@ const BlogDetail = () => {
               </div>
 
               <h1 className="text-3xl md:text-5xl font-bold text-primary mb-6">
-                {article.title}
+                {displayTitle}
               </h1>
 
               <div 
@@ -206,7 +215,7 @@ const BlogDetail = () => {
                   prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-6
                   prose-ul:text-muted-foreground prose-ul:mb-6
                   prose-li:mb-2"
-                dangerouslySetInnerHTML={{ __html: article.content }}
+                dangerouslySetInnerHTML={{ __html: displayContent || '' }}
               />
 
               <div className="mt-12 pt-8 border-t border-border">

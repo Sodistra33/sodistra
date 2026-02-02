@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useContentTranslations } from "@/contexts/TranslationsContext";
 
 interface Project {
   id: string;
@@ -27,9 +28,16 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { language, t } = useLanguage();
+  const { getProjectTranslation } = useContentTranslations();
   const [selectedImage, setSelectedImage] = useState(0);
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Get translated content
+  const translation = project ? getProjectTranslation(project.id) : undefined;
+  const displayTitle = (language === 'en' && translation?.title_en) ? translation.title_en : project?.title;
+  const displayDescription = (language === 'en' && translation?.description_en) ? translation.description_en : project?.description;
+  const displayCategory = (language === 'en' && translation?.category_en) ? translation.category_en : project?.category;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -160,11 +168,11 @@ const ProjectDetail = () => {
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-                {project.title}
+                {displayTitle}
               </h1>
 
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                {project.description}
+                {displayDescription}
               </p>
 
               <div className="space-y-6">
@@ -213,7 +221,7 @@ const ProjectDetail = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">{t('project.category')}</p>
                         <p className="font-semibold text-primary capitalize">
-                          {project.category}
+                          {displayCategory}
                         </p>
                       </div>
                     </div>

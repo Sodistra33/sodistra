@@ -9,10 +9,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getCategoryTranslation } from "@/lib/contentTranslations";
+import { useContentTranslations } from "@/contexts/TranslationsContext";
 
 const AllNews = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { getBlogTranslation } = useContentTranslations();
   const [dbArticles, setDbArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,10 +40,14 @@ const AllNews = () => {
   };
 
   const handleShare = (article: any) => {
+    const translation = getBlogTranslation(article.id);
+    const displayTitle = (language === 'en' && translation?.title_en) ? translation.title_en : article.title;
+    const displayExcerpt = (language === 'en' && translation?.excerpt_en) ? translation.excerpt_en : article.excerpt;
+    
     if (navigator.share) {
       navigator.share({
-        title: article.title,
-        text: article.excerpt,
+        title: displayTitle,
+        text: displayExcerpt,
         url: `${window.location.origin}/actualite/${article.id}`
       }).catch(() => {
         console.log("Share cancelled");
@@ -56,6 +62,15 @@ const AllNews = () => {
   const translateCategory = (category: string) => {
     const key = getCategoryTranslation(category);
     return key ? t(key) : category;
+  };
+
+  const getDisplayContent = (article: any) => {
+    const translation = getBlogTranslation(article.id);
+    return {
+      title: (language === 'en' && translation?.title_en) ? translation.title_en : article.title,
+      excerpt: (language === 'en' && translation?.excerpt_en) ? translation.excerpt_en : article.excerpt,
+      category: (language === 'en' && translation?.category_en) ? translation.category_en : translateCategory(article.category)
+    };
   };
 
   return (
@@ -118,56 +133,59 @@ const AllNews = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {dbArticles.map((article: any, index: number) => (
-                <Card
-                  key={article.id}
-                  className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={article.featured_image_url}
-                      alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
-                        {translateCategory(article.category)}
-                      </span>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Calendar size={16} className="mr-1" />
-                        {formatDate(article.published_at)}
+              {dbArticles.map((article: any, index: number) => {
+                const display = getDisplayContent(article);
+                return (
+                  <Card
+                    key={article.id}
+                    className="overflow-hidden group hover:shadow-xl transition-all duration-300 animate-slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={article.featured_image_url}
+                        alt={display.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
+                          {display.category}
+                        </span>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar size={16} className="mr-1" />
+                          {formatDate(article.published_at)}
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
+                        {display.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-4 line-clamp-3">{display.excerpt}</p>
+                      <div className="flex items-center justify-between">
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto text-accent"
+                          onClick={() => navigate(`/actualite/${article.id}`)}
+                        >
+                          {t('blog.read_more')} →
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={e => {
+                            e.stopPropagation();
+                            handleShare(article);
+                          }}
+                          className="text-muted-foreground hover:text-accent"
+                        >
+                          <Share2 size={18} />
+                        </Button>
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-accent transition-colors">
-                      {article.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-4 line-clamp-3">{article.excerpt}</p>
-                    <div className="flex items-center justify-between">
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto text-accent"
-                        onClick={() => navigate(`/actualite/${article.id}`)}
-                      >
-                        {t('blog.read_more')} →
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleShare(article);
-                        }}
-                        className="text-muted-foreground hover:text-accent"
-                      >
-                        <Share2 size={18} />
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>

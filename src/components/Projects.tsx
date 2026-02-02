@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useContentTranslations } from "@/contexts/TranslationsContext";
 
 export interface Project {
   id: string;
@@ -24,7 +25,8 @@ export interface Project {
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const { getProjectTranslation } = useContentTranslations();
   const [dbProjects, setDbProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,20 +52,24 @@ const Projects = () => {
     }
   };
 
-  // Map database projects to Project interface
+  // Map database projects to Project interface with translations
   const displayedProjects: Project[] = dbProjects.map((project) => {
     // Calculer le statut basé sur la date d'achèvement
     const isCompleted = project.completion_date ? new Date(project.completion_date) <= new Date() : false;
+    
+    const translation = getProjectTranslation(project.id);
+    const displayTitle = (language === 'en' && translation?.title_en) ? translation.title_en : project.title;
+    const displayDescription = (language === 'en' && translation?.description_en) ? translation.description_en : (project.description || "");
 
     return {
       id: project.id.toString(),
-      title: project.title,
+      title: displayTitle,
       category: project.category || "batiments",
       image:
         project.featured_image_url ||
         "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop",
       status: isCompleted ? t('projects.completed') : t('projects.in_progress'),
-      description: project.description || "",
+      description: displayDescription,
       client: project.client || "",
       date: project.completion_date || "",
       gallery: project.gallery_images || [],

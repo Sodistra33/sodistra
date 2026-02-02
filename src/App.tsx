@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { TranslationsProvider } from "@/contexts/TranslationsContext";
 import Index from "./pages/Index";
 import ProjectDetail from "./pages/ProjectDetail";
 import BlogDetail from "./pages/BlogDetail";
@@ -21,25 +22,27 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/projets" element={<AllProjects />} />
-            <Route path="/projet/:id" element={<ProjectDetail />} />
-            <Route path="/actualites" element={<AllNews />} />
-            <Route path="/actualite/:id" element={<BlogDetail />} />
-            <Route path="/carriere" element={<Career />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/migration" element={<MigrationTool />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <TranslationsProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/projets" element={<AllProjects />} />
+              <Route path="/projet/:id" element={<ProjectDetail />} />
+              <Route path="/actualites" element={<AllNews />} />
+              <Route path="/actualite/:id" element={<BlogDetail />} />
+              <Route path="/carriere" element={<Career />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/migration" element={<MigrationTool />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </TranslationsProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );
