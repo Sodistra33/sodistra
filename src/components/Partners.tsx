@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 const Partners = () => {
+  const { t } = useLanguage();
   const [partners, setPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
@@ -20,8 +23,8 @@ const Partners = () => {
     } catch (error) {
       console.error('Error fetching partners:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les partenaires",
+        title: t('error.generic'),
+        description: t('error.loading_partners'),
         variant: "destructive"
       });
     } finally {
@@ -37,14 +40,14 @@ const Partners = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-slide-up">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            ​Ils nous font    <span className="text-accent">​confiance</span>
+            {t('partners.title')} <span className="text-accent">{t('partners.title_accent')}</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Ils nous font confiance pour leurs projets de construction
+            {t('partners.subtitle')}
           </p>
         </div>
 
-        {loading ? <p className="text-center text-muted-foreground">Chargement des partenaires...</p> : partners.length === 0 ? <p className="text-center text-muted-foreground">Aucun partenaire pour le moment.</p> : <div ref={scrollRef} className="relative overflow-x-auto scrollbar-hide touch-pan-x" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
+        {loading ? <p className="text-center text-muted-foreground">{t('partners.loading')}</p> : partners.length === 0 ? <p className="text-center text-muted-foreground">{t('partners.no_partners')}</p> : <div ref={scrollRef} className="relative overflow-x-auto scrollbar-hide touch-pan-x" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
             <div className={`flex gap-12 items-center ${isPaused ? '' : 'animate-marquee'}`} style={{
           animationPlayState: isPaused ? 'paused' : 'running'
         }}>
