@@ -89,13 +89,15 @@ const AllProjects = () => {
     };
   });
 
-  // Create categories dynamically from services
+  // Static categories (no longer from services database)
   const categories = [
     { value: "all", label: t('projects.all_categories') },
-    ...services.map(service => ({
-      value: service.title,
-      label: service.title
-    }))
+    { value: "Assainissement et Réhabilitations", label: t('nav.sanitation_rehab') },
+    { value: "Ponts et Voiries", label: t('nav.bridges_roads') },
+    { value: "Ouvrages Hydro-Agricoles", label: t('nav.hydro_works') },
+    { value: "Routes neuves", label: t('nav.new_roads') },
+    { value: "Construction de zones industrielles", label: t('nav.industrial_zones') },
+    { value: "Assainissement et voieries", label: t('nav.sanitation_roads') },
   ];
 
   // Filter projects by category
