@@ -184,6 +184,17 @@ const translations: Record<Language, Record<string, string>> = {
     'dept.technical': 'Département technique',
     'dept.equipment': 'Département parc matériel',
     'dept.other': 'Autres',
+    
+    // Partners
+    'partners.title': 'Ils nous font',
+    'partners.title_accent': 'confiance',
+    'partners.subtitle': 'Ils nous font confiance pour leurs projets de construction',
+    'partners.loading': 'Chargement des partenaires...',
+    'partners.no_partners': 'Aucun partenaire pour le moment.',
+    
+    // Errors
+    'error.loading_partners': 'Impossible de charger les partenaires',
+    'error.generic': 'Erreur',
   },
   en: {
     // Navbar
@@ -360,6 +371,17 @@ const translations: Record<Language, Record<string, string>> = {
     'dept.technical': 'Technical Department',
     'dept.equipment': 'Equipment Department',
     'dept.other': 'Other',
+    
+    // Partners
+    'partners.title': 'They',
+    'partners.title_accent': 'trust us',
+    'partners.subtitle': 'They trust us for their construction projects',
+    'partners.loading': 'Loading partners...',
+    'partners.no_partners': 'No partners at the moment.',
+    
+    // Errors
+    'error.loading_partners': 'Unable to load partners',
+    'error.generic': 'Error',
   },
 };
 
