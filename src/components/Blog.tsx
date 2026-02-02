@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { isVideoUrl } from "@/lib/mediaUtils";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -96,11 +97,22 @@ const Blog = () => {
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
                       <div className="aspect-video overflow-hidden">
-                        <img
-                          src={article.featured_image_url}
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
+                        {isVideoUrl(article.featured_image_url) ? (
+                          <video
+                            src={article.featured_image_url}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                          />
+                        ) : (
+                          <img
+                            src={article.featured_image_url}
+                            alt={article.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        )}
                       </div>
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-3">

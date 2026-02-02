@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { isVideoUrl, MEDIA_ACCEPT } from "@/lib/mediaUtils";
 
 interface BlogPost {
   id: string;
@@ -232,37 +233,52 @@ export const BlogManager = () => {
                 <Input id="category" name="category" defaultValue={editingPost?.category} required placeholder="Événement, Nouveauté, etc." />
               </div>
               <div>
-                <Label htmlFor="featured_image">Image principale</Label>
+                <Label htmlFor="featured_image">Image ou Vidéo principale</Label>
                 <Input 
                   id="featured_image" 
                   type="file" 
-                  accept="image/*" 
+                  accept={MEDIA_ACCEPT}
                   onChange={handleImageUpload} 
                   disabled={uploading}
                   className="cursor-pointer"
                 />
+                <p className="text-xs text-muted-foreground mt-1">Formats supportés: Images (JPG, PNG, WebP) et Vidéos (MP4, WebM, MOV)</p>
                 {uploading && <p className="text-sm text-muted-foreground mt-1">Upload en cours...</p>}
                 {(previewImage || editingPost?.featured_image_url) && (
-                  <img src={previewImage || editingPost?.featured_image_url} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
+                  isVideoUrl(previewImage || editingPost?.featured_image_url) ? (
+                    <video 
+                      src={previewImage || editingPost?.featured_image_url} 
+                      className="mt-2 h-32 w-full object-cover rounded" 
+                      muted 
+                      controls
+                    />
+                  ) : (
+                    <img src={previewImage || editingPost?.featured_image_url} alt="Preview" className="mt-2 h-32 w-full object-cover rounded" />
+                  )
                 )}
                 <Input id="featured_image_url" name="featured_image_url" type="hidden" defaultValue={previewImage || editingPost?.featured_image_url} />
               </div>
               <div>
-                <Label htmlFor="gallery_images">Galerie d'images</Label>
+                <Label htmlFor="gallery_images">Galerie (Images et Vidéos)</Label>
                 <Input 
                   id="gallery_images" 
                   type="file" 
-                  accept="image/*" 
+                  accept={MEDIA_ACCEPT}
                   multiple
                   onChange={handleGalleryUpload} 
                   disabled={uploading}
                   className="cursor-pointer"
                 />
+                <p className="text-xs text-muted-foreground mt-1">Vous pouvez ajouter des images et vidéos à la galerie</p>
                 {galleryImages.length > 0 && (
                   <div className="mt-2 grid grid-cols-3 gap-2">
                     {galleryImages.map((url, index) => (
                       <div key={index} className="relative group">
-                        <img src={url} alt={`Gallery ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        {isVideoUrl(url) ? (
+                          <video src={url} className="h-24 w-full object-cover rounded" muted />
+                        ) : (
+                          <img src={url} alt={`Gallery ${index + 1}`} className="h-24 w-full object-cover rounded" />
+                        )}
                         <button
                           type="button"
                           onClick={() => removeGalleryImage(index)}
