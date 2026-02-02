@@ -202,7 +202,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.industrial_zones': 'Industrial Zones Construction',
     'nav.sanitation_roads': 'Sanitation and Roads',
     'nav.job_offers': 'Job offers',
-    'nav.apply': 'Apply',
+    'nav.apply': 'Spontaneous application',
     
     // Hero
     'hero.fallback_title': 'Your trusted partner',
