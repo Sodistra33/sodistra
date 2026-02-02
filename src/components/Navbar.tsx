@@ -74,10 +74,10 @@ const Navbar = () => {
         href: "#realisations",
         subItems: [
           { label: t('nav.all_projects'), href: "/projets" },
-          { label: t('nav.buildings'), href: "/projets?category=Bâtiments" },
-          { label: t('nav.bridges_roads'), href: "/projets?category=Ponts%20et%20Voiries" },
-          { label: t('nav.hydro_works'), href: "/projets?category=Ouvrages%20Hydro-Agricoles" },
-          { label: t('nav.sanitation'), href: "/projets?category=Assainissement%20et%20Réhabilitations" },
+          { label: t('nav.new_roads'), href: "/projets?category=Routes%20neuves" },
+          { label: t('nav.industrial_zones'), href: "/projets?category=Construction%20de%20zones%20industrielles" },
+          { label: t('nav.sanitation_roads'), href: "/projets?category=Assainissement%20et%20voieries" },
+          { label: t('nav.hydro_works'), href: "/projets?category=Ouvrages%20hydro-agricoles" },
         ]
       },
       { label: t('nav.advantages'), href: "#atouts" },
