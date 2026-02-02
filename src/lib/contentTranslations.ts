@@ -49,3 +49,27 @@ export const getCategoryTranslationKey = (category: string): string | null => {
   
   return null;
 };
+
+// Blog category translations
+export const blogCategoryTranslations: Record<string, string> = {
+  'event': 'blog.category.event',
+  'évènement': 'blog.category.event',
+  'evenement': 'blog.category.event',
+  'news': 'blog.category.news',
+  'actualités': 'blog.category.news',
+  'actualites': 'blog.category.news',
+  'rse': 'blog.category.csr',
+  'csr': 'blog.category.csr',
+};
+
+export const getCategoryTranslation = (category: string): string | null => {
+  const lowerCategory = category.toLowerCase();
+  
+  for (const [keyword, key] of Object.entries(blogCategoryTranslations)) {
+    if (lowerCategory.includes(keyword)) {
+      return key;
+    }
+  }
+  
+  return null;
+};

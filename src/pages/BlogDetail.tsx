@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { isVideoUrl } from "@/lib/mediaUtils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getCategoryTranslation } from "@/lib/contentTranslations";
 
 interface BlogPost {
   id: string;
@@ -22,6 +24,7 @@ interface BlogPost {
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const [article, setArticle] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -49,6 +52,19 @@ const BlogDetail = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const translateCategory = (category: string) => {
+    const key = getCategoryTranslation(category);
+    return key ? t(key) : category;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -61,8 +77,8 @@ const BlogDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">Article non trouvé</h1>
-          <Button onClick={() => navigate("/actualites")}>Retour</Button>
+          <h1 className="text-4xl font-bold text-primary mb-4">{t('blog.not_found')}</h1>
+          <Button onClick={() => navigate("/actualites")}>{t('blog.back')}</Button>
         </div>
       </div>
     );
@@ -77,12 +93,11 @@ const BlogDetail = () => {
         text: article.excerpt,
         url: shareUrl,
       }).catch(() => {
-        console.log("Partage annulé");
+        console.log("Share cancelled");
       });
     } else {
-      // Fallback: copier le lien dans le presse-papier
       navigator.clipboard.writeText(shareUrl).then(() => {
-        alert("Lien copié dans le presse-papier !");
+        alert(t('blog.link_copied'));
       });
     }
   };
@@ -99,7 +114,7 @@ const BlogDetail = () => {
             className="mb-8 text-primary hover:text-accent"
           >
             <ArrowLeft className="mr-2" size={20} />
-            Retour
+            {t('blog.back')}
           </Button>
 
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
@@ -163,15 +178,11 @@ const BlogDetail = () => {
               <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                 <div className="flex items-center gap-4">
                   <span className="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-semibold rounded-full">
-                    {article.category}
+                    {translateCategory(article.category)}
                   </span>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar size={16} className="mr-2" />
-                    {new Date(article.published_at).toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
+                    {formatDate(article.published_at)}
                   </div>
                 </div>
                 <Button
@@ -180,7 +191,7 @@ const BlogDetail = () => {
                   className="text-primary hover:text-accent hover:border-accent"
                 >
                   <Share2 size={18} className="mr-2" />
-                  Partager
+                  {t('blog.share')}
                 </Button>
               </div>
 
@@ -201,14 +212,14 @@ const BlogDetail = () => {
               <div className="mt-12 pt-8 border-t border-border">
                 <div className="flex items-center justify-between">
                   <p className="text-muted-foreground">
-                    Vous avez aimé cet article ? Partagez-le !
+                    {t('blog.share_prompt')}
                   </p>
                   <Button
                     onClick={handleShare}
                     className="bg-accent hover:bg-accent-light text-accent-foreground"
                   >
                     <Share2 size={18} className="mr-2" />
-                    Partager
+                    {t('blog.share')}
                   </Button>
                 </div>
               </div>

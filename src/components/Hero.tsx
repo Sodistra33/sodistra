@@ -17,7 +17,7 @@ interface HeroImage {
 }
 
 const Hero = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [heroImages, setHeroImages] = useState<HeroImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [brochureUrl, setBrochureUrl] = useState<string | null>(null);
@@ -133,8 +133,8 @@ const Hero = () => {
         <div className="overflow-hidden mb-6 w-full">
           <h1 className="text-5xl md:text-7xl font-bold text-white animate-fade-in">
             <div className="inline-flex whitespace-nowrap animate-marquee-title">
-              <span className="px-16">{hero?.title || t('hero.fallback_title')} {t('hero.in_construction')}</span>
-              <span className="px-16">{hero?.title || t('hero.fallback_title')} {t('hero.in_construction')}</span>
+              <span className="px-16">{language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}</span>
+              <span className="px-16">{language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}</span>
             </div>
           </h1>
         </div>
