@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { isVideoUrl } from "@/lib/mediaUtils";
 
 interface BlogPost {
   id: string;
@@ -104,15 +105,29 @@ const BlogDetail = () => {
           <article className="max-w-4xl mx-auto bg-background rounded-2xl shadow-lg overflow-hidden">
             {(article.gallery_images && article.gallery_images.length > 0) || article.featured_image_url ? (
               <div className="aspect-square overflow-hidden relative bg-muted flex items-center justify-center">
-                <img
-                  src={
-                    article.gallery_images && article.gallery_images.length > 0
-                      ? article.gallery_images[selectedImage]
-                      : article.featured_image_url!
-                  }
-                  alt={article.title}
-                  className="max-w-full max-h-full object-contain"
-                />
+                {(() => {
+                  const currentMediaUrl = article.gallery_images && article.gallery_images.length > 0
+                    ? article.gallery_images[selectedImage]
+                    : article.featured_image_url!;
+                  
+                  return isVideoUrl(currentMediaUrl) ? (
+                    <video
+                      src={currentMediaUrl}
+                      className="max-w-full max-h-full object-contain"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      controls
+                    />
+                  ) : (
+                    <img
+                      src={currentMediaUrl}
+                      alt={article.title}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  );
+                })()}
                 {article.gallery_images && article.gallery_images.length > 1 && (
                   <>
                     <Button
