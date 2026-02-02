@@ -26,7 +26,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.industrial_zones': 'Construction de zones industrielles',
     'nav.sanitation_roads': 'Assainissement et voieries',
     'nav.job_offers': 'Offres d\'emploi',
-    'nav.apply': 'Postuler',
+    'nav.apply': 'Candidature spontanée',
     
     // Hero
     'hero.fallback_title': 'Votre partenaire de confiance',
