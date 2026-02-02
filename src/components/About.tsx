@@ -14,7 +14,7 @@ interface AboutContent {
 }
 
 const About = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [contents, setContents] = useState<AboutContent[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -64,15 +64,21 @@ const About = () => {
     description: t('about.default_description'),
   };
 
+  // Get translated content based on language
+  const displayTitle = language === 'en' ? t('about.main_title') : mainContent.title;
+  const displayDescription = language === 'en' 
+    ? `${t('about.paragraph1')}\n\n${t('about.paragraph2')}\n\n${t('about.paragraph3')}`
+    : mainContent.description;
+
   return (
     <section id="apropos" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up">
             <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('about.section_title')}</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">{mainContent.title}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-6">{displayTitle}</h2>
             <div className="text-muted-foreground text-lg mb-8 leading-relaxed space-y-4">
-              {mainContent.description.split('\n\n').map((paragraph, index) => (
+              {displayDescription.split('\n\n').map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
