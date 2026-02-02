@@ -88,7 +88,7 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.expertise_desc': '20 ans d\'expérience en Côte d\'Ivoire avec une connaissance approfondie du terrain.',
     'advantages.deadlines_title': 'Délais respectés',
     'advantages.deadlines_desc': 'Gestion rigoureuse des projets pour livrer dans les temps convenus sans compromis sur la qualité.',
-    'advantages.innovation_title': 'Innovation',
+    'advantages.innovation_title': 'Technologie de pointe',
     'advantages.innovation_desc': 'Utilisation des dernières technologies et méthodes de construction pour des résultats optimaux.',
     
     // Blog
@@ -264,7 +264,7 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.expertise_desc': '20 years of experience in Ivory Coast with in-depth knowledge of the terrain.',
     'advantages.deadlines_title': 'Deadlines met',
     'advantages.deadlines_desc': 'Rigorous project management to deliver on time without compromising on quality.',
-    'advantages.innovation_title': 'Innovation',
+    'advantages.innovation_title': 'Cutting-edge Technology',
     'advantages.innovation_desc': 'Using the latest technologies and construction methods for optimal results.',
     
     // Blog
