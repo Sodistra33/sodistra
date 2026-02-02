@@ -118,13 +118,27 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.innovation_title': 'Technologie de pointe',
     'advantages.innovation_desc': 'Utilisation des dernières technologies et méthodes de construction pour des résultats optimaux.',
     
-    // Blog
+    // Blog / RSE
     'blog.title': 'Restez',
     'blog.title_accent': 'informés de nos actions RSE',
     'blog.subtitle': 'Découvrez nos dernières actualités et actions RSE',
     'blog.read_more': 'Lire la suite',
     'blog.view_more': 'Voir plus d\'actualités',
     'blog.no_articles': 'Aucune actualité disponible pour le moment.',
+    'blog.section_title': 'Nos actions RSE',
+    'blog.all_title': 'Toutes nos',
+    'blog.all_title_accent': 'actualités et actions RSE',
+    'blog.all_subtitle': 'Restez informés de nos dernières actualités et actions RSE',
+    'blog.back': 'Retour',
+    'blog.not_found': 'Article non trouvé',
+    'blog.share': 'Partager',
+    'blog.share_prompt': 'Vous avez aimé cet article ? Partagez-le !',
+    'blog.link_copied': 'Lien copié dans le presse-papier !',
+    
+    // Blog categories
+    'blog.category.event': 'Évènement',
+    'blog.category.news': 'Actualités',
+    'blog.category.csr': 'RSE',
     
     // Contact
     'contact.title': 'Contactez',
@@ -332,13 +346,27 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.innovation_title': 'Cutting-edge Technology',
     'advantages.innovation_desc': 'Using the latest technologies and construction methods for optimal results.',
     
-    // Blog
+    // Blog / CSR
     'blog.title': 'Stay',
     'blog.title_accent': 'informed about our CSR actions',
     'blog.subtitle': 'Discover our latest news and CSR actions',
     'blog.read_more': 'Read more',
     'blog.view_more': 'View more news',
     'blog.no_articles': 'No news available at the moment.',
+    'blog.section_title': 'Our CSR actions',
+    'blog.all_title': 'All our',
+    'blog.all_title_accent': 'news and CSR actions',
+    'blog.all_subtitle': 'Stay informed about our latest news and CSR actions',
+    'blog.back': 'Back',
+    'blog.not_found': 'Article not found',
+    'blog.share': 'Share',
+    'blog.share_prompt': 'Did you like this article? Share it!',
+    'blog.link_copied': 'Link copied to clipboard!',
+    
+    // Blog categories
+    'blog.category.event': 'Event',
+    'blog.category.news': 'News',
+    'blog.category.csr': 'CSR',
     
     // Contact
     'contact.title': 'Contact',

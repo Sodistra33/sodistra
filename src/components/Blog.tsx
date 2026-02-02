@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { isVideoUrl } from "@/lib/mediaUtils";
+import { getCategoryTranslation } from "@/lib/contentTranslations";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -55,6 +56,11 @@ const Blog = () => {
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US');
+  };
+
+  const translateCategory = (category: string) => {
+    const key = getCategoryTranslation(category);
+    return key ? t(key) : category;
   };
 
   return (
@@ -117,7 +123,7 @@ const Blog = () => {
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-3">
                           <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full">
-                            {article.category}
+                            {translateCategory(article.category)}
                           </span>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar size={16} className="mr-1" />
