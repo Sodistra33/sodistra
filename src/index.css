@@ -208,15 +208,15 @@ All colors MUST be HSL.
   
   @keyframes marqueeTitle {
     0% {
-      transform: translateX(0%);
+      transform: translateX(100%);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-100%);
     }
   }
   
   .animate-marquee-title {
-    animation: marqueeTitle 40s linear infinite;
+    animation: marqueeTitle 20s linear infinite;
   }
   
   .scrollbar-hide {

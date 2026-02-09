@@ -134,10 +134,6 @@ const Hero = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-white px-4">
             {language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}
           </h1>
-          <img src={chargeuseTruck} alt="Chargeuse" className="h-14 w-auto flex-shrink-0" />
-          <h1 className="text-4xl md:text-6xl font-bold text-white px-4">
-            {language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}
-          </h1>
         </div>
       </div>
 
