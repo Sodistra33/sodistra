@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
-import bulldozer from "@/assets/bulldozer.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeroImage {
@@ -128,27 +127,28 @@ const Hero = () => {
         </div>
       )}
 
-      {/* Static text content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="overflow-hidden mb-6 w-full">
-          <h1 className="text-5xl md:text-7xl font-bold text-white animate-fade-in">
-            <div className="inline-flex whitespace-nowrap animate-marquee-title">
-              <span className="px-16">{language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}</span>
-              <span className="px-16">{language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}</span>
-            </div>
+      {/* Scrolling text with truck at the bottom */}
+      <div className="absolute bottom-8 left-0 right-0 z-20 overflow-hidden">
+        <div className="flex items-center whitespace-nowrap animate-marquee-title">
+          <img src={chargeuseTruck} alt="Chargeuse" className="h-14 w-auto flex-shrink-0" />
+          <h1 className="text-4xl md:text-6xl font-bold text-white px-4">
+            {language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}
+          </h1>
+          <img src={chargeuseTruck} alt="Chargeuse" className="h-14 w-auto flex-shrink-0" />
+          <h1 className="text-4xl md:text-6xl font-bold text-white px-4">
+            {language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}
           </h1>
         </div>
-        {hero?.subtitle && (
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in animate-delay-100">
-            {hero.subtitle}
-          </p>
-        )}
       </div>
 
-      <div className="absolute bottom-8 left-0 right-0 z-20 overflow-hidden">
-        <img src={chargeuseTruck} alt="Chargeuse" className="h-16 w-auto animate-roll-truck" />
-        <img src={bulldozer} alt="Bulldozer" className="h-14 w-auto animate-roll-truck-reverse absolute bottom-0" />
-      </div>
+      {/* Subtitle in center */}
+      {hero?.subtitle && (
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in">
+            {hero.subtitle}
+          </p>
+        </div>
+      )}
     </section>
   );
 };
