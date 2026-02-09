@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
-import bulldozer from "@/assets/bulldozer.png";
+import bulldozer from "@/assets/bulldozer-new.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getServiceTranslationKey } from "@/lib/contentTranslations";

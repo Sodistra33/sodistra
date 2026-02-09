@@ -177,7 +177,7 @@ All colors MUST be HSL.
   }
   
   .animate-roll-truck {
-    animation: rollTruck 8s linear infinite;
+    animation: rollTruck 20s linear infinite;
   }
   
   @keyframes rollTruckReverse {
@@ -190,7 +190,7 @@ All colors MUST be HSL.
   }
   
   .animate-roll-truck-reverse {
-    animation: rollTruckReverse 10s linear infinite;
+    animation: rollTruckReverse 25s linear infinite;
   }
   
   @keyframes marquee {
