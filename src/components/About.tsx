@@ -23,6 +23,7 @@ const About = () => {
     t('about.experience'),
     t('about.team'),
     t('about.deadlines'),
+    t('about.equipment'),
   ];
 
   useEffect(() => {
