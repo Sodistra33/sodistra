@@ -155,17 +155,6 @@ const ProjectDetail = () => {
 
             {/* Project Info */}
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <Badge 
-                  className={`text-sm ${
-                    project.status === "en_cours" 
-                      ? "bg-orange-500 hover:bg-orange-600 text-white" 
-                      : "bg-green-500 hover:bg-green-600 text-white"
-                  }`}
-                >
-                  {project.status === "en_cours" ? t('projects.in_progress') : t('projects.completed')}
-                </Badge>
-              </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
                 {displayTitle}
@@ -197,7 +186,7 @@ const ProjectDetail = () => {
                         <Calendar className="text-accent mt-1" size={20} />
                         <div>
                           <p className="text-sm text-muted-foreground">
-                            {project.status === "en_cours" ? t('project.expected_date') : t('project.completion_date')}
+                            {t('project.completion_date')}
                           </p>
                           <p className="font-semibold text-primary">
                             {formatDate(project.completion_date)}
