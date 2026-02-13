@@ -50,7 +50,7 @@ const Partners = () => {
         </div>
 
         {loading ? <p className="text-center text-muted-foreground">{t('partners.loading')}</p> : partners.length === 0 ? <p className="text-center text-muted-foreground">{t('partners.no_partners')}</p> : <div ref={scrollRef} className="relative overflow-x-auto scrollbar-hide touch-pan-x" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
-            <div className={`flex gap-12 items-center`} style={{
+            <div className="flex gap-12 items-center w-max" style={{
           animation: isPaused ? 'none' : `marquee ${animationDuration}s linear infinite`,
           animationPlayState: isPaused ? 'paused' : 'running'
         }}>
