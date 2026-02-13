@@ -202,19 +202,6 @@ const AllProjects = () => {
                     {/* Gradient overlay - transparent at top, dark at bottom */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/40 to-blue-950/90" />
                     
-                    {/* Status badge */}
-                    <div className="absolute top-4 right-4">
-                      <Badge
-                        variant={project.status === t('projects.completed') ? "default" : "secondary"}
-                        className={
-                          project.status === t('projects.completed')
-                            ? "bg-green-500 hover:bg-green-600 text-white"
-                            : "bg-orange-500 hover:bg-orange-600 text-white"
-                        }
-                      >
-                        {project.status}
-                      </Badge>
-                    </div>
 
                     {/* Text content overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-6">
