@@ -182,24 +182,20 @@ const Footer = () => {
             </ul>
           </div>
 
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <div>
+            <h3 className="font-bold text-lg mb-4">{t('footer.services')}</h3>
+            <ul className="space-y-2">
+              {services.map((service) => (
+                <li key={service.id}>
+                  <button
+                    onClick={() => handleNavigation("#services")}
+                    className="text-primary-foreground/70 hover:text-accent transition-colors text-left">
+                    {(() => { const keys = getServiceTranslationKey(service.title); return keys ? t(keys.titleKey) : service.title; })()}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
 
 
           <div>
