@@ -37,7 +37,7 @@ const Contact = () => {
       icon: MapPin,
       titleKey: 'contact.address_title',
       content: "Cocody Riviera Palmeraie Akouedo ILOT 25, 23 BP 2793 Abj 23",
-      link: "https://maps.app.goo.gl/i5voQ4qgAwMRBFbSA"
+      link: "https://maps.app.goo.gl/zV47fqa8wFUnnQsRA"
     }
   ];
 
@@ -211,7 +211,7 @@ const Contact = () => {
                 <div className="h-64 bg-muted">
                   <iframe
                     title="SODISTRA Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!3d3972.298941972839!2d-3.9795835!3d5.372195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjInMTkuOSJOIDPCsDU4JzQ2LjUiVw!5e0!3m2!1sfr!2sci!4v1702900000000"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.3!2d-3.9464!3d5.3636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z93FC%2B5W+Abidjan!5e0!3m2!1sfr!2sci!4v1702900000000"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
