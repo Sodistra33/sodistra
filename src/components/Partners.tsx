@@ -34,6 +34,8 @@ const Partners = () => {
 
   // Duplicate partners for seamless loop
   const displayPartners = partners.length > 0 ? [...partners, ...partners] : [];
+  // Dynamic duration: ~4s per partner for smooth scrolling
+  const animationDuration = Math.max(20, partners.length * 4);
   const handleTouchStart = () => setIsPaused(true);
   const handleTouchEnd = () => setIsPaused(false);
   return <section className="py-20 bg-background border-y border-border overflow-hidden">
@@ -48,7 +50,8 @@ const Partners = () => {
         </div>
 
         {loading ? <p className="text-center text-muted-foreground">{t('partners.loading')}</p> : partners.length === 0 ? <p className="text-center text-muted-foreground">{t('partners.no_partners')}</p> : <div ref={scrollRef} className="relative overflow-x-auto scrollbar-hide touch-pan-x" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} onMouseDown={handleTouchStart} onMouseUp={handleTouchEnd} onMouseLeave={handleTouchEnd}>
-            <div className={`flex gap-12 items-center ${isPaused ? '' : 'animate-marquee'}`} style={{
+            <div className={`flex gap-12 items-center`} style={{
+          animation: isPaused ? 'none' : `marquee ${animationDuration}s linear infinite`,
           animationPlayState: isPaused ? 'paused' : 'running'
         }}>
               {displayPartners.map((partner, index) => <div key={`${partner.id}-${index}`} className="flex-shrink-0 flex items-center justify-center p-6">
