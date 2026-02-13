@@ -135,7 +135,7 @@ const Footer = () => {
 
       </div>
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="mb-4">
               <img
@@ -182,20 +182,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-bold text-lg mb-4">{t('footer.services')}</h3>
-            <ul className="space-y-2">
-              {services.map((service) => (
-                <li key={service.id}>
-                  <button
-                    onClick={() => handleNavigation("#services")}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors text-left">
-                    {(() => { const keys = getServiceTranslationKey(service.title); return keys ? t(keys.titleKey) : service.title; })()}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
 
 
           <div>
@@ -204,6 +190,10 @@ const Footer = () => {
               <li className="flex items-center gap-2 text-primary-foreground/70">
                 <Phone size={18} className="flex-shrink-0" />
                 <span>(+225) 27 22 47 39 96</span>
+              </li>
+              <li className="flex items-center gap-2 text-primary-foreground/70">
+                <Phone size={18} className="flex-shrink-0" />
+                <span>(+225) 07 09 59 65 02</span>
               </li>
             </ul>
           </div>
