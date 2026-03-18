@@ -110,13 +110,13 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.title_accent': 'choisir ?',
     'advantages.subtitle': 'Des valeurs fortes et un engagement total envers la satisfaction de nos clients',
     'advantages.reliability_title': 'Fiabilité garantie',
-    'advantages.reliability_desc': 'Engagement total sur la qualité et la durabilité de nos constructions avec garanties complètes.',
+    'advantages.reliability_desc': 'Engagement total sur la qualité et la durabilité de nos constructions.',
     'advantages.expertise_title': 'Expertise locale',
     'advantages.expertise_desc': '20 ans d\'expérience en Côte d\'Ivoire avec une connaissance approfondie du terrain.',
-    'advantages.deadlines_title': 'Délais respectés',
-    'advantages.deadlines_desc': 'Gestion rigoureuse des projets pour livrer dans les temps convenus sans compromis sur la qualité.',
+    'advantages.deadlines_title': 'Respect de l\'environnement',
+    'advantages.deadlines_desc': 'Engagement concret pour préserver les ressources naturelles.',
     'advantages.innovation_title': 'Technologie de pointe',
-    'advantages.innovation_desc': 'Utilisation des dernières technologies et méthodes de construction pour des résultats optimaux.',
+    'advantages.innovation_desc': 'Des équipements modernes pour optimiser la productivité et la qualité d\'exécution.',
     
     // Blog / RSE
     'blog.title': 'Restez',
