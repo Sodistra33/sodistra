@@ -195,7 +195,15 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary mb-1">{t(info.titleKey)}</h4>
-                    {info.link !== "#" ? (
+                    {'links' in info && info.links ? (
+                      <div className="space-y-1">
+                        {info.links.map((phoneLink, i) => (
+                          <a key={i} href={phoneLink.href} className="block text-muted-foreground hover:text-accent transition-colors text-sm">
+                            {phoneLink.label}
+                          </a>
+                        ))}
+                      </div>
+                    ) : info.link !== "#" ? (
                       <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors text-sm">
                         {info.contentKey ? t(info.contentKey) : info.content}
                       </a>
