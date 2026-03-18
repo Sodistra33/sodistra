@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
+import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeroImage {
