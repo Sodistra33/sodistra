@@ -42,7 +42,7 @@ const translations: Record<Language, Record<string, string>> = {
     'about.experience': '20 ans d\'expertise',
     'about.team': 'Équipe de professionnels qualifiés (570 employés)',
     'about.deadlines': 'Respect des délais et budgets',
-    'about.equipment': 'Parc matériel diversifié soit 408 équipements, engins et petits matériels confondus',
+    'about.equipment': 'Parc matériel diversifié soit plus de 600 machines et équipements',
     'about.no_image': 'Aucune image disponible',
     'about.default_title': 'Notre Vision & Mission',
     'about.default_description': 'SODISTRA est une entreprise générale de bâtiment & travaux publics spécialisée dans les travaux de construction/réhabilitation, les travaux routiers et de voirie, l\'assainissement, la construction de zones industrielles et d\'ouvrages divers.',
