@@ -211,7 +211,7 @@ All colors MUST be HSL.
       transform: translateX(100vw);
     }
     100% {
-      transform: translateX(-100%);
+      transform: translateX(calc(-100% - 100vw));
     }
   }
   
