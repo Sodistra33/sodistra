@@ -24,8 +24,11 @@ const Contact = () => {
     {
       icon: Phone,
       titleKey: 'contact.phone_title',
-      content: "(+225) 27 22 47 99 96 / (+225) 07 09 59 65 02",
-      link: "tel:+22527224799996"
+      content: "(+225) 27 22 47 39 96 / (+225) 07 09 59 65 02",
+      links: [
+        { label: "(+225) 27 22 47 39 96", href: "tel:+2252722473996" },
+        { label: "(+225) 07 09 59 65 02", href: "tel:+2250709596502" }
+      ]
     },
     {
       icon: Clock,
@@ -192,7 +195,15 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary mb-1">{t(info.titleKey)}</h4>
-                    {info.link !== "#" ? (
+                    {'links' in info && info.links ? (
+                      <div className="space-y-1">
+                        {info.links.map((phoneLink, i) => (
+                          <a key={i} href={phoneLink.href} className="block text-muted-foreground hover:text-accent transition-colors text-sm">
+                            {phoneLink.label}
+                          </a>
+                        ))}
+                      </div>
+                    ) : info.link !== "#" ? (
                       <a href={info.link} className="text-muted-foreground hover:text-accent transition-colors text-sm">
                         {info.contentKey ? t(info.contentKey) : info.content}
                       </a>
