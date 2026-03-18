@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import chargeuseTruck from "@/assets/chargeuse-truck.png";
+import logoSodistra from "@/assets/logo-sodistra-footer.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeroImage {
@@ -134,6 +135,7 @@ const Hero = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-white px-4">
             {language === 'en' ? 'Durable in construction' : (hero?.title || t('hero.fallback_title'))} {language === 'en' ? '' : t('hero.in_construction')}
           </h1>
+          <img src={logoSodistra} alt="SODISTRA" className="h-10 md:h-12 w-auto flex-shrink-0 ml-4" />
         </div>
       </div>
 
