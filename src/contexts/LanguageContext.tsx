@@ -40,7 +40,7 @@ const translations: Record<Language, Record<string, string>> = {
     'about.years_expertise': 'd\'expertise',
     'about.excellence': 'Excellence et qualité garanties',
     'about.experience': '20 ans d\'expertise',
-    'about.team': 'Équipe de professionnels qualifiés (plus de 570 employés)',
+    'about.team': 'Équipe de professionnels qualifiés (+ de 700 employés)',
     'about.deadlines': 'Respect des délais et budgets',
     'about.equipment': 'Parc matériel diversifié soit plus de 600 machines et équipements',
     'about.no_image': 'Aucune image disponible',
