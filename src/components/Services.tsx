@@ -174,7 +174,7 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
           {services.map((service, index) => {
             const isYellow = index % 2 === 0;
             const IconComponent = getIcon(service.icon_name);
