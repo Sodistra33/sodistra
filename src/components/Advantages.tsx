@@ -1,4 +1,4 @@
-import { Shield, Award, Clock, Lightbulb } from "lucide-react";
+import { Shield, Award, Leaf, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import logoWatermark from "@/assets/logo-sodistra-watermark.png";
 import { useLanguage } from "@/contexts/LanguageContext";
