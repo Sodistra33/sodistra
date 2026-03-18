@@ -24,8 +24,11 @@ const Contact = () => {
     {
       icon: Phone,
       titleKey: 'contact.phone_title',
-      content: "(+225) 27 22 47 99 96 / (+225) 07 09 59 65 02",
-      link: "tel:+22527224799996"
+      content: "(+225) 27 22 47 39 96 / (+225) 07 09 59 65 02",
+      links: [
+        { label: "(+225) 27 22 47 39 96", href: "tel:+22527224739 96".replace(/\s/g, '') },
+        { label: "(+225) 07 09 59 65 02", href: "tel:+2250709596502" }
+      ]
     },
     {
       icon: Clock,
