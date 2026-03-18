@@ -15,7 +15,7 @@ const Advantages = () => {
     titleKey: 'advantages.expertise_title',
     descKey: 'advantages.expertise_desc'
   }, {
-    icon: Clock,
+    icon: Leaf,
     titleKey: 'advantages.deadlines_title',
     descKey: 'advantages.deadlines_desc'
   }, {

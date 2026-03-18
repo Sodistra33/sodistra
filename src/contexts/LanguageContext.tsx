@@ -338,13 +338,13 @@ const translations: Record<Language, Record<string, string>> = {
     'advantages.title_accent': 'us?',
     'advantages.subtitle': 'Strong values and total commitment to customer satisfaction',
     'advantages.reliability_title': 'Guaranteed reliability',
-    'advantages.reliability_desc': 'Total commitment to quality and durability of our constructions with complete guarantees.',
+    'advantages.reliability_desc': 'Total commitment to the quality and durability of our constructions.',
     'advantages.expertise_title': 'Local expertise',
     'advantages.expertise_desc': '20 years of experience in Ivory Coast with in-depth knowledge of the terrain.',
-    'advantages.deadlines_title': 'Deadlines met',
-    'advantages.deadlines_desc': 'Rigorous project management to deliver on time without compromising on quality.',
+    'advantages.deadlines_title': 'Environmental responsibility',
+    'advantages.deadlines_desc': 'Concrete commitment to preserving natural resources.',
     'advantages.innovation_title': 'Cutting-edge Technology',
-    'advantages.innovation_desc': 'Using the latest technologies and construction methods for optimal results.',
+    'advantages.innovation_desc': 'Modern equipment to optimize productivity and execution quality.',
     
     // Blog / CSR
     'blog.title': 'Stay',
