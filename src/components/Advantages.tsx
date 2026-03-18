@@ -1,4 +1,4 @@
-import { Shield, Award, Clock, Lightbulb } from "lucide-react";
+import { Shield, Award, Leaf, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import logoWatermark from "@/assets/logo-sodistra-watermark.png";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,7 +15,7 @@ const Advantages = () => {
     titleKey: 'advantages.expertise_title',
     descKey: 'advantages.expertise_desc'
   }, {
-    icon: Clock,
+    icon: Leaf,
     titleKey: 'advantages.deadlines_title',
     descKey: 'advantages.deadlines_desc'
   }, {
