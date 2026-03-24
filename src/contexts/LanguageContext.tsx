@@ -279,8 +279,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Services
     'services.section_title': 'Our achievements',
-    'services.title': 'What services',
-    'services.title_accent': 'do we offer?',
+    'services.title': 'Discover our',
+    'services.title_accent': 'projects',
     'services.subtitle': 'A complete range of services to meet all your construction needs',
     
     // Service titles (for database content translation)
