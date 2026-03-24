@@ -278,7 +278,7 @@ const translations: Record<Language, Record<string, string>> = {
     'about.paragraph3': 'With SODISTRA, every stone laid is a step towards a stronger, more inclusive and more prosperous future for Africa.',
     
     // Services
-    'services.section_title': 'Our services',
+    'services.section_title': 'Our achievements',
     'services.title': 'What services',
     'services.title_accent': 'do we offer?',
     'services.subtitle': 'A complete range of services to meet all your construction needs',
