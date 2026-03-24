@@ -50,7 +50,7 @@ const translations: Record<Language, Record<string, string>> = {
     'about.paragraph3': 'Avec SODISTRA, chaque pierre posée est un pas vers un futur plus solide, plus inclusif et plus prospère pour l\'Afrique.',
     
     // Services
-    'services.section_title': 'Nos services',
+    'services.section_title': 'Nos réalisations',
     'services.title': 'Quels services',
     'services.title_accent': 'offrons-nous ?',
     'services.subtitle': 'Une gamme complète de services pour répondre à tous vos besoins en construction',
