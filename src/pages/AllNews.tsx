@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getCategoryTranslation } from "@/lib/contentTranslations";
 import { useContentTranslations } from "@/contexts/TranslationsContext";
+import { isVideoUrl } from "@/lib/mediaUtils";
 
 const AllNews = () => {
   const navigate = useNavigate();
