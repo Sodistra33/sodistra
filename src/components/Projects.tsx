@@ -80,15 +80,6 @@ const Projects = () => {
     return (
       <section id="realisations" className="py-20 bg-secondary">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('projects.section_title')}</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-              {t('projects.title')} <span className="text-accent">{t('projects.title_accent')}</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              {t('projects.subtitle')}
-            </p>
-          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
               <Card key={i} className="overflow-hidden">
@@ -108,15 +99,6 @@ const Projects = () => {
   return (
     <section id="realisations" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 animate-slide-up">
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider">{t('projects.section_title')}</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mt-4 mb-4">
-            {t('projects.title')} <span className="text-accent">{t('projects.title_accent')}</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('projects.subtitle')}
-          </p>
-        </div>
 
         <Carousel
           opts={{
