@@ -222,7 +222,7 @@ const Contact = () => {
                 <div className="h-64 bg-muted">
                   <iframe
                     title="SODISTRA Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.5!2d-3.9575!3d5.3445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1ed14db1e44e3%3A0x7fe0c3b1c3bb7c48!2sSODISTRA!5e0!3m2!1sfr!2sci!4v1702900000000"
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d8275.602998905551!2d-3.9295123!3d5.3727582!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1ed8ede67545d%3A0x64cb1ed1af5f377!2sSODISTRA!5e1!3m2!1sfr!2sci!4v1774352175793!5m2!1sfr!2sci"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
