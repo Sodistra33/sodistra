@@ -17,6 +17,7 @@ import ContactMessagesManager from "@/components/admin/ContactMessagesManager";
 import JobOffersManager from "@/components/admin/JobOffersManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import { TranslationsManager } from "@/components/admin/TranslationsManager";
+import MailsManager from "@/components/admin/MailsManager";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
@@ -174,6 +175,10 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="jobs" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
               Offres d'emploi
+            </TabsTrigger>
+            <TabsTrigger value="mails" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
+              <Mail className="mr-2 h-4 w-4" />
+              Mails
             </TabsTrigger>
             <TabsTrigger value="social" className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border-b-2 data-[state=active]:border-accent px-6 py-2.5 rounded-lg font-medium transition-all">
               Réseaux sociaux
@@ -337,6 +342,7 @@ const AdminDashboard = () => {
           <TabsContent value="partners"><PartnersManager /></TabsContent>
           <TabsContent value="brochures"><BrochuresManager /></TabsContent>
           <TabsContent value="contact"><ContactMessagesManager /></TabsContent>
+          <TabsContent value="mails"><MailsManager /></TabsContent>
           <TabsContent value="social"><SocialLinksManager /></TabsContent>
           <TabsContent value="translations"><TranslationsManager /></TabsContent>
         </Tabs>
