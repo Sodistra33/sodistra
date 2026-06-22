@@ -22,6 +22,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState({
     projects: 0,
     blog: 0,
@@ -33,6 +34,10 @@ const AdminDashboard = () => {
     about: 0,
     jobOffers: 0
   });
+  const goToTab = (tab: string) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   useEffect(() => {
     checkAuth();
     const {
