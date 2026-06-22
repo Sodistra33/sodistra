@@ -220,120 +220,52 @@ const AdminDashboard = () => {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-foreground">Statistiques du site</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Projets */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nombres de Projets</CardTitle>
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <FolderKanban className="h-5 w-5 text-primary" />
+            {/* Statistiques */}
+            <div className="space-y-6">
+              <div className="flex items-end justify-between">
+                <div>
+                  <h2 className="text-3xl font-bold text-foreground tracking-tight">Statistiques du site</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Cliquez sur une carte pour gérer la section correspondante</p>
+                </div>
+                <div className="hidden md:block h-1 flex-1 ml-8 bg-gradient-to-r from-primary/40 via-accent/40 to-transparent rounded-full" />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {[
+                  { key: "projects", tab: "projects", label: "Projets", sub: "Total de projets", value: stats.projects, Icon: FolderKanban, from: "from-primary", to: "to-primary-light", text: "text-primary", bg: "bg-primary/10" },
+                  { key: "blog", tab: "blog", label: "Articles", sub: "Articles de blog", value: stats.blog, Icon: Newspaper, from: "from-accent", to: "to-accent-light", text: "text-accent", bg: "bg-accent/10" },
+                  { key: "partners", tab: "partners", label: "Partenaires", sub: "Partenaires actifs", value: stats.partners, Icon: Users, from: "from-primary", to: "to-primary-light", text: "text-primary", bg: "bg-primary/10" },
+                  { key: "messages", tab: "mails", label: "Messages & Mails", sub: "Messages reçus", value: stats.messages, Icon: Mail, from: "from-accent", to: "to-accent-light", text: "text-accent", bg: "bg-accent/10" },
+                  { key: "hero", tab: "hero", label: "Images cover", sub: "Images d'accueil", value: stats.hero, Icon: Image, from: "from-accent", to: "to-accent-light", text: "text-accent", bg: "bg-accent/10" },
+                  { key: "brochures", tab: "brochures", label: "Brochures", sub: "Brochures disponibles", value: stats.brochures, Icon: FileText, from: "from-primary", to: "to-primary-light", text: "text-primary", bg: "bg-primary/10" },
+                  { key: "jobs", tab: "jobs", label: "Offres d'emploi", sub: "Postes disponibles", value: stats.jobOffers, Icon: Briefcase, from: "from-accent", to: "to-accent-light", text: "text-accent", bg: "bg-accent/10" },
+                  { key: "services", tab: "services", label: "Services", sub: "Services proposés", value: stats.services, Icon: Wrench, from: "from-primary", to: "to-primary-light", text: "text-primary", bg: "bg-primary/10" },
+                ].map(({ key, tab, label, sub, value, Icon, from, to, text, bg }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => goToTab(tab)}
+                    className="group relative text-left rounded-2xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  >
+                    <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${from} ${to}`} />
+                    <div className={`absolute -right-10 -top-10 w-32 h-32 rounded-full bg-gradient-to-br ${from} ${to} opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500`} />
+                    <div className="relative p-5">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`p-3 rounded-xl ${bg} group-hover:scale-110 transition-transform duration-300`}>
+                          <Icon className={`h-6 w-6 ${text}`} />
+                        </div>
+                        <svg className="w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </div>
+                      <div className={`text-4xl font-extrabold ${text} tracking-tight leading-none`}>{value}</div>
+                      <div className="mt-3">
+                        <div className="text-sm font-semibold text-foreground">{label}</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">{sub}</div>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary">{stats.projects}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Total de projets</p>
-                  </CardContent>
-                </Card>
-
-                {/* Articles de blog */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nombres d'Articles</CardTitle>
-                      <div className="p-2 bg-accent/10 rounded-lg">
-                        <Newspaper className="h-5 w-5 text-accent" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-accent">{stats.blog}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Articles de blog</p>
-                  </CardContent>
-                </Card>
-
-                {/* Partenaires */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nombres de Partenaires</CardTitle>
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Users className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary">{stats.partners}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Partenaires actifs</p>
-                  </CardContent>
-                </Card>
-
-                {/* Messages */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Total Messages</CardTitle>
-                      <div className="p-2 bg-accent/10 rounded-lg">
-                        <Mail className="h-5 w-5 text-accent" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-accent">{stats.messages}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Messages de contact</p>
-                  </CardContent>
-                </Card>
-
-                {/* Services */}
-                
-
-                {/* Images Hero */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nombre Images cover</CardTitle>
-                      <div className="p-2 bg-accent/10 rounded-lg">
-                        <Image className="h-5 w-5 text-accent" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-accent">{stats.hero}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Images d'accueil</p>
-                  </CardContent>
-                </Card>
-
-                {/* Brochures */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nombre Brochures</CardTitle>
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <FileText className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary">{stats.brochures}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Brochures disponibles</p>
-                  </CardContent>
-                </Card>
-
-                {/* Offres d'emploi */}
-                <Card className="hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-accent">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Offres d'emploi</CardTitle>
-                      <div className="p-2 bg-accent/10 rounded-lg">
-                        <Briefcase className="h-5 w-5 text-accent" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-accent">{stats.jobOffers}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Postes disponibles</p>
-                  </CardContent>
-                </Card>
+                  </button>
+                ))}
               </div>
             </div>
           </TabsContent>
