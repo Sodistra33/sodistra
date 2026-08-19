@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Briefcase, Share2 } from "lucide-react";
+import { MapPin, Briefcase, Share2, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -31,6 +31,7 @@ const JobOffers = () => {
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<string>("");
+  const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,6 +53,18 @@ const JobOffers = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleExpanded = (jobId: string) => {
+    setExpandedJobs((prev) => {
+      const next = new Set(prev);
+      if (next.has(jobId)) {
+        next.delete(jobId);
+      } else {
+        next.add(jobId);
+      }
+      return next;
+    });
   };
 
   const handleCopyLink = async () => {
@@ -143,12 +156,34 @@ const JobOffers = () => {
           <CardContent className="space-y-4">
             <div>
               <h4 className="font-semibold text-primary mb-2">{t('job.description')}</h4>
-              <p className="text-muted-foreground text-sm line-clamp-3">{job.description}</p>
+              <p className={`text-muted-foreground text-sm ${expandedJobs.has(job.id) ? '' : 'line-clamp-3'}`}>
+                {job.description}
+              </p>
+              {(job.description.length > 180 || !expandedJobs.has(job.id)) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleExpanded(job.id)}
+                  className="mt-1 h-auto p-0 text-accent hover:text-accent-light hover:bg-transparent"
+                >
+                  {expandedJobs.has(job.id) ? (
+                    <>
+                      {t('job.read_less')} <ChevronUp className="ml-1 h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      {t('job.read_more')} <ChevronDown className="ml-1 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
             {job.requirements && (
               <div>
                 <h4 className="font-semibold text-primary mb-2">{t('job.requirements')}</h4>
-                <p className="text-muted-foreground text-sm line-clamp-2">{job.requirements}</p>
+                <p className={`text-muted-foreground text-sm ${expandedJobs.has(job.id) ? '' : 'line-clamp-2'}`}>
+                  {job.requirements}
+                </p>
               </div>
             )}
             <Dialog>
