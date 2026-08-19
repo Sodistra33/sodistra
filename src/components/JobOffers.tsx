@@ -31,6 +31,7 @@ const JobOffers = () => {
   const [jobOffers, setJobOffers] = useState<JobOffer[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<string>("");
+  const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   useEffect(() => {
