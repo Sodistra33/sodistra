@@ -55,6 +55,18 @@ const JobOffers = () => {
     }
   };
 
+  const toggleExpanded = (jobId: string) => {
+    setExpandedJobs((prev) => {
+      const next = new Set(prev);
+      if (next.has(jobId)) {
+        next.delete(jobId);
+      } else {
+        next.add(jobId);
+      }
+      return next;
+    });
+  };
+
   const handleCopyLink = async () => {
     const url = window.location.href;
     
