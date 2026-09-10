@@ -159,24 +159,6 @@ const JobOffers = () => {
               <p className={`text-muted-foreground text-sm ${expandedJobs.has(job.id) ? '' : 'line-clamp-3'}`}>
                 {job.description}
               </p>
-              {(job.description.length > 180 || !expandedJobs.has(job.id)) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleExpanded(job.id)}
-                  className="mt-1 h-auto p-0 text-accent hover:text-accent-light hover:bg-transparent"
-                >
-                  {expandedJobs.has(job.id) ? (
-                    <>
-                      {t('job.read_less')} <ChevronUp className="ml-1 h-4 w-4" />
-                    </>
-                  ) : (
-                    <>
-                      {t('job.read_more')} <ChevronDown className="ml-1 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-              )}
             </div>
             {job.requirements && (
               <div>
@@ -185,6 +167,25 @@ const JobOffers = () => {
                   {job.requirements}
                 </p>
               </div>
+            )}
+            {(job.description.length > 180 || (job.requirements?.length ?? 0) > 120) && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => toggleExpanded(job.id)}
+                aria-expanded={expandedJobs.has(job.id)}
+                className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+              >
+                {expandedJobs.has(job.id) ? (
+                  <>
+                    {t('job.read_less')} <ChevronUp className="ml-2 h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    {t('job.read_more')} <ChevronDown className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
             )}
             <Dialog>
               <DialogTrigger asChild>
